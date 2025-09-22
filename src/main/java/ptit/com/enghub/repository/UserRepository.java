@@ -1,7 +1,7 @@
 package ptit.com.enghub.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ptit.com.enghub.model.User;
+import ptit.com.enghub.entity.User;
 
 import java.util.Optional;
 

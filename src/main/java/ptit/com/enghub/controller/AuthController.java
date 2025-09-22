@@ -1,11 +1,13 @@
 package ptit.com.enghub.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import ptit.com.enghub.model.User;
+import ptit.com.enghub.dto.ResponseDto;
+import ptit.com.enghub.entity.User;
 import ptit.com.enghub.repository.UserRepository;
 import ptit.com.enghub.security.JwtUtil;
 
@@ -22,12 +24,19 @@ public class AuthController {
     @Autowired private PasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public Map<String, String> register(@RequestBody User user) {
+    public ResponseEntity<ResponseDto> register(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("USER");
         user.setCreatedAt(LocalDateTime.now());
         userRepository.save(user);
-        return Map.of("message", "User registered successfully");
+
+        ResponseDto response = new ResponseDto(
+                "200",
+                "User registered successfully",
+                Map.of("username", user.getUsername(), "role", user.getRole())
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
@@ -36,7 +45,11 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.get("username"), request.get("password"))
         );
 
-        String token = jwtUtil.generateToken(request.get("username"));
+        User user = userRepository.findByUsername(request.get("username"))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+
         return Map.of("token", token);
     }
 }

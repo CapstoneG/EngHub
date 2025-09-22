@@ -1,4 +1,4 @@
-package ptit.com.enghub.model;
+package ptit.com.enghub.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,1 +1,13 @@
 spring.application.name=EngHub
+
+# JWT
+jwt.secret=
+jwt.expiration=3600000
+
+# Database
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.default_schema=

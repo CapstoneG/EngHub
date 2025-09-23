@@ -95,3 +95,7 @@ databaseChangeLog:
               - column:
                   name: xp
                   valueNumeric: 0
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP

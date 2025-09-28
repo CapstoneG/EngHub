@@ -1,3 +1,5 @@
 databaseChangeLog:
   - include:
       file: db/changelog/20250923/20250923-create-users-table.yaml
+  - include:
+      file: db/changelog/20250928/20250928-create-topics-table.yaml

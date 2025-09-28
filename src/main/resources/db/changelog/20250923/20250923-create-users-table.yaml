@@ -32,7 +32,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
 
-
               - column:
                   name: role
                   type: VARCHAR(100)
@@ -71,6 +70,7 @@ databaseChangeLog:
                   name: last_login
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
+
         - insert:
             tableName: users
             columns:

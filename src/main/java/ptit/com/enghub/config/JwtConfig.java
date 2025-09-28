@@ -1,5 +1,7 @@
 package ptit.com.enghub.config;
 
+import lombok.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -7,19 +9,21 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "jwt")
 public class JwtConfig {
     private String secret;
-    private long expiration;
+    private Long expiration;
 
     public String getSecret() {
         return secret;
     }
+
     public void setSecret(String secret) {
         this.secret = secret;
     }
 
-    public long getExpiration() {
+    public Long getExpiration() {
         return expiration;
     }
-    public void setExpiration(long expiration) {
+
+    public void setExpiration(Long expiration) {
         this.expiration = expiration;
     }
 }

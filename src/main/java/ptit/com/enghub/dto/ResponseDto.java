@@ -1,18 +1,14 @@
 package ptit.com.enghub.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class ResponseDto {
     private String status;
     private String message;
     private Object data;
-
-    public ResponseDto(String status, String message, Object data) {
-        this.status = status;
-        this.message = message;
-        this.data = data;
-    }
 }

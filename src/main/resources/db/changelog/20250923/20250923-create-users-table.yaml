@@ -1,0 +1,101 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-users-table
+      author: hieu
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: role
+                  type: VARCHAR(100)
+
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+
+              - column:
+                  name: avatar
+                  type: VARCHAR(500)
+
+              - column:
+                  name: level
+                  type: VARCHAR(50)
+
+              - column:
+                  name: streak
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: xp
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: last_login
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: "admin"
+              - column:
+                  name: password
+                  value: "$2a$10$7/wlOK6h3/IcV/ajkHiQleSno8ds71aKROh2s3xYa2S9qB.DzD0Ny"
+              - column:
+                  name: name
+                  value: "ADMIN"
+              - column:
+                  name: role
+                  value: "ADMIN"
+              - column:
+                  name: email
+                  value: "admin@gmail.com"
+              - column:
+                  name: streak
+                  valueNumeric: 0
+              - column:
+                  name: xp
+                  valueNumeric: 0
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP

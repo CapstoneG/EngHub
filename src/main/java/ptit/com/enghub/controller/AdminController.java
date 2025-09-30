@@ -1,5 +1,6 @@
 package ptit.com.enghub.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ptit.com.enghub.dto.ResponseDto;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
     @GetMapping("/dashboard")

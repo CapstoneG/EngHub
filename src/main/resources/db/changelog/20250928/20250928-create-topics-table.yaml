@@ -1,0 +1,307 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-topic
+      author: tu
+      changes:
+        - createTable:
+            tableName: topic
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(500)
+              - column:
+                  name: level
+                  type: VARCHAR(10)
+              - column:
+                  name: image_url
+                  type: VARCHAR(500)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+  - changeSet:
+      id: 002-create-vocab
+      author: tu
+      changes:
+        - createTable:
+            tableName: vocab
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: word
+                  type: VARCHAR(255)
+              - column:
+                  name: phonetic
+                  type: VARCHAR(100)
+              - column:
+                  name: meaning
+                  type: VARCHAR(500)
+              - column:
+                  name: part_of_speech
+                  type: VARCHAR(50)
+              - column:
+                  name: example_sentence
+                  type: VARCHAR(1000)
+              - column:
+                  name: image_url
+                  type: VARCHAR(500)
+              - column:
+                  name: audio_url
+                  type: VARCHAR(500)
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+
+  - changeSet:
+      id: 003-create-topic-vocab-join
+      author: tu
+      changes:
+        - createTable:
+            tableName: topic_vocab
+            columns:
+              - column:
+                  name: topic_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: vocab_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: topic_vocab
+            columnNames: topic_id, vocab_id
+        - addForeignKeyConstraint:
+            baseTableName: topic_vocab
+            baseColumnNames: topic_id
+            constraintName: fk_topic_vocab_topic
+            referencedTableName: topic
+            referencedColumnNames: id
+        - addForeignKeyConstraint:
+            baseTableName: topic_vocab
+            baseColumnNames: vocab_id
+            constraintName: fk_topic_vocab_vocab
+            referencedTableName: vocab
+            referencedColumnNames: id
+
+
+  - changeSet:
+      id: 004-insert-sample-data
+      author: tu
+      changes:
+        # Insert sample topics
+        - insert:
+            tableName: topic
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: name
+                  value: "Animals"
+              - column:
+                  name: description
+                  value: "Common animals and pets"
+              - column:
+                  name: level
+                  value: "A1"
+              - column:
+                  name: image_url
+                  value: "https://example.com/images/animals.png"
+              - column:
+                  name: created_at
+                  valueDate: "2025-01-01T00:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2025-01-01T00:00:00"
+
+        - insert:
+            tableName: topic
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: name
+                  value: "Food"
+              - column:
+                  name: description
+                  value: "Food and drinks vocabulary"
+              - column:
+                  name: level
+                  value: "A1"
+              - column:
+                  name: image_url
+                  value: "https://example.com/images/food.png"
+              - column:
+                  name: created_at
+                  valueDate: "2025-01-01T00:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2025-01-01T00:00:00"
+
+        # Insert sample vocabs
+        - insert:
+            tableName: vocab
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 1
+              - column:
+                  name: word
+                  value: "cat"
+              - column:
+                  name: phonetic
+                  value: "/kæt/"
+              - column:
+                  name: meaning
+                  value: "con mèo"
+              - column:
+                  name: part_of_speech
+                  value: "noun"
+              - column:
+                  name: example_sentence
+                  value: "The cat is sleeping on the sofa."
+              - column:
+                  name: image_url
+                  value: "https://example.com/images/cat.png"
+              - column:
+                  name: audio_url
+                  value: "https://example.com/audio/cat.mp3"
+              - column:
+                  name: created_at
+                  valueDate: "2025-01-01T00:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2025-01-01T00:00:00"
+
+        - insert:
+            tableName: vocab
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 2
+              - column:
+                  name: word
+                  value: "dog"
+              - column:
+                  name: phonetic
+                  value: "/dɒɡ/"
+              - column:
+                  name: meaning
+                  value: "con chó"
+              - column:
+                  name: part_of_speech
+                  value: "noun"
+              - column:
+                  name: example_sentence
+                  value: "The dog is barking loudly."
+              - column:
+                  name: image_url
+                  value: "https://example.com/images/dog.png"
+              - column:
+                  name: audio_url
+                  value: "https://example.com/audio/dog.mp3"
+              - column:
+                  name: created_at
+                  valueDate: "2025-01-01T00:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2025-01-01T00:00:00"
+
+        - insert:
+            tableName: vocab
+            columns:
+              - column:
+                  name: id
+                  valueNumeric: 3
+              - column:
+                  name: word
+                  value: "apple"
+              - column:
+                  name: phonetic
+                  value: "/ˈæp.əl/"
+              - column:
+                  name: meaning
+                  value: "quả táo"
+              - column:
+                  name: part_of_speech
+                  value: "noun"
+              - column:
+                  name: example_sentence
+                  value: "I eat an apple every morning."
+              - column:
+                  name: image_url
+                  value: "https://example.com/images/apple.png"
+              - column:
+                  name: audio_url
+                  value: "https://example.com/audio/apple.mp3"
+              - column:
+                  name: created_at
+                  valueDate: "2025-01-01T00:00:00"
+              - column:
+                  name: updated_at
+                  valueDate: "2025-01-01T00:00:00"
+
+        # Insert sample relations topic_vocab
+        - insert:
+            tableName: topic_vocab
+            columns:
+              - column:
+                  name: topic_id
+                  valueNumeric: 1
+              - column:
+                  name: vocab_id
+                  valueNumeric: 1
+
+        - insert:
+            tableName: topic_vocab
+            columns:
+              - column:
+                  name: topic_id
+                  valueNumeric: 1
+              - column:
+                  name: vocab_id
+                  valueNumeric: 2
+
+        - insert:
+            tableName: topic_vocab
+            columns:
+              - column:
+                  name: topic_id
+                  valueNumeric: 2
+              - column:
+                  name: vocab_id
+                  valueNumeric: 3
+
+  - changeSet:
+      id: 005-update-sequence
+      author: tu
+      changes:
+        - sql:
+            dbms: postgresql
+            splitStatements: false
+            stripComments: true
+            sql: |
+              SELECT setval(pg_get_serial_sequence('topic', 'id'), (SELECT MAX(id) FROM topic));
+              SELECT setval(pg_get_serial_sequence('vocab', 'id'), (SELECT MAX(id) FROM vocab));
+

@@ -8,6 +8,8 @@ jwt.expiration=3600000
 spring.datasource.url=
 spring.datasource.username=
 spring.datasource.password=
-spring.jpa.hibernate.ddl-auto=update
+spring.jpa.hibernate.ddl-auto=none
 spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.default_schema=
+spring.jpa.properties.hibernate.default_schema=org.hibernate.dialect.PostgreSQLDialect
+
+spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.yaml

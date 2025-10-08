@@ -1,7 +1,39 @@
 databaseChangeLog:
   - changeSet:
-      id: create-users-table
-      author: hieu
+      id: 1-create-roles
+      author: buddy
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
+  - changeSet:
+      id: 2-create-users
+      author: buddy
       changes:
         - createTable:
             tableName: users
@@ -12,90 +44,319 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     nullable: false
-
               - column:
-                  name: username
+                  name: email
+                  type: VARCHAR(150)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: provider
+                  type: VARCHAR(50)
+              - column:
+                  name: is_verified
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: last_login
+                  type: TIMESTAMP
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+
+  - changeSet:
+      id: 3-create-user-roles
+      author: buddy
+      changes:
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: user_roles
+            columnNames: user_id, role_id
+            constraintName: pk_user_roles
+        - addForeignKeyConstraint:
+            baseTableName: user_roles
+            baseColumnNames: user_id
+            constraintName: fk_user_roles_user
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: user_roles
+            baseColumnNames: role_id
+            constraintName: fk_user_roles_role
+            referencedTableName: roles
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 4-create-oauth2-accounts
+      author: buddy
+      changes:
+        - createTable:
+            tableName: oauth2_accounts
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: provider
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: provider_id
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+        - addForeignKeyConstraint:
+            baseTableName: oauth2_accounts
+            baseColumnNames: user_id
+            constraintName: fk_oauth2_account_user
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 5-create-refresh-tokens
+      author: buddy
+      changes:
+        - createTable:
+            tableName: refresh_tokens
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: token
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
                     unique: true
-
               - column:
-                  name: password
+                  name: expiry_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: device_info
                   type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-
-              - column:
-                  name: name
-                  type: VARCHAR(255)
-                  constraints:
-                    nullable: false
-
-              - column:
-                  name: role
-                  type: VARCHAR(100)
-
-              - column:
-                  name: email
-                  type: VARCHAR(255)
-
-              - column:
-                  name: avatar
-                  type: VARCHAR(500)
-
-              - column:
-                  name: level
-                  type: VARCHAR(50)
-
-              - column:
-                  name: streak
-                  type: INT
-                  defaultValueNumeric: 0
-                  constraints:
-                    nullable: false
-
-              - column:
-                  name: xp
-                  type: INT
-                  defaultValueNumeric: 0
-                  constraints:
-                    nullable: false
-
               - column:
                   name: created_at
                   type: TIMESTAMP
-
               - column:
-                  name: last_login
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_at
                   type: TIMESTAMP
-                  defaultValueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+        - addForeignKeyConstraint:
+            baseTableName: refresh_tokens
+            baseColumnNames: user_id
+            constraintName: fk_refresh_token_user
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
 
+  - changeSet:
+      id: 6-create-verification-tokens
+      author: buddy
+      changes:
+        - createTable:
+            tableName: verification_tokens
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: token
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: type
+                  type: VARCHAR(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiry_date
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: created_by
+                  type: VARCHAR(100)
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_by
+                  type: VARCHAR(100)
+        - addForeignKeyConstraint:
+            baseTableName: verification_tokens
+            baseColumnNames: user_id
+            constraintName: fk_verification_token_user
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+  - changeSet:
+      id: 7-insert-default-roles
+      author: buddy
+      context: data
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ADMIN
+              - column:
+                  name: created_at
+                  valueDate: NOW()
+              - column:
+                  name: created_by
+                  value: system
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: USER
+              - column:
+                  name: created_at
+                  valueDate: NOW()
+              - column:
+                  name: created_by
+                  value: system
+
+  - changeSet:
+      id: 8-insert-admin-user
+      author: buddy
+      context: data
+      changes:
         - insert:
             tableName: users
             columns:
               - column:
-                  name: username
-                  value: "admin"
+                  name: email
+                  value: admin@example.com
               - column:
                   name: password
-                  value: "$2a$10$7/wlOK6h3/IcV/ajkHiQleSno8ds71aKROh2s3xYa2S9qB.DzD0Ny"
+                  value: "$2a$10$K2Bh1QRC6KE5QJrTz8kg9eBSiLpFB5UfTQYz06RvFfBygcnzIaDAm"
               - column:
-                  name: name
-                  value: "ADMIN"
+                  name: first_name
+                  value: system
               - column:
-                  name: role
-                  value: "ADMIN"
+                  name: last_name
+                  value: admin
               - column:
-                  name: email
-                  value: "admin@gmail.com"
+                  name: is_verified
+                  valueBoolean: true
               - column:
-                  name: streak
-                  valueNumeric: 0
-              - column:
-                  name: xp
-                  valueNumeric: 0
+                  name: last_login
+                  valueDate: NOW()
               - column:
                   name: created_at
-                  type: TIMESTAMP
-                  defaultValueComputed: CURRENT_TIMESTAMP
+                  valueDate: NOW()
+              - column:
+                  name: created_by
+                  value: system
+
+  - changeSet:
+      id: 9-assign-admin-role
+      author: buddy
+      context: data
+      changes:
+        - insert:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+              - column:
+                  name: role_id
+                  valueNumeric: 1

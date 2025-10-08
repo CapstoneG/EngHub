@@ -1,307 +1,418 @@
 databaseChangeLog:
   - changeSet:
-      id: 001-create-topic
+      id: 1
       author: tu
       changes:
         - createTable:
-            tableName: topic
+            tableName: language
             columns:
               - column:
                   name: id
-                  type: BIGSERIAL
+                  type: bigint
+                  autoIncrement: true
                   constraints:
                     primaryKey: true
+                    nullable: false
               - column:
                   name: name
-                  type: VARCHAR(255)
-              - column:
-                  name: description
-                  type: VARCHAR(500)
-              - column:
-                  name: level
-                  type: VARCHAR(10)
-              - column:
-                  name: image_url
-                  type: VARCHAR(500)
-              - column:
-                  name: created_at
-                  type: TIMESTAMP
-              - column:
-                  name: updated_at
-                  type: TIMESTAMP
-
-  - changeSet:
-      id: 002-create-vocab
-      author: tu
-      changes:
-        - createTable:
-            tableName: vocab
-            columns:
-              - column:
-                  name: id
-                  type: BIGSERIAL
-                  constraints:
-                    primaryKey: true
-              - column:
-                  name: word
-                  type: VARCHAR(255)
-              - column:
-                  name: phonetic
-                  type: VARCHAR(100)
-              - column:
-                  name: meaning
-                  type: VARCHAR(500)
-              - column:
-                  name: part_of_speech
-                  type: VARCHAR(50)
-              - column:
-                  name: example_sentence
-                  type: VARCHAR(1000)
-              - column:
-                  name: image_url
-                  type: VARCHAR(500)
-              - column:
-                  name: audio_url
-                  type: VARCHAR(500)
-              - column:
-                  name: created_at
-                  type: TIMESTAMP
-              - column:
-                  name: updated_at
-                  type: TIMESTAMP
-
-  - changeSet:
-      id: 003-create-topic-vocab-join
-      author: tu
-      changes:
-        - createTable:
-            tableName: topic_vocab
-            columns:
-              - column:
-                  name: topic_id
-                  type: BIGINT
+                  type: varchar(255)
                   constraints:
                     nullable: false
               - column:
-                  name: vocab_id
-                  type: BIGINT
+                  name: code
+                  type: varchar(10)
                   constraints:
                     nullable: false
-        - addPrimaryKey:
-            tableName: topic_vocab
-            columnNames: topic_id, vocab_id
-        - addForeignKeyConstraint:
-            baseTableName: topic_vocab
-            baseColumnNames: topic_id
-            constraintName: fk_topic_vocab_topic
-            referencedTableName: topic
-            referencedColumnNames: id
-        - addForeignKeyConstraint:
-            baseTableName: topic_vocab
-            baseColumnNames: vocab_id
-            constraintName: fk_topic_vocab_vocab
-            referencedTableName: vocab
-            referencedColumnNames: id
+                    unique: true
 
-
-  - changeSet:
-      id: 004-insert-sample-data
-      author: tu
-      changes:
-        # Insert sample topics
-        - insert:
-            tableName: topic
+        - createTable:
+            tableName: course
             columns:
               - column:
                   name: id
-                  valueNumeric: 1
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
-                  name: name
-                  value: "Animals"
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
               - column:
                   name: description
-                  value: "Common animals and pets"
+                  type: text
               - column:
                   name: level
-                  value: "A1"
+                  type: varchar(50)
               - column:
-                  name: image_url
-                  value: "https://example.com/images/animals.png"
-              - column:
-                  name: created_at
-                  valueDate: "2025-01-01T00:00:00"
-              - column:
-                  name: updated_at
-                  valueDate: "2025-01-01T00:00:00"
+                  name: language_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_course_language
+                    references: language(id)
 
-        - insert:
-            tableName: topic
+        - createTable:
+            tableName: unit
             columns:
               - column:
                   name: id
-                  valueNumeric: 2
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
-                  name: name
-                  value: "Food"
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
               - column:
-                  name: description
-                  value: "Food and drinks vocabulary"
+                  name: order_index
+                  type: int
+                  constraints:
+                    nullable: false
               - column:
-                  name: level
-                  value: "A1"
-              - column:
-                  name: image_url
-                  value: "https://example.com/images/food.png"
-              - column:
-                  name: created_at
-                  valueDate: "2025-01-01T00:00:00"
-              - column:
-                  name: updated_at
-                  valueDate: "2025-01-01T00:00:00"
+                  name: course_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_unit_course
+                    references: course(id)
 
-        # Insert sample vocabs
-        - insert:
-            tableName: vocab
+        - createTable:
+            tableName: lesson
             columns:
               - column:
                   name: id
-                  valueNumeric: 1
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
-                  name: word
-                  value: "cat"
+                  name: title
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
               - column:
-                  name: phonetic
-                  value: "/kæt/"
+                  name: order_index
+                  type: int
+                  constraints:
+                    nullable: false
               - column:
-                  name: meaning
-                  value: "con mèo"
-              - column:
-                  name: part_of_speech
-                  value: "noun"
-              - column:
-                  name: example_sentence
-                  value: "The cat is sleeping on the sofa."
-              - column:
-                  name: image_url
-                  value: "https://example.com/images/cat.png"
-              - column:
-                  name: audio_url
-                  value: "https://example.com/audio/cat.mp3"
-              - column:
-                  name: created_at
-                  valueDate: "2025-01-01T00:00:00"
-              - column:
-                  name: updated_at
-                  valueDate: "2025-01-01T00:00:00"
+                  name: unit_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_lesson_unit
+                    references: unit(id)
 
-        - insert:
-            tableName: vocab
+        - createTable:
+            tableName: exercise
             columns:
               - column:
                   name: id
-                  valueNumeric: 2
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
-                  name: word
-                  value: "dog"
+                  name: question
+                  type: text
+                  constraints:
+                    nullable: false
               - column:
-                  name: phonetic
-                  value: "/dɒɡ/"
+                  name: correct_answer
+                  type: text
+                  constraints:
+                    nullable: false
               - column:
-                  name: meaning
-                  value: "con chó"
+                  name: type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
               - column:
-                  name: part_of_speech
-                  value: "noun"
-              - column:
-                  name: example_sentence
-                  value: "The dog is barking loudly."
-              - column:
-                  name: image_url
-                  value: "https://example.com/images/dog.png"
-              - column:
-                  name: audio_url
-                  value: "https://example.com/audio/dog.mp3"
-              - column:
-                  name: created_at
-                  valueDate: "2025-01-01T00:00:00"
-              - column:
-                  name: updated_at
-                  valueDate: "2025-01-01T00:00:00"
+                  name: lesson_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_exercise_lesson
+                    references: lesson(id)
 
-        - insert:
-            tableName: vocab
+        - createTable:
+            tableName: exercise_option
             columns:
               - column:
                   name: id
-                  valueNumeric: 3
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
-                  name: word
-                  value: "apple"
+                  name: content
+                  type: text
+                  constraints:
+                    nullable: false
               - column:
-                  name: phonetic
-                  value: "/ˈæp.əl/"
+                  name: is_correct
+                  type: boolean
+                  constraints:
+                    nullable: false
               - column:
-                  name: meaning
-                  value: "quả táo"
-              - column:
-                  name: part_of_speech
-                  value: "noun"
-              - column:
-                  name: example_sentence
-                  value: "I eat an apple every morning."
-              - column:
-                  name: image_url
-                  value: "https://example.com/images/apple.png"
-              - column:
-                  name: audio_url
-                  value: "https://example.com/audio/apple.mp3"
-              - column:
-                  name: created_at
-                  valueDate: "2025-01-01T00:00:00"
-              - column:
-                  name: updated_at
-                  valueDate: "2025-01-01T00:00:00"
+                  name: exercise_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_exercise_option_exercise
+                    references: exercise(id)
 
-        # Insert sample relations topic_vocab
-        - insert:
-            tableName: topic_vocab
+        - createTable:
+            tableName: user_progress
             columns:
               - column:
-                  name: topic_id
-                  valueNumeric: 1
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
               - column:
-                  name: vocab_id
-                  valueNumeric: 1
-
-        - insert:
-            tableName: topic_vocab
-            columns:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
               - column:
-                  name: topic_id
-                  valueNumeric: 1
+                  name: lesson_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_user_progress_lesson
+                    references: lesson(id)
               - column:
-                  name: vocab_id
-                  valueNumeric: 2
-
-        - insert:
-            tableName: topic_vocab
-            columns:
+                  name: completed
+                  type: boolean
+                  constraints:
+                    nullable: false
+                    defaultValue: false
               - column:
-                  name: topic_id
-                  valueNumeric: 2
+                  name: score
+                  type: int
               - column:
-                  name: vocab_id
-                  valueNumeric: 3
+                  name: last_updated
+                  type: timestamp
+                  constraints:
+                    nullable: false
 
   - changeSet:
-      id: 005-update-sequence
+      id: 2
       author: tu
       changes:
-        - sql:
-            dbms: postgresql
-            splitStatements: false
-            stripComments: true
-            sql: |
-              SELECT setval(pg_get_serial_sequence('topic', 'id'), (SELECT MAX(id) FROM topic));
-              SELECT setval(pg_get_serial_sequence('vocab', 'id'), (SELECT MAX(id) FROM vocab));
+        - insert:
+            tableName: language
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: name
+                  value: "English"
+              - column:
+                  name: code
+                  value: "EN"
 
+        - insert:
+            tableName: course
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: title
+                  value: "Beginner English"
+              - column:
+                  name: description
+                  value: "A course for beginners to learn basic English."
+              - column:
+                  name: level
+                  value: "Beginner"
+              - column:
+                  name: language_id
+                  value: 1
+
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: title
+                  value: "Basic Vocabulary"
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: course_id
+                  value: 1
+
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: title
+                  value: "Greetings"
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: unit_id
+                  value: 1
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: title
+                  value: "Introductions"
+              - column:
+                  name: order_index
+                  value: 1
+              - column:
+                  name: unit_id
+                  value: 1
+
+        - insert:
+            tableName: exercise
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: question
+                  value: "What is the English word for 'Xin chào'?"
+              - column:
+                  name: correct_answer
+                  value: "Hello"
+              - column:
+                  name: type
+                  value: "TRANSLATE"
+              - column:
+                  name: lesson_id
+                  value: 1
+        - insert:
+            tableName: exercise
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: question
+                  value: "Choose the correct greeting."
+              - column:
+                  name: correct_answer
+                  value: "Good morning"
+              - column:
+                  name: type
+                  value: "MULTIPLE_CHOICE"
+              - column:
+                  name: lesson_id
+                  value: 1
+
+        - insert:
+            tableName: exercise_option
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: content
+                  value: "Good morning"
+              - column:
+                  name: is_correct
+                  value: true
+              - column:
+                  name: exercise_id
+                  value: 2
+        - insert:
+            tableName: exercise_option
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: content
+                  value: "Good night"
+              - column:
+                  name: is_correct
+                  value: false
+              - column:
+                  name: exercise_id
+                  value: 2
+        - insert:
+            tableName: exercise_option
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: content
+                  value: "Goodbye"
+              - column:
+                  name: is_correct
+                  value: false
+              - column:
+                  name: exercise_id
+                  value: 2
+
+        - insert:
+            tableName: user_progress
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: lesson_id
+                  value: 1
+              - column:
+                  name: completed
+                  value: true
+              - column:
+                  name: score
+                  value: 80
+              - column:
+                  name: last_updated
+                  value: "2025-10-08T21:00:00"
+        - insert:
+            tableName: user_progress
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: user_id
+                  value: 1
+              - column:
+                  name: lesson_id
+                  value: 2
+              - column:
+                  name: completed
+                  value: false
+              - column:
+                  name: score
+                  value: 0
+              - column:
+                  name: last_updated
+                  value: "2025-10-08T21:00:00"

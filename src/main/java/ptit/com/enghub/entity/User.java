@@ -1,44 +1,72 @@
 package ptit.com.enghub.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "users")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Email
+    @Size(max = 50)
+    @Column(nullable = false, unique = true)
+    private String email;
 
-    @Column(nullable = false)
+    @Size(max = 100)
+    @Column // Cho phép null nếu chỉ dùng OAuth2
     private String password;
 
-    @Column(nullable = false)
-    private String name;
-    private String role;
-    private String email;
-    private String avatar;
-    private String level;
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "first_name")
+    private String firstName;
 
-    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
-    private int streak;
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "last_name")
+    private String lastName;
 
-    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
-    private int xp;
+    @Column(length = 20)
+    private String provider;
 
-    private LocalDateTime createdAt;
+    @Column(name = "is_verified", nullable = false)
+    @Builder.Default
+    private boolean verified = false;
 
-    @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
-            insertable = false, updatable = true)
+    @Builder.Default
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<OAuth2Account> oauth2Accounts = new HashSet<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<VerificationToken> verificationTokens = new HashSet<>();
+
+    @UpdateTimestamp
+    @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
 }

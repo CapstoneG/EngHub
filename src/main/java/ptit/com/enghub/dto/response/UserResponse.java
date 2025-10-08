@@ -1,22 +1,22 @@
 package ptit.com.enghub.dto.response;
 
-import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.util.Set;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-@Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    private Long id;
-    private String username;
-    private String name;
-    private String role;
-    private String email;
-    private String avatar;
-    private String level;
-    private int streak;
-    private int xp;
-    private LocalDateTime createdAt;
-    private LocalDateTime lastLogin;
+    int id;
+    String email;
+    String firstName;
+    String lastName;
+    Set<RoleResponse> roles;
 }
+

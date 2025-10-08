@@ -1,40 +1,58 @@
 package ptit.com.enghub.controller;
 
+import jakarta.validation.Valid;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+import ptit.com.enghub.dto.request.UserCreationRequest;
+import ptit.com.enghub.dto.request.UserUpdateRequest;
+import ptit.com.enghub.dto.response.ApiResponse;
 import ptit.com.enghub.dto.response.UserResponse;
-import ptit.com.enghub.entity.User;
-import ptit.com.enghub.repository.UserRepository;
+import ptit.com.enghub.service.UserService;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class UserController {
+    UserService userService;
 
-    private final UserRepository userRepository;
 
-    @GetMapping("/me")
-    public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
-        String username = (String) authentication.getPrincipal(); // principal là String
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return ResponseEntity.ok(UserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .name(user.getName())
-                .role(user.getRole())
-                .email(user.getEmail())
-                .avatar(user.getAvatar())
-                .level(user.getLevel())
-                .streak(user.getStreak())
-                .xp(user.getXp())
-                .createdAt(user.getCreatedAt())
-                .lastLogin(user.getLastLogin())
-                .build());
+
+    @GetMapping
+    public ResponseEntity<List<UserResponse>> getAllUsers(){
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
+    @GetMapping("/info")
+    public ResponseEntity<UserResponse> getYourInfo(){
+        return ResponseEntity.ok(userService.getYourInfo());
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId){
+        ApiResponse apiResponse = new ApiResponse<>();
+        apiResponse.setResult(userService.getUser(userId));
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequest request){
+        return ResponseEntity.ok(userService.updateUser(userId, request));
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId){
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
 }

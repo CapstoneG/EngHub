@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/20250923/20250923-create-users-table.yaml
   - include:
       file: db/changelog/20250928/20250928-create-topics-table.yaml
+  - include:
+      file: db/changelog/20251008/20251008-insert-sample-data.yaml

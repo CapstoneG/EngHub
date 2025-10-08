@@ -22,14 +22,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse login(UserLoginRequest request) {
-        User user = userRepository.findByUsername(request.getUsername())
+        User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        String token = jwtUtil.generateToken(user.getUsername(), user.getRole());
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole().name());
 
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);

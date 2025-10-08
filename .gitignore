@@ -44,3 +44,5 @@ target/
 # Application configs (DB, secret)
 application.properties
 application.yml
+
+logs

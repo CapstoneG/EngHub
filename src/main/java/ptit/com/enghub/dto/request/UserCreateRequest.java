@@ -4,7 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class UserCreateRequest {
+    private String email;
     private String username;
     private String password;
-    private String name;
 }

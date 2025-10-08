@@ -1,15 +1,23 @@
 spring.application.name=EngHub
+server.address=0.0.0.0
+server.port=
+
 
 # JWT
 jwt.secret=
-jwt.expiration=3600000
+jwt.expiration=
 
 # Database
 spring.datasource.url=
-spring.datasource.username=
+spring.datasource.username=postgres
 spring.datasource.password=
-spring.jpa.hibernate.ddl-auto=none
+spring.jpa.hibernate.ddl-auto=
 spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.default_schema=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.properties.hibernate.default_schema=
 
 spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.yaml
+spring.liquibase.clear-checksums=true
+
+#logging.level.root=DEBUG
+logging.level.ptit.com.enghub=DEBUG
+#logging.file.name=logs/enghub.log

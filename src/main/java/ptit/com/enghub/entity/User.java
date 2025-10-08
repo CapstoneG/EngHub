@@ -2,6 +2,7 @@ package ptit.com.enghub.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ptit.com.enghub.enums.Role;
 
 import java.time.LocalDateTime;
 
@@ -17,15 +18,15 @@ public class User {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String email;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String name;
-    private String role;
-    private String email;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    private String username;
     private String avatar;
     private String level;
 

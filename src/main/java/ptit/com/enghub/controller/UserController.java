@@ -19,14 +19,14 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
-        String username = (String) authentication.getPrincipal(); // principal là String
-        User user = userRepository.findByUsername(username)
+        String email = (String) authentication.getPrincipal();
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
         return ResponseEntity.ok(UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
-                .name(user.getName())
-                .role(user.getRole())
+                .role(user.getRole().name())
                 .email(user.getEmail())
                 .avatar(user.getAvatar())
                 .level(user.getLevel())

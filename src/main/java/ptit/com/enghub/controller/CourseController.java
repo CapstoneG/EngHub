@@ -1,10 +1,8 @@
 package ptit.com.enghub.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ptit.com.enghub.dto.request.CourseRequest;
 import ptit.com.enghub.dto.response.ApiResponse;
 import ptit.com.enghub.dto.response.CourseResponse;
 import ptit.com.enghub.service.IService.CourseService;
@@ -21,6 +19,7 @@ public class CourseController {
     public ApiResponse<List<CourseResponse>> getAllCourses() {
         return ApiResponse.<List<CourseResponse>>builder()
                 .result(courseService.getAllCourses())
+                .message("Get all courses successfully")
                 .build();
     }
 
@@ -28,6 +27,31 @@ public class CourseController {
     public ApiResponse<CourseResponse> getCourseById(@PathVariable Long id) {
         return ApiResponse.<CourseResponse>builder()
                 .result(courseService.getCourseById(id))
+                .message("Get course detail successfully")
+                .build();
+    }
+
+    @PostMapping
+    public ApiResponse<CourseResponse> createCourse(@RequestBody CourseRequest request) {
+        return ApiResponse.<CourseResponse>builder()
+                .result(courseService.createCourse(request))
+                .message("Course created successfully")
+                .build();
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<CourseResponse> update(@PathVariable Long id, @RequestBody CourseRequest request) {
+        return ApiResponse.<CourseResponse>builder()
+                .result(courseService.updateCourse(id, request))
+                .message("Course updated successfully")
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> delete(@PathVariable Long id) {
+        courseService.deleteCourse(id);
+        return ApiResponse.<Void>builder()
+                .message("Course deleted successfully")
                 .build();
     }
 }

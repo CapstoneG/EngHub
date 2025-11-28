@@ -1,0 +1,67 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3
+      author: trong
+      changes:
+        - insert:
+            tableName: course
+            columns:
+              - column:
+                  name: title
+                  value: "Beginner English"
+              - column:
+                  name: description
+                  value: "Khóa học tiếng Anh sơ cấp giúp người học làm quen với từ vựng, ngữ pháp và mẫu câu giao tiếp cơ bản trong đời sống hằng ngày."
+              - column:
+                  name: level
+                  value: "Beginner"
+              - column:
+                  name: language_id
+                  value: 1
+        - insert:
+            tableName: course
+            columns:
+              - column:
+                  name: title
+                  value: "Intermediate English"
+              - column:
+                  name: description
+                  value: "Khóa học tiếng Anh trung cấp giúp người học củng cố ngữ pháp và mở rộng vốn từ vựng."
+              - column:
+                  name: level
+                  value: "Intermediate"
+              - column:
+                  name: language_id
+                  value: 1
+
+        - insert:
+            tableName: course
+            columns:
+              - column:
+                  name: title
+                  value: "Advanced English"
+              - column:
+                  name: description
+                  value: "Khóa học tiếng Anh nâng cao dành cho người học muốn cải thiện khả năng giao tiếp và viết học thuật."
+              - column:
+                  name: level
+                  value: "Advanced"
+              - column:
+                  name: language_id
+                  value: 1
+
+        - insert:
+            tableName: course
+            columns:
+              - column:
+                  name: title
+                  value: "Business English"
+              - column:
+                  name: description
+                  value: "Khóa học tiếng Anh thương mại tập trung vào kỹ năng giao tiếp trong môi trường doanh nghiệp."
+              - column:
+                  name: level
+                  value: "Professional"
+              - column:
+                  name: language_id
+                  value: 1

@@ -23,10 +23,26 @@ public class Lesson {
     @Column(name = "order_index", nullable = false)
     private int orderIndex;
 
-    @ManyToOne
+    @Column
+    private int duration;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "unit_id", nullable = false)
     private Unit unit;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Exercise> exercises;
+
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Dialogue> dialogue;
+
+    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Grammar grammar;
+
+    @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Video video;
+
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Vocabulary> vocabularies;
+
 }

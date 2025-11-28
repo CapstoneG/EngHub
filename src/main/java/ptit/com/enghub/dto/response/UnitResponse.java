@@ -8,6 +8,9 @@ import java.util.List;
 public class UnitResponse {
     private Long id;
     private String title;
+    private String description;
     private int orderIndex;
     private List<LessonResponse> lessons;
+    private int progress;
+    private String icon;
 }

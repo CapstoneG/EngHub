@@ -8,5 +8,5 @@ import java.util.List;
 public interface LessonService {
     LessonResponse getLesson(Long lessonId, Long userId);
     List<LessonResponse> getLessonsByUnitId(Long unitId);
-    void completeLesson(Long lessonId, CompleteLessonRequest request);
+    void completeLesson(Long lessonId, CompleteLessonRequest request, Long userId);
 }

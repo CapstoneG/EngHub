@@ -1,15 +1,15 @@
 package ptit.com.enghub.controller;
 
-import com.cloudinary.Api;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ptit.com.enghub.dto.request.CompleteLessonRequest;
 import ptit.com.enghub.dto.response.ApiResponse;
 import ptit.com.enghub.dto.response.ExerciseResponse;
 import ptit.com.enghub.dto.response.LessonResponse;
+import ptit.com.enghub.entity.User;
 import ptit.com.enghub.service.IService.ExerciseService;
 import ptit.com.enghub.service.IService.LessonService;
+import ptit.com.enghub.service.UserService;
 
 import java.util.List;
 
@@ -19,11 +19,13 @@ import java.util.List;
 public class LessonController {
     private final LessonService lessonService;
     private final ExerciseService exerciseService;
+    private final UserService userService;
 
     @GetMapping("/lessons/{id}")
-    public ApiResponse<LessonResponse> getLesson(@PathVariable Long id, @RequestParam Long userId) {
+    public ApiResponse<LessonResponse> getLesson(@PathVariable Long id) {
+        User user = userService.getUser();
         return ApiResponse.<LessonResponse>builder()
-                .result(lessonService.getLesson(id, userId))
+                .result(lessonService.getLesson(id, user.getId()))
                 .build();
     }
 
@@ -36,7 +38,8 @@ public class LessonController {
 
     @PostMapping("/lessons/{id}/complete")
     public ApiResponse<Void> completeLesson(@PathVariable Long id, @RequestBody CompleteLessonRequest request) {
-        lessonService.completeLesson(id, request);
+        User user = userService.getUser();
+        lessonService.completeLesson(id, request, user.getId());
         return ApiResponse.<Void>builder()
                 .message("Lesson completed successfully")
                 .build();

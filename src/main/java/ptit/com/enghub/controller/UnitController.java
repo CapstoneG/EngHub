@@ -1,13 +1,13 @@
 package ptit.com.enghub.controller;
 
-import com.cloudinary.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ptit.com.enghub.dto.request.UnitRequest;
 import ptit.com.enghub.dto.response.ApiResponse;
 import ptit.com.enghub.dto.response.UnitResponse;
-import ptit.com.enghub.entity.Unit;
+import ptit.com.enghub.entity.User;
 import ptit.com.enghub.service.IService.UnitService;
+import ptit.com.enghub.service.UserService;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UnitController {
     private final UnitService unitService;
+    private final UserService userService;
 
     @GetMapping("/units/{id}")
     public ApiResponse<UnitResponse> getUnitById(@PathVariable Long id) {
@@ -27,8 +28,9 @@ public class UnitController {
 
     @GetMapping("/courses/{courseId}/units")
     public ApiResponse<List<UnitResponse>> getUnitsByCourseId(@PathVariable Long courseId) {
+        User user = userService.getUser();
         return ApiResponse.<List<UnitResponse>>builder()
-                .result(unitService.getUnitsByCourseId(courseId))
+                .result(unitService.getUnitsByCourseId(courseId, user.getId()))
                 .message("Get units by course successfully")
                 .build();
     }

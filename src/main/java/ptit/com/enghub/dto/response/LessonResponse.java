@@ -10,4 +10,8 @@ public class LessonResponse {
     private String title;
     private int orderIndex;
     private List<ExerciseResponse> exercises;
+    private String content;
+    private boolean completed;
+    private int duration;
+    private String type;
 }

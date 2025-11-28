@@ -1,0 +1,333 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5
+      author: trong
+      changes:
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: title
+                  value: "Thành viên gia đình"
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: unit_id
+                  value: 1
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: title
+                  value: "Đồ vật xung quanh"
+              - column:
+                  name: order_index
+                  value: 1
+              - column:
+                  name: unit_id
+                  value: 1
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: title
+                  value: "Từ vựng về nghề nghiệp"
+              - column:
+                  name: order_index
+                  value: 2
+              - column:
+                  name: unit_id
+                  value: 1
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: title
+                  value: "Kiểm tra từ vựng tổng hợp"
+              - column:
+                  name: order_index
+                  value: 3
+              - column:
+                  name: unit_id
+                  value: 1
+              - column:
+                  name: duration
+                  value: 10
+
+#                  ===
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: title
+                  value: "Động từ To Be (am, is, are)"
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: unit_id
+                  value: 2
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: title
+                  value: "Thì hiện tại đơn (Simple Present)"
+              - column:
+                  name: order_index
+                  value: 1
+              - column:
+                  name: unit_id
+                  value: 2
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: title
+                  value: "Danh từ & Đại từ"
+              - column:
+                  name: order_index
+                  value: 2
+              - column:
+                  name: unit_id
+                  value: 2
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: title
+                  value: "Luyện tập thì hiện tại đơn"
+              - column:
+                  name: order_index
+                  value: 3
+              - column:
+                  name: unit_id
+                  value: 2
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: title
+                  value: "Bài kiểm tra ngữ pháp"
+              - column:
+                  name: order_index
+                  value: 4
+              - column:
+                  name: unit_id
+                  value: 2
+              - column:
+                  name: duration
+                  value: 10
+#                  ===
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 10
+              - column:
+                  name: title
+                  value: "Chào hỏi và tạm biệt"
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: unit_id
+                  value: 3
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: title
+                  value: "Giới thiệu bản thân"
+              - column:
+                  name: order_index
+                  value: 1
+              - column:
+                  name: unit_id
+                  value: 3
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 12
+              - column:
+                  name: title
+                  value: "Hỏi và nói về thời tiết"
+              - column:
+                  name: order_index
+                  value: 2
+              - column:
+                  name: unit_id
+                  value: 3
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 13
+              - column:
+                  name: title
+                  value: "Đặt món ăn & đồ uống"
+              - column:
+                  name: order_index
+                  value: 3
+              - column:
+                  name: unit_id
+                  value: 3
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 14
+              - column:
+                  name: title
+                  value: "Kiểm tra giao tiếp"
+              - column:
+                  name: order_index
+                  value: 4
+              - column:
+                  name: unit_id
+                  value: 3
+              - column:
+                  name: duration
+                  value: 10
+#        ===
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 15
+              - column:
+                  name: title
+                  value: "Nghe hội thoại: đi siêu thị"
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: unit_id
+                  value: 4
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 16
+              - column:
+                  name: title
+                  value: "Nghe hội thoại: hỏi đường"
+              - column:
+                  name: order_index
+                  value: 1
+              - column:
+                  name: unit_id
+                  value: 4
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 17
+              - column:
+                  name: title
+                  value: "Phản xạ nói theo mẫu"
+              - column:
+                  name: order_index
+                  value: 2
+              - column:
+                  name: unit_id
+                  value: 4
+              - column:
+                  name: duration
+                  value: 10
+        - insert:
+            tableName: lesson
+            columns:
+              - column:
+                  name: id
+                  value: 18
+              - column:
+                  name: title
+                  value: "Luyện nghe chọn đáp án đúng"
+              - column:
+                  name: order_index
+                  value: 3
+              - column:
+                  name: unit_id
+                  value: 4
+              - column:
+                  name: duration
+                  value: 10

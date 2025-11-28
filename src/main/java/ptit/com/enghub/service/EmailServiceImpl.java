@@ -60,9 +60,6 @@ public class EmailServiceImpl implements EmailService {
         MimeMessageHelper mimeMessageHelper;
 
         try {
-
-            // Setting multipart as true for attachments to
-            // be send
             mimeMessageHelper
                     = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender, "Enghub Website");
@@ -79,8 +76,6 @@ public class EmailServiceImpl implements EmailService {
             javaMailSender.send(mimeMessage);
             return "Mail sent Successfully";
         }
-
-        // Catch block to handle MessagingException
         catch (MessagingException e) {
 
             // Display message when exception occurred
@@ -94,6 +89,10 @@ public class EmailServiceImpl implements EmailService {
     public void sendEmailWithHtmlTemplate(String to, String subject, String templateName, Context context) {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+
+        if (context == null) {
+            context = new Context();
+        }
 
         try {
             helper.setFrom(sender, "Enghub Website");

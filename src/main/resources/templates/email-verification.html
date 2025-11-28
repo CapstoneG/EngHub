@@ -1,14 +1,90 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Email Verification</title>
-    </head>
-    <body>
-        <h2>Welcome to Enghub Website</h2>
-        <p>Please click the link below to verify your email address:</p>
-        <a th:href="${verificationUrl}" href="#">Verify Email</a>
-        <p>This link will expire in 24 hours.</p>
-        <p>Thank you!</p>
-    </body>
+<html lang="vi" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EngHub Email</title>
+</head>
+
+<body style="margin:0; padding:0; background:#f4f6f8; font-family:Arial, sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 0;">
+    <tr>
+        <td align="center">
+
+            <table width="600" cellpadding="0" cellspacing="0"
+                   style="background:#ffffff; border-radius:12px; overflow:hidden;">
+
+                <!-- Header -->
+                <tr>
+                    <td style="background:#7ac7b8; padding:30px 0; text-align:center;">
+                        <img src="https://res.cloudinary.com/dc5glptng/image/upload/v1763995098/logo_b8sutf.png"
+                             alt="EngHub Logo" width="90" style="margin-bottom:10px;" />
+
+                        <h2 style="color:#ffffff; margin:0; font-size:24px;">
+                            Welcome to EngHub!
+                        </h2>
+                    </td>
+                </tr>
+
+                <!-- Body -->
+                <tr>
+                    <td style="padding:35px; text-align:center;">
+
+                        <p style="font-size:16px; color:#333; line-height:1.6; margin:0 0 20px 0;">
+                            Cảm ơn bạn đã đăng ký tài khoản tại <strong>EngHub</strong>!<br/>
+                            Chỉ còn một bước nữa: hãy xác thực email của bạn để kích hoạt tài khoản.
+                        </p>
+
+                        <!-- BUTTON -->
+                        <table role="presentation" align="center" cellspacing="0" cellpadding="0" border="0">
+                            <tr>
+                                <td align="center">
+                                    <a th:href="${verificationUrl}"
+                                       href="#"
+                                       style="
+            background:#007bff;
+            color:#ffffff;
+            padding:14px 28px;
+            border-radius:8px;
+            text-decoration:none;
+            font-size:16px;
+            font-weight:bold;
+            display:inline-block;
+            font-family:Arial, sans-serif;
+         ">
+                                        Xác thực tài khoản
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <p style="font-size:14px; color:#777; margin-top:20px;">
+                            Liên kết xác thực sẽ hết hạn trong <strong>24 giờ</strong>.
+                        </p>
+
+                        <p style="font-size:13px; color:#999; margin-top:25px; line-height:1.6;">
+                            Nếu bạn không yêu cầu tạo tài khoản, vui lòng bỏ qua email này.
+                        </p>
+
+                    </td>
+                </tr>
+
+                <!-- Footer -->
+                <tr>
+                    <td style="background:#fafafa; padding:20px; text-align:center;">
+                        <p style="font-size:12px; color:#999; margin:0;">
+                            © 2025 EngHub. All rights reserved.
+                        </p>
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
 </html>

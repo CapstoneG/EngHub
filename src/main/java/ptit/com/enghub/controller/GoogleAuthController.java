@@ -24,7 +24,6 @@
         private final OAuth2AuthorizedClientService clientService;
         private final ClientRegistrationRepository clientRegistrationRepository;
 
-        // B1: FE gọi API này để lấy URL
         @GetMapping("/url")
         public Map<String, String> getGoogleLoginUrl(HttpServletRequest request) {
             ClientRegistration googleRegistration = clientRegistrationRepository.findByRegistrationId("google");
@@ -43,7 +42,7 @@
         @GetMapping("/callback")
         public void handleGoogleCallback(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
             log.info(code);
-            response.sendRedirect("http://localhost:5173/auth/google/callback?code=" + code);
+            response.sendRedirect("http://localhost:5173/login?code=" + code);
         }
 
     }

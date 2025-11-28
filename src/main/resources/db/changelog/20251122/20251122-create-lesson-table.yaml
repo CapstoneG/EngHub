@@ -1,0 +1,232 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: trong
+      changes:
+        - createTable:
+            tableName: video
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: lesson_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_video_lesson
+                    references: lesson(id)
+
+              - column:
+                  name: url
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: description
+                  type: TEXT
+
+              - column:
+                  name: duration
+                  type: int
+
+  - changeSet:
+      id: 2
+      author: trong
+      changes:
+        - createTable:
+            tableName: vocabulary
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: lesson_id
+                  type: bigint
+                  constraints:
+                    nullable: true
+                    foreignKeyName: fk_vocabulary_lesson
+                    references: lesson(id)
+
+              - column:
+                  name: word
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: meaning
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: example
+                  type: TEXT
+
+              - column:
+                  name: image_url
+                  type: varchar(500)
+
+  - changeSet:
+      id: 3
+      author: trong
+      changes:
+        - createTable:
+            tableName: grammar
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: lesson_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_grammar_lesson
+                    references: lesson(id)
+
+              - column:
+                  name: topic
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: explanation
+                  type: TEXT
+
+  - changeSet:
+      id: 4
+      author: trong
+      changes:
+        - createTable:
+            tableName: grammar_formula
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: grammar_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_formula_grammar
+                    references: grammar(id)
+
+              - column:
+                  name: type
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: formula
+                  type: TEXT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: signal_word
+                  type: TEXT
+
+              - column:
+                  name: description
+                  type: TEXT
+
+              - column:
+                  name: verb_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 5
+      author: trong
+      changes:
+        - createTable:
+            tableName: grammar_example
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: formula_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_example_formula
+                    references: grammar_formula(id)
+
+              - column:
+                  name: sentence
+                  type: TEXT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: translation
+                  type: TEXT
+
+              - column:
+                  name: highlight
+                  type: TEXT
+
+  - changeSet:
+      id: 6
+      author: trong
+      changes:
+        - createTable:
+            tableName: dialogue
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: lesson_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_dialogue_lesson
+                    references: lesson(id)
+
+              - column:
+                  name: speaker
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: text
+                  type: TEXT
+                  constraints:
+                    nullable: false

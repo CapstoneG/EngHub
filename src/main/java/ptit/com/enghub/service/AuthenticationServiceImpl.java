@@ -67,9 +67,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         var user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
-        log.info("Authenticating user: {}", user.getEmail());
-        log.info(passwordEncoder.encode(request.getPassword()));
-
         boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (!authenticated) {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
@@ -105,7 +102,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setLastName(request.getLastName());
         user.setFirstName(request.getFirstName());
         user.setProvider("LOCAL");
-        user.setVerified(false); // Chưa xác thực
+        user.setVerified(false);
 
         var roles = roleRepository.findByName(EnumRole.USER)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
@@ -122,8 +119,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
     }
 
-    // Sinh access token (giữ nguyên)
     public String generateToken(User user) {
+
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getEmail())
@@ -144,15 +144,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-    // Sinh refresh token
     public RefreshToken generateRefreshToken(User user) {
         byte[] randomBytes = new byte[32];
         new SecureRandom().nextBytes(randomBytes);
         String refreshToken = Base64.getUrlEncoder().encodeToString(randomBytes);
 
-        Instant expiresAt = Instant.now().plus(7, ChronoUnit.DAYS);
-
-        // Lấy thông tin thiết bị từ request
+        Instant expiresAt = Instant.now().plus(30, ChronoUnit.DAYS);
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String userAgent = request.getHeader("User-Agent");
         String ipAddress = request.getRemoteAddr();

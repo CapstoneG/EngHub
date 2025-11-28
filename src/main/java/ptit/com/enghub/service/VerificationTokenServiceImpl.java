@@ -1,6 +1,7 @@
 package ptit.com.enghub.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import ptit.com.enghub.entity.User;
@@ -19,18 +20,18 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final EmailService emailService;
 
     @Override
+    @Async
     public void createAndSendVerificationToken(User user) {
         String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = VerificationToken.builder()
                 .token(token)
                 .type("EMAIL_VERIFY")
-                .expiryDate(LocalDateTime.now().plusHours(24)) // Hết hạn sau 24h
+                .expiryDate(LocalDateTime.now().plusHours(1))
                 .user(user)
                 .build();
 
         verificationTokenRepository.save(verificationToken);
 
-        // Gửi email xác thực
         String verificationUrl = "http://localhost:8080/auth/verify?token=" + token;
         sendVerificationEmail(user.getEmail(), verificationUrl);
     }
@@ -42,7 +43,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         emailService.sendEmailWithHtmlTemplate(
                 email,
                 "Verify Your Email Address",
-                "email-verification", // Tên template HTML
+                "email-verification",
                 context
         );
     }

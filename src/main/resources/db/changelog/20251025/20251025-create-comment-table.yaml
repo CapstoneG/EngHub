@@ -1,0 +1,133 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: trong
+      changes:
+        - createTable:
+            tableName: comment
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: author_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: lesson_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: parent_id
+                  type: BIGINT
+                  constraints:
+                    nullable: true
+
+              - column:
+                  name: rating
+                  type: INT
+                  constraints:
+                    nullable: true
+
+              - column:
+                  name: content
+                  type: TEXT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: likes
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: comment
+            baseColumnNames: author_id
+            constraintName: fk_comment_user
+            referencedTableName: users
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: comment
+            baseColumnNames: lesson_id
+            constraintName: fk_comment_lesson
+            referencedTableName: lesson
+            referencedColumnNames: id
+
+        - addForeignKeyConstraint:
+            baseTableName: comment
+            baseColumnNames: parent_id
+            constraintName: fk_comment_parent
+            referencedTableName: comment
+            referencedColumnNames: id
+  - changeSet:
+      id: 2
+      author: trong
+      changes:
+        - createTable:
+            tableName: comment_likes
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: comment_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addUniqueConstraint:
+            tableName: comment_likes
+            columnNames: user_id, comment_id
+            constraintName: uk_user_comment_like
+
+        - addForeignKeyConstraint:
+            baseTableName: comment_likes
+            baseColumnNames: user_id
+            constraintName: fk_comment_like_user
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: comment_likes
+            baseColumnNames: comment_id
+            constraintName: fk_comment_like_comment
+            referencedTableName: comment
+            referencedColumnNames: id
+            onDelete: CASCADE

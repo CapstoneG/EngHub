@@ -1,0 +1,388 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: trong
+      changes:
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: title
+                  value: "Từ vựng cơ bản"
+              - column:
+                  name: description
+                  value: "200+ từ vựng thiết yếu cho người mới bắt đầu"
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: course_id
+                  value: 1
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: title
+                  value: "Ngữ pháp căn bản"
+              - column:
+                  name: description
+                  value: "Các cấu trúc câu đơn giản và thì hiện tại đơn"
+              - column:
+                  name: order_index
+                  value: 1
+              - column:
+                  name: course_id
+                  value: 1
+              - column:
+                  name: icon
+                  value: "FaBook"
+
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: title
+                  value: "Giao tiếp hàng ngày"
+              - column:
+                  name: description
+                  value: "Các câu giao tiếp thông dụng trong cuộc sống"
+              - column:
+                  name: order_index
+                  value: 2
+              - column:
+                  name: course_id
+                  value: 1
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 4
+              - column:
+                  name: title
+                  value: "Kỹ năng nghe và nói"
+              - column:
+                  name: description
+                  value: "Cải thiện khả năng nghe hiểu và phản xạ nói qua các bài hội thoại cơ bản."
+              - column:
+                  name: order_index
+                  value: 3
+              - column:
+                  name: course_id
+                  value: 1
+              - column:
+                  name: icon
+                  value: "FaBook"
+
+#                  ====
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 5
+              - column:
+                  name: title
+                  value: "Ngữ pháp nâng cao cơ bản"
+              - column:
+                  name: description
+                  value: "Ôn tập và mở rộng các cấu trúc ngữ pháp thường gặp."
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: course_id
+                  value: 2
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 6
+              - column:
+                  name: title
+                  value: "Từ vựng và cách diễn đạt"
+              - column:
+                  name: description
+                  value: "Mở rộng vốn từ theo chủ đề và học các cụm từ thông dụng."
+              - column:
+                  name: order_index
+                  value: 1
+              - column:
+                  name: course_id
+                  value: 2
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 7
+              - column:
+                  name: title
+                  value: "Kỹ năng nghe và nói"
+              - column:
+                  name: description
+                  value: "Phát triển khả năng nghe hiểu và phản xạ trong giao tiếp qua hội thoại thực tế."
+              - column:
+                  name: order_index
+                  value: 2
+              - column:
+                  name: course_id
+                  value: 2
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 8
+              - column:
+                  name: title
+                  value: "Đọc hiểu và viết cơ bản"
+              - column:
+                  name: description
+                  value: "Rèn luyện kỹ năng đọc hiểu văn bản và viết đoạn văn ngắn."
+              - column:
+                  name: order_index
+                  value: 3
+              - column:
+                  name: course_id
+                  value: 2
+              - column:
+                  name: icon
+                  value: "FaBook"
+#                  ===
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 9
+              - column:
+                  name: title
+                  value: "Ngữ pháp nâng cao"
+              - column:
+                  name: description
+                  value: "Tập trung vào các cấu trúc câu phức tạp"
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: course_id
+                  value: 3
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 10
+              - column:
+                  name: title
+                  value: "Từ vựng học thuật"
+              - column:
+                  name: description
+                  value: "Mở rộng vốn từ vựng học thuật thường gặp"
+              - column:
+                  name: order_index
+                  value: 1
+              - column:
+                  name: course_id
+                  value: 3
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 11
+              - column:
+                  name: title
+                  value: "Viết học thuật (Academic Writing)"
+              - column:
+                  name: description
+                  value: "Rèn luyện kỹ năng viết bài luận, thư trang trọng và phân tích văn bản chuyên sâu."
+              - column:
+                  name: order_index
+                  value: 2
+              - column:
+                  name: course_id
+                  value: 3
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 12
+              - column:
+                  name: title
+                  value: "Nghe và Nói nâng cao"
+              - column:
+                  name: description
+                  value: "Phát triển khả năng hiểu và phản ứng nhanh trong giao tiếp thực tế"
+              - column:
+                  name: order_index
+                  value: 3
+              - column:
+                  name: course_id
+                  value: 3
+              - column:
+                  name: icon
+                  value: "FaBook"
+#                  ===
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 13
+              - column:
+                  name: title
+                  value: "Giao tiếp trong môi trường làm việc"
+              - column:
+                  name: description
+                  value: "Phát triển kỹ năng nói và phản xạ trong các tình huống giao tiếp công sở"
+              - column:
+                  name: order_index
+                  value: 0
+              - column:
+                  name: course_id
+                  value: 4
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 14
+              - column:
+                  name: title
+                  value: "Email và thư từ chuyên nghiệp"
+              - column:
+                  name: description
+                  value: "Học cách viết email, thư và báo cáo chuyên nghiệp"
+              - column:
+                  name: order_index
+                  value: 1
+              - column:
+                  name: course_id
+                  value: 4
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 15
+              - column:
+                  name: title
+                  value: "Thuyết trình và thương lượng"
+              - column:
+                  name: description
+                  value: "Nâng cao khả năng trình bày ý tưởng, thuyết phục và đàm phán"
+              - column:
+                  name: order_index
+                  value: 2
+              - column:
+                  name: course_id
+                  value: 4
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 16
+              - column:
+                  name: title
+                  value: "Từ vựng và thành ngữ thương mại"
+              - column:
+                  name: description
+                  value: "Mở rộng vốn từ và cách sử dụng cụm từ, thành ngữ phổ biến"
+              - column:
+                  name: order_index
+                  value: 3
+              - column:
+                  name: course_id
+                  value: 4
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 17
+              - column:
+                  name: title
+                  value: "Phỏng vấn và phát triển nghề nghiệp"
+              - column:
+                  name: description
+                  value: "Rèn luyện kỹ năng phỏng vấn, viết CV, và trao đổi chuyên nghiệp."
+              - column:
+                  name: order_index
+                  value: 4
+              - column:
+                  name: course_id
+                  value: 4
+              - column:
+                  name: icon
+                  value: "FaBook"
+        - insert:
+            tableName: unit
+            columns:
+              - column:
+                  name: id
+                  value: 18
+              - column:
+                  name: title
+                  value: "Đánh giá cuối khóa"
+              - column:
+                  name: description
+                  value: "Tổng hợp kiến thức và đánh giá năng lực tiếng Anh thương mại thực tế của học viên."
+              - column:
+                  name: order_index
+                  value: 5
+              - column:
+                  name: course_id
+                  value: 4
+              - column:
+                  name: icon
+                  value: "FaBook"

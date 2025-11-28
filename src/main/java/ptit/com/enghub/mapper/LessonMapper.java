@@ -1,6 +1,7 @@
 package ptit.com.enghub.mapper;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ptit.com.enghub.dto.response.LessonResponse;
 import ptit.com.enghub.entity.Lesson;
 

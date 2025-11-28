@@ -37,10 +37,8 @@ public class GoogleAuthService {
     private String redirectUri;
 
     public AuthenticationResponse loginWithGoogle(String code) {
-        // 1. Lấy access token từ Google
         String accessToken = getAccessToken(code);
 
-        // 2. Lấy thông tin người dùng từ Google
         Map<String, Object> userInfo = getUserInfo(accessToken);
         String email = (String) userInfo.get("email");
         String firstName = (String) userInfo.get("given_name");
@@ -49,28 +47,12 @@ public class GoogleAuthService {
 
         log.info("Google user info: {}", userInfo);
 
-        // 3. Kiểm tra và tạo/lấy user
         User user = userRepository.findByEmail(email)
                 .orElseGet(() -> createNewUser(email, firstName, lastName, providerId));
-
-        // 4. Kiểm tra trạng thái xác thực
-        if (!user.isVerified()) {
-            boolean isNew = user.getCreatedAt().isAfter(LocalDateTime.now().minusMinutes(1));
-            // hoặc có thể gắn flag trong createNewUser
-
-            return AuthenticationResponse.builder()
-                    .authenticated(false)
-                    .verified(false)
-                    .newlyRegistered(isNew)
-                    .message(isNew
-                            ? "Tài khoản mới được tạo. Vui lòng kiểm tra email để xác thực trước khi đăng nhập."
-                            : "Tài khoản đã tồn tại nhưng chưa xác thực. Vui lòng xác thực email.")
-                    .build();
-        }
-
-        // 5. Tạo JWT
         String jwt = authenticationService.generateToken(user);
         String refresh = authenticationService.generateRefreshToken(user).getToken();
+
+        log.info(jwt);
 
         return AuthenticationResponse.builder()
                 .token(jwt)
@@ -111,10 +93,10 @@ public class GoogleAuthService {
     private User createNewUser(String email, String firstName, String lastName, String providerId) {
         User newUser = User.builder()
                 .email(email)
-                .password("") // Không cần password cho OAuth
+                .password("")
                 .firstName(firstName)
                 .lastName(lastName)
-                .verified(false) // Chưa xác thực email
+                .verified(false)
                 .build();
         newUser.setCreatedAt(LocalDateTime.now());
 
@@ -127,10 +109,6 @@ public class GoogleAuthService {
                 .user(savedUser)
                 .build();
         oauth2AccountRepository.save(oauth2Account);
-
-        // Gửi email xác thực
-        verificationTokenService.createAndSendVerificationToken(savedUser);
-
         return savedUser;
     }
 }

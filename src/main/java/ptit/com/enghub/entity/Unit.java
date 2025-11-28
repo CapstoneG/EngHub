@@ -20,6 +20,12 @@ public class Unit {
     @Column(nullable = false)
     private String title;
 
+    @Column
+    private String description;
+
+    @Column
+    private String icon;
+
     @Column(name = "order_index", nullable = false)
     private int orderIndex;
 

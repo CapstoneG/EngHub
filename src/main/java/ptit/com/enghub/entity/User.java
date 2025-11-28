@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.UpdateTimestamp;
+import ptit.com.enghub.enums.Level;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -30,7 +31,7 @@ public class User extends BaseEntity {
     private String email;
 
     @Size(max = 100)
-    @Column // Cho phép null nếu chỉ dùng OAuth2
+    @Column
     private String password;
 
     @Size(max = 50)
@@ -45,6 +46,10 @@ public class User extends BaseEntity {
 
     @Column(length = 20)
     private String provider;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "level")
+    private Level level;
 
     @Column(name = "is_verified", nullable = false)
     @Builder.Default

@@ -1,6 +1,7 @@
 package ptit.com.enghub.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ptit.com.enghub.dto.request.CompleteLessonRequest;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class LessonServiceImpl implements LessonService {
     private final LessonRepository lessonRepository;
     private final UserProgressRepository userProgressRepository;
@@ -28,12 +30,15 @@ public class LessonServiceImpl implements LessonService {
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
-        // Kiểm tra quyền truy cập (bài học đã được mở khóa chưa)
-        if (!isLessonUnlocked(lesson, userId)) {
-            throw new RuntimeException("Lesson is locked. Complete previous lessons first.");
-        }
+        LessonResponse response = lessonMapper.toResponse(lesson);
 
-        return lessonMapper.toResponse(lesson);
+        boolean completed = userProgressRepository
+                .findByUserIdAndLessonId(userId, lessonId)
+                .map(UserProgress::isCompleted)
+                .orElse(false);
+
+        response.setCompleted(completed);
+        return response;
     }
 
     @Override
@@ -45,14 +50,14 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     @Transactional
-    public void completeLesson(Long lessonId, CompleteLessonRequest request) {
+    public void completeLesson(Long lessonId, CompleteLessonRequest request, Long userId) {
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
-        UserProgress progress = userProgressRepository.findByUserIdAndLessonId(request.getUserId(), lessonId)
+        UserProgress progress = userProgressRepository.findByUserIdAndLessonId(userId, lessonId)
                 .orElse(new UserProgress());
 
-        progress.setUserId(request.getUserId());
+        progress.setUserId(userId);
         progress.setLesson(lesson);
         progress.setCompleted(true);
         progress.setScore(request.getScore());
@@ -61,7 +66,7 @@ public class LessonServiceImpl implements LessonService {
         userProgressRepository.save(progress);
 
         // Mở khóa bài học tiếp theo
-        unlockNextLesson(lesson, request.getUserId());
+        unlockNextLesson(lesson, userId);
     }
 
     private boolean isLessonUnlocked(Lesson lesson, Long userId) {

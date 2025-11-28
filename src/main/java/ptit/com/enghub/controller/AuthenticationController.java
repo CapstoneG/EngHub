@@ -5,10 +5,8 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import ptit.com.enghub.dto.request.AuthenticationRequest;
 import ptit.com.enghub.dto.request.IntrospectRequest;
 import ptit.com.enghub.dto.request.RefreshTokenRequest;
@@ -58,8 +56,11 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh-token")
-    public AuthenticationResponse refreshToken(@RequestBody RefreshTokenRequest request) {
-        return authenticationService.refreshToken(request);
+    public ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
+        var result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
+                .build();
     }
 
     @PostMapping("/logout")
@@ -89,12 +90,11 @@ public class AuthenticationController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+    public ModelAndView verifyEmail(@RequestParam String token) {
         boolean isVerified = verificationTokenService.verifyToken(token);
-        if (isVerified) {
-            return ResponseEntity.ok("Email verified successfully!");
-        } else {
-            return ResponseEntity.badRequest().body("Invalid or expired token.");
-        }
+        ModelAndView mav = new ModelAndView("verify"); // tên template
+        mav.addObject("message", isVerified ? "Email verified successfully!" : "Invalid or expired token.");
+        return mav;
     }
+
 }

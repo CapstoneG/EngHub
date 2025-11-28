@@ -13,10 +13,12 @@ import java.util.Set;
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    int id;
+    long id;
     String email;
     String firstName;
     String lastName;
     Set<RoleResponse> roles;
+    String level;
+
 }
 

@@ -70,6 +70,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: icon
+                  type: varchar(255)
+              - column:
                   name: order_index
                   type: int
                   constraints:
@@ -109,6 +115,9 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_lesson_unit
                     references: unit(id)
+              - column:
+                  name: duration
+                  type: int
 
         - createTable:
             tableName: exercise
@@ -224,195 +233,3 @@ databaseChangeLog:
               - column:
                   name: code
                   value: "EN"
-
-        - insert:
-            tableName: course
-            columns:
-              - column:
-                  name: id
-                  value: 1
-              - column:
-                  name: title
-                  value: "Beginner English"
-              - column:
-                  name: description
-                  value: "A course for beginners to learn basic English."
-              - column:
-                  name: level
-                  value: "Beginner"
-              - column:
-                  name: language_id
-                  value: 1
-
-        - insert:
-            tableName: unit
-            columns:
-              - column:
-                  name: id
-                  value: 1
-              - column:
-                  name: title
-                  value: "Basic Vocabulary"
-              - column:
-                  name: order_index
-                  value: 0
-              - column:
-                  name: course_id
-                  value: 1
-
-        - insert:
-            tableName: lesson
-            columns:
-              - column:
-                  name: id
-                  value: 1
-              - column:
-                  name: title
-                  value: "Greetings"
-              - column:
-                  name: order_index
-                  value: 0
-              - column:
-                  name: unit_id
-                  value: 1
-        - insert:
-            tableName: lesson
-            columns:
-              - column:
-                  name: id
-                  value: 2
-              - column:
-                  name: title
-                  value: "Introductions"
-              - column:
-                  name: order_index
-                  value: 1
-              - column:
-                  name: unit_id
-                  value: 1
-
-        - insert:
-            tableName: exercise
-            columns:
-              - column:
-                  name: id
-                  value: 1
-              - column:
-                  name: question
-                  value: "What is the English word for 'Xin chào'?"
-              - column:
-                  name: correct_answer
-                  value: "Hello"
-              - column:
-                  name: type
-                  value: "TRANSLATE"
-              - column:
-                  name: lesson_id
-                  value: 1
-        - insert:
-            tableName: exercise
-            columns:
-              - column:
-                  name: id
-                  value: 2
-              - column:
-                  name: question
-                  value: "Choose the correct greeting."
-              - column:
-                  name: correct_answer
-                  value: "Good morning"
-              - column:
-                  name: type
-                  value: "MULTIPLE_CHOICE"
-              - column:
-                  name: lesson_id
-                  value: 1
-
-        - insert:
-            tableName: exercise_option
-            columns:
-              - column:
-                  name: id
-                  value: 1
-              - column:
-                  name: content
-                  value: "Good morning"
-              - column:
-                  name: is_correct
-                  value: true
-              - column:
-                  name: exercise_id
-                  value: 2
-        - insert:
-            tableName: exercise_option
-            columns:
-              - column:
-                  name: id
-                  value: 2
-              - column:
-                  name: content
-                  value: "Good night"
-              - column:
-                  name: is_correct
-                  value: false
-              - column:
-                  name: exercise_id
-                  value: 2
-        - insert:
-            tableName: exercise_option
-            columns:
-              - column:
-                  name: id
-                  value: 3
-              - column:
-                  name: content
-                  value: "Goodbye"
-              - column:
-                  name: is_correct
-                  value: false
-              - column:
-                  name: exercise_id
-                  value: 2
-
-        - insert:
-            tableName: user_progress
-            columns:
-              - column:
-                  name: id
-                  value: 1
-              - column:
-                  name: user_id
-                  value: 1
-              - column:
-                  name: lesson_id
-                  value: 1
-              - column:
-                  name: completed
-                  value: true
-              - column:
-                  name: score
-                  value: 80
-              - column:
-                  name: last_updated
-                  value: "2025-10-08T21:00:00"
-        - insert:
-            tableName: user_progress
-            columns:
-              - column:
-                  name: id
-                  value: 2
-              - column:
-                  name: user_id
-                  value: 1
-              - column:
-                  name: lesson_id
-                  value: 2
-              - column:
-                  name: completed
-                  value: false
-              - column:
-                  name: score
-                  value: 0
-              - column:
-                  name: last_updated
-                  value: "2025-10-08T21:00:00"

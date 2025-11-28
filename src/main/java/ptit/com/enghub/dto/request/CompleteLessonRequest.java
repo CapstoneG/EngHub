@@ -4,6 +4,5 @@ import lombok.Data;
 
 @Data
 public class CompleteLessonRequest {
-    private Long userId;
     private int score;
 }

@@ -10,6 +10,7 @@ import ptit.com.enghub.dto.request.UserUpdateRequest;
 import ptit.com.enghub.dto.response.UserResponse;
 import ptit.com.enghub.entity.User;
 import ptit.com.enghub.enums.EnumRole;
+import ptit.com.enghub.enums.Level;
 import ptit.com.enghub.exception.AppException;
 import ptit.com.enghub.exception.ErrorCode;
 import ptit.com.enghub.mapper.UserMapper;
@@ -52,6 +53,12 @@ public class UserService {
                 userRepository.findById(userId)
                         .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED))
         );
+    }
+
+    public User getUser(){
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        return userRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 
     public UserResponse updateUser(Long userId, UserUpdateRequest request) {

@@ -8,7 +8,8 @@ import ptit.com.enghub.entity.Notification;
 
 import java.util.UUID;
 
-public interface NotificationRepository extends JpaRepository<Notification, UUID> {
+public interface NotificationRepository
+        extends JpaRepository<Notification, UUID> {
     Page<Notification> findByUserIdOrderByCreatedAtDesc(String userId, Pageable pageable);
     long countByUserIdAndIsReadFalse(String userId);
 }

@@ -21,9 +21,6 @@ public class Exercise {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String question;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String correctAnswer;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ExerciseType type;
@@ -32,6 +29,7 @@ public class Exercise {
     @JoinColumn(name = "lesson_id", nullable = false)
     private Lesson lesson;
 
-    @OneToMany(mappedBy = "exercise", cascade = CascadeType.ALL)
-    private List<ExerciseOption> options;
+    @Column(columnDefinition = "TEXT", nullable = true)
+    private String metadata;
+
 }

@@ -135,15 +135,15 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: correct_answer
-                  type: text
-                  constraints:
-                    nullable: false
-              - column:
                   name: type
                   type: varchar(50)
                   constraints:
                     nullable: false
+              - column:
+                  name: metadata
+                  type: text
+                  constraints:
+                    nullable: true
               - column:
                   name: lesson_id
                   type: bigint
@@ -151,34 +151,6 @@ databaseChangeLog:
                     nullable: false
                     foreignKeyName: fk_exercise_lesson
                     references: lesson(id)
-
-        - createTable:
-            tableName: exercise_option
-            columns:
-              - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
-                  constraints:
-                    primaryKey: true
-                    nullable: false
-              - column:
-                  name: content
-                  type: text
-                  constraints:
-                    nullable: false
-              - column:
-                  name: is_correct
-                  type: boolean
-                  constraints:
-                    nullable: false
-              - column:
-                  name: exercise_id
-                  type: bigint
-                  constraints:
-                    nullable: false
-                    foreignKeyName: fk_exercise_option_exercise
-                    references: exercise(id)
 
         - createTable:
             tableName: user_progress

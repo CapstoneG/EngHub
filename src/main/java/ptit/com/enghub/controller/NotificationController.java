@@ -29,7 +29,7 @@ public class NotificationController {
 
     @PostMapping
     public Notification createNotification(@RequestBody NotificationRequest req) {
-        return service.createAndSend(req);
+        return service.create(req);
     }
 
     @PostMapping("/{id}/read")

@@ -1,11 +1,13 @@
 package ptit.com.enghub.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ptit.com.enghub.dto.ReminderMessage;
 import ptit.com.enghub.dto.request.NotificationRequest;
 import ptit.com.enghub.entity.Notification;
+import ptit.com.enghub.enums.NotificationType;
 import ptit.com.enghub.messaging.NotificationProducer;
 import ptit.com.enghub.repository.NotificationRepository;
 
@@ -13,42 +15,26 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class NotificationService {
 
     private final NotificationRepository repository;
-    private final RealtimePublisher realtimePublisher;
-    private final NotificationProducer producer;
+    private final RealtimePublisher publisher;
 
-    public NotificationService(NotificationRepository repository,
-                               RealtimePublisher realtimePublisher,
-                               NotificationProducer producer) {
-        this.repository = repository;
-        this.realtimePublisher = realtimePublisher;
-        this.producer = producer;
-    }
+    public Notification create(NotificationRequest req) {
 
-    public Notification createAndSend(NotificationRequest req) {
         Notification n = new Notification();
         n.setId(UUID.randomUUID());
-        n.setUserId(req.userId);
-        n.setType(req.type);
-        n.setTitle(req.title);
-        n.setContent(req.content);
+        n.setUserId(req.getUserId());
+        n.setType(req.getType());
+        n.setTitle(req.getTitle());
+        n.setContent(req.getContent());
         n.setCreatedAt(Instant.now());
         n.setRead(false);
 
         repository.save(n);
-        realtimePublisher.publishToUser(n.getUserId(), n);
+        publisher.publishToUser(req.getUserId(), n);
         return n;
-    }
-
-    public void enqueueReminder(String userId, String title, String content) {
-        var msg = new ReminderMessage();
-        msg.setUserId(userId);
-        msg.setType("DAILY_REMINDER");
-        msg.setTitle(title);
-        msg.setContent(content);
-        producer.sendReminder(msg);
     }
 
     public Page<Notification> listForUser(String userId, Pageable pageable) {
@@ -67,3 +53,4 @@ public class NotificationService {
         return repository.countByUserIdAndIsReadFalse(userId);
     }
 }
+

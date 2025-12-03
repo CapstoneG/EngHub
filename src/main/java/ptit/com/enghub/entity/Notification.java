@@ -2,6 +2,7 @@ package ptit.com.enghub.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ptit.com.enghub.enums.NotificationType;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -23,7 +24,8 @@ public class Notification {
     private String userId;
 
     @Column(name = "type", nullable = false)
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private NotificationType type;
 
     @Column(name = "title")
     private String title;

@@ -326,10 +326,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: email
-                  value: admin@example.com
+                  value: "admin@gmail.com"
               - column:
                   name: password
-                  value: "$2a$10$K2Bh1QRC6KE5QJrTz8kg9eBSiLpFB5UfTQYz06RvFfBygcnzIaDAm"
+                  value: "$2a$10$ej.jfHsFNbb3HuIcXZpCkenusr4v53XXbrI7Hi3amfK51aAqx1tom"
               - column:
                   name: first_name
                   value: system

@@ -1,15 +1,15 @@
 package ptit.com.enghub.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
 @Entity
 @Table(name = "vocabulary")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vocabulary {
 
     @Id

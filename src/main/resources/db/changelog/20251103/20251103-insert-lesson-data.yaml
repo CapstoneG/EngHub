@@ -7,9 +7,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 1
-              - column:
                   name: title
                   value: "Thành viên gia đình"
               - column:
@@ -24,9 +21,6 @@ databaseChangeLog:
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: id
-                  value: 2
               - column:
                   name: title
                   value: "Đồ vật xung quanh"
@@ -43,9 +37,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 3
-              - column:
                   name: title
                   value: "Từ vựng về nghề nghiệp"
               - column:
@@ -60,9 +51,6 @@ databaseChangeLog:
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: id
-                  value: 4
               - column:
                   name: title
                   value: "Kiểm tra từ vựng tổng hợp"
@@ -81,9 +69,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 5
-              - column:
                   name: title
                   value: "Động từ To Be (am, is, are)"
               - column:
@@ -98,9 +83,6 @@ databaseChangeLog:
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: id
-                  value: 6
               - column:
                   name: title
                   value: "Thì hiện tại đơn (Simple Present)"
@@ -117,9 +99,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 7
-              - column:
                   name: title
                   value: "Danh từ & Đại từ"
               - column:
@@ -135,9 +114,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 8
-              - column:
                   name: title
                   value: "Luyện tập thì hiện tại đơn"
               - column:
@@ -152,9 +128,6 @@ databaseChangeLog:
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: id
-                  value: 9
               - column:
                   name: title
                   value: "Bài kiểm tra ngữ pháp"
@@ -172,9 +145,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 10
-              - column:
                   name: title
                   value: "Chào hỏi và tạm biệt"
               - column:
@@ -189,9 +159,6 @@ databaseChangeLog:
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: id
-                  value: 11
               - column:
                   name: title
                   value: "Giới thiệu bản thân"
@@ -208,9 +175,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 12
-              - column:
                   name: title
                   value: "Hỏi và nói về thời tiết"
               - column:
@@ -226,9 +190,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 13
-              - column:
                   name: title
                   value: "Đặt món ăn & đồ uống"
               - column:
@@ -243,9 +204,6 @@ databaseChangeLog:
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: id
-                  value: 14
               - column:
                   name: title
                   value: "Kiểm tra giao tiếp"
@@ -263,9 +221,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 15
-              - column:
                   name: title
                   value: "Nghe hội thoại: đi siêu thị"
               - column:
@@ -280,9 +235,6 @@ databaseChangeLog:
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: id
-                  value: 16
               - column:
                   name: title
                   value: "Nghe hội thoại: hỏi đường"
@@ -299,9 +251,6 @@ databaseChangeLog:
             tableName: lesson
             columns:
               - column:
-                  name: id
-                  value: 17
-              - column:
                   name: title
                   value: "Phản xạ nói theo mẫu"
               - column:
@@ -316,9 +265,6 @@ databaseChangeLog:
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: id
-                  value: 18
               - column:
                   name: title
                   value: "Luyện nghe chọn đáp án đúng"

@@ -31,4 +31,7 @@ public class Grammar {
 
     @OneToMany(mappedBy = "grammar", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<GrammarFormula> formulas = new ArrayList<>();
+
+    @Column(columnDefinition = "TEXT")
+    private String signalWord; // signal world
 }

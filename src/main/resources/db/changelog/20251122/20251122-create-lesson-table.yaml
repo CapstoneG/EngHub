@@ -111,6 +111,10 @@ databaseChangeLog:
                   name: explanation
                   type: TEXT
 
+              - column:
+                  name: signal_word
+                  type: TEXT
+
   - changeSet:
       id: 4
       author: trong
@@ -145,10 +149,6 @@ databaseChangeLog:
                   type: TEXT
                   constraints:
                     nullable: false
-
-              - column:
-                  name: signal_word
-                  type: TEXT
 
               - column:
                   name: description

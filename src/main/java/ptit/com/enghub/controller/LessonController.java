@@ -3,9 +3,11 @@ package ptit.com.enghub.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import ptit.com.enghub.dto.request.CompleteLessonRequest;
+import ptit.com.enghub.dto.request.LessonCreationRequest;
 import ptit.com.enghub.dto.response.ApiResponse;
 import ptit.com.enghub.dto.response.ExerciseResponse;
 import ptit.com.enghub.dto.response.LessonResponse;
+import ptit.com.enghub.entity.Lesson;
 import ptit.com.enghub.entity.User;
 import ptit.com.enghub.service.IService.ExerciseService;
 import ptit.com.enghub.service.IService.LessonService;
@@ -51,4 +53,13 @@ public class LessonController {
                 .result(exerciseService.getExercisesByLessonId(lessonId))
                 .build();
     }
+
+    @PostMapping("/lessons")
+    public ApiResponse<Void> createLesson(@RequestBody LessonCreationRequest request) {
+        Lesson lesson = lessonService.createLesson(request);
+        return ApiResponse.<Void>builder()
+                .message("Lesson created success")
+                .build();
+    }
+
 }

@@ -31,9 +31,6 @@ public class GrammarFormula {
     private String formula;
 
     @Column(columnDefinition = "TEXT")
-    private String signalWord; // signal world
-
-    @Column(columnDefinition = "TEXT")
     private String description; // usage
 
     @Column(nullable = false)

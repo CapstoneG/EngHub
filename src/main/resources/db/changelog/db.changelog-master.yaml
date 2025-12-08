@@ -15,3 +15,5 @@ databaseChangeLog:
       file: db/changelog/20251122/20251122-create-lesson-table.yaml
   - include:
       file: db/changelog/20251125/create-notification-table.yaml
+  - include:
+      file: db/changelog/20251208/create-deck-flashcard-table.yaml

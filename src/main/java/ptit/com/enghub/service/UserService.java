@@ -32,8 +32,12 @@ public class UserService {
 
     public List<UserResponse> getAllUsers() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Username: {}", authentication.getName());
-        authentication.getAuthorities().forEach(auth -> log.info("Authority: {}", auth.getAuthority()));
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
 
         return userRepository.findAll()
                 .stream()
@@ -69,6 +73,13 @@ public class UserService {
     }
 
     public String deleteUser(Long userId) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
         userRepository.deleteById(userId);
         return "User was deleted";
     }

@@ -8,7 +8,11 @@ import org.springframework.web.client.RestTemplate;
 import ptit.com.enghub.dto.response.AuthenticationResponse;
 import ptit.com.enghub.entity.OAuth2Account;
 import ptit.com.enghub.entity.User;
+import ptit.com.enghub.enums.EnumRole;
+import ptit.com.enghub.exception.AppException;
+import ptit.com.enghub.exception.ErrorCode;
 import ptit.com.enghub.repository.OAuth2AccountRepository;
+import ptit.com.enghub.repository.RoleRepository;
 import ptit.com.enghub.repository.UserRepository;
 import ptit.com.enghub.service.IService.AuthenticationService;
 import ptit.com.enghub.service.IService.VerificationTokenService;
@@ -26,6 +30,7 @@ public class GoogleAuthService {
     private final AuthenticationService authenticationService;
     private final VerificationTokenService verificationTokenService;
     private final RestTemplate restTemplate;
+    private final RoleRepository roleRepository;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
@@ -96,9 +101,13 @@ public class GoogleAuthService {
                 .password("")
                 .firstName(firstName)
                 .lastName(lastName)
-                .verified(false)
+                .verified(true)
                 .build();
         newUser.setCreatedAt(LocalDateTime.now());
+
+        var roles = roleRepository.findByName(EnumRole.USER)
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+        newUser.getRoles().add(roles);
 
         User savedUser = userRepository.save(newUser);
 

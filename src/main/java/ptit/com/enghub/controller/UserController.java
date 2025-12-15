@@ -29,8 +29,6 @@ import java.util.Map;
 public class UserController {
     UserService userService;
 
-
-
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());

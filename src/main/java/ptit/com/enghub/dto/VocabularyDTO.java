@@ -1,9 +1,9 @@
-package ptit.com.enghub.dto.request;
+package ptit.com.enghub.dto;
 
 import lombok.Data;
 
 @Data
-public class VocabularyRequest {
+public class VocabularyDTO {
     private String word;
     private String meaning;
     private String example;

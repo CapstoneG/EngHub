@@ -12,4 +12,6 @@ public interface LessonService {
     List<LessonResponse> getLessonsByUnitId(Long unitId);
     void completeLesson(Long lessonId, CompleteLessonRequest request, Long userId);
     Lesson createLesson(LessonCreationRequest request);
+    void deleteLesson(Long id);
+
 }

@@ -4,14 +4,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ptit.com.enghub.dto.request.CompleteLessonRequest;
 import ptit.com.enghub.dto.request.LessonCreationRequest;
 import ptit.com.enghub.dto.response.LessonResponse;
 import ptit.com.enghub.entity.*;
+import ptit.com.enghub.exception.AppException;
+import ptit.com.enghub.exception.ErrorCode;
 import ptit.com.enghub.mapper.LessonMapper;
-import ptit.com.enghub.mapper.UnitMapper;
 import ptit.com.enghub.repository.LessonRepository;
 import ptit.com.enghub.repository.UnitRepository;
 import ptit.com.enghub.repository.UserProgressRepository;
@@ -116,6 +118,14 @@ public class LessonServiceImpl implements LessonService {
 
     @Transactional
     public Lesson createLesson(LessonCreationRequest request) {
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
 
         Unit unit = unitRepository.findById(request.getUnitId())
                 .orElseThrow(() -> new RuntimeException("Unit not found"));
@@ -223,4 +233,21 @@ public class LessonServiceImpl implements LessonService {
 
         return lessonRepository.save(lesson);
     }
+
+    @Override
+    public void deleteLesson(Long id) {
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
+        Lesson lesson = lessonRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+        lessonRepository.delete(lesson);
+    }
+
 }

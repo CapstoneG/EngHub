@@ -29,7 +29,6 @@ public class SecurityConfig {
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
 
-    // Filter chain cho OAuth2 Login (browser-based)
     @Bean
     @Order(1)
     public SecurityFilterChain oauth2FilterChain(HttpSecurity http) throws Exception {

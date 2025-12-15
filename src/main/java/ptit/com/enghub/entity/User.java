@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.UpdateTimestamp;
 import ptit.com.enghub.enums.Level;
+import ptit.com.enghub.enums.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -73,6 +74,12 @@ public class User extends BaseEntity {
     @UpdateTimestamp
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
+
 
 }
 

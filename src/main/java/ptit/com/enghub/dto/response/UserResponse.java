@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public class UserResponse {
     String lastName;
     Set<RoleResponse> roles;
     String level;
-
+    String status;
+    LocalDateTime lastLogin;
 }
 

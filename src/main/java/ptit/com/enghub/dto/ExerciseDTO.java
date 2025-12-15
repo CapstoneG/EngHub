@@ -1,13 +1,11 @@
-package ptit.com.enghub.dto.request;
+package ptit.com.enghub.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Data;
 import ptit.com.enghub.enums.ExerciseType;
 
-import java.util.List;
-
 @Data
-public class ExerciseRequest {
+public class ExerciseDTO {
     private String question;
     private ExerciseType type;
     private JsonNode metadata;

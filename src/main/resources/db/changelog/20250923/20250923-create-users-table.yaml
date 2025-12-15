@@ -90,6 +90,10 @@ databaseChangeLog:
               - column:
                   name: updated_by
                   type: VARCHAR(100)
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  defaultValue: "ACTIVE"
 
   - changeSet:
       id: 3-create-user-roles
@@ -351,6 +355,10 @@ databaseChangeLog:
               - column:
                   name: level
                   value: "PROFICIENCY"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+
 
   - changeSet:
       id: 9-assign-admin-role

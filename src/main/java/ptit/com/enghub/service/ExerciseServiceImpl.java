@@ -2,7 +2,7 @@ package ptit.com.enghub.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ptit.com.enghub.dto.response.ExerciseResponse;
+import ptit.com.enghub.dto.ExerciseDTO;
 import ptit.com.enghub.mapper.ExerciseMapper;
 import ptit.com.enghub.repository.ExerciseRepository;
 import ptit.com.enghub.service.IService.ExerciseService;
@@ -17,9 +17,10 @@ public class ExerciseServiceImpl implements ExerciseService {
     private final ExerciseMapper exerciseMapper;
 
     @Override
-    public List<ExerciseResponse> getExercisesByLessonId(Long lessonId) {
-        return exerciseRepository.findByLesson_Id(lessonId).stream()
-                .map(exerciseMapper::toResponse)
-                .collect(Collectors.toList());
+    public List<ExerciseDTO> getExercisesByLessonId(Long lessonId) {
+        return exerciseRepository.findByLesson_Id(lessonId)
+                .stream()
+                .map(exerciseMapper::toDTO)
+                .toList();
     }
 }

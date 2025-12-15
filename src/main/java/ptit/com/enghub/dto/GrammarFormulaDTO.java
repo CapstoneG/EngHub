@@ -1,4 +1,4 @@
-package ptit.com.enghub.dto.request;
+package ptit.com.enghub.dto;
 
 
 import lombok.Data;
@@ -7,10 +7,10 @@ import ptit.com.enghub.enums.VerbType;
 import java.util.List;
 
 @Data
-public class GrammarFormulaRequest {
+public class GrammarFormulaDTO {
     private String type;
     private String formula;
     private String description;
     private VerbType verbType;
-    private List<GrammarExampleRequest> examples;
+    private List<GrammarExampleDTO> examples;
 }

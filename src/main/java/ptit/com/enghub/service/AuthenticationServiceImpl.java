@@ -29,6 +29,7 @@ import ptit.com.enghub.dto.response.UserResponse;
 import ptit.com.enghub.entity.RefreshToken;
 import ptit.com.enghub.entity.User;
 import ptit.com.enghub.enums.EnumRole;
+import ptit.com.enghub.enums.UserStatus;
 import ptit.com.enghub.exception.AppException;
 import ptit.com.enghub.exception.ErrorCode;
 import ptit.com.enghub.mapper.UserMapper;
@@ -77,6 +78,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .authenticated(false)
                     .verified(false)
                     .message("Tài khoản đã tồn tại nhưng chưa xác thực. Vui lòng xác thực email.")
+                    .build();
+        }
+
+        if ( !user.getStatus().equals(UserStatus.ACTIVE) ){
+            return AuthenticationResponse.builder()
+                    .authenticated(false)
+                    .verified(false)
+                    .message("Tài khoản không hoạt động")
                     .build();
         }
 

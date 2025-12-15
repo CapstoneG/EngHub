@@ -3,6 +3,7 @@ package ptit.com.enghub.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ptit.com.enghub.dto.request.DeckCreationRequest;
 import ptit.com.enghub.dto.response.DeckSummaryResponse;
 import ptit.com.enghub.entity.Deck;
 import ptit.com.enghub.entity.Flashcard;
@@ -17,57 +18,68 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class DeckService {
-    private final DeckRepository deckRepository;
-    private final FlashcardRepository flashcardRepository;
-    private final DeckMapper deckMapper;
+        private final DeckRepository deckRepository;
+        private final FlashcardRepository flashcardRepository;
+        private final DeckMapper deckMapper;
 
-//    public DeckSummaryResponse createDeck(Long userId, DeckCreationRequest request) {
-//        Deck deck = new Deck();
-//        deck.setName(request.getName());
-//        deck.setDescription(request.getDescription());
-//        deck.setPublic(request.isPublic());
-//        deck.setOwnerId(userId);
-//        deck.setCreatorId(userId);
-//        // sourceDeckId để null
-//
-//        Deck savedDeck = deckRepository.save(deck);
-//        return deckMapper.toSummaryDTO(savedDeck);
-//    }
+        public DeckSummaryResponse createDeck(Long userId, DeckCreationRequest request) {
+                Deck deck = new Deck();
+                deck.setName(request.getName());
+                deck.setDescription(request.getDescription());
+                deck.setOwnerId(userId);
+                deck.setCreatorId(userId);
 
-    @Transactional
-    public void cloneDeck(Long userId, Long originalDeckId) {
-        Deck original = deckRepository.findById(originalDeckId)
-                .orElseThrow(() -> new RuntimeException("Deck not found"));
+                Deck savedDeck = deckRepository.save(deck);
+                return deckMapper.toSummaryDTO(savedDeck);
+        }
 
-        // 1. Clone Deck Info
-        Deck newDeck = Deck.builder()
-                .name(original.getName())
-                .description(original.getDescription())
-                .isPublic(false) // Clone về thì thành private
-                .ownerId(userId)
-                .creatorId(original.getCreatorId())
-                .sourceDeckId(original.getId()) // Đánh dấu nguồn gốc
-                .build();
-        newDeck = deckRepository.save(newDeck);
+        @Transactional
+        public void cloneDeck(Long userId, Long originalDeckId) {
+                Deck original = deckRepository.findById(originalDeckId)
+                                .orElseThrow(() -> new RuntimeException("Deck not found"));
 
-        // 2. Clone All Cards (Reset SRS params)
-        Deck finalNewDeck = newDeck;
-        List<Flashcard> newCards = original.getCards().stream().map(oldCard ->
-                Flashcard.builder()
-                        .term(oldCard.getTerm())
-                        .phonetic(oldCard.getPhonetic())
-                        .definition(oldCard.getDefinition())
-                        .partOfSpeech(oldCard.getPartOfSpeech())
-                        .exampleSentence(oldCard.getExampleSentence())
-                        .deck(finalNewDeck) // Gán vào deck mới
-                        // Reset thuật toán
-                        .repetitions(0).intervalDays(0).easeFactor(2.5)
-                        .nextReviewAt(LocalDateTime.now()) // Học ngay
-                        .build()
-        ).collect(Collectors.toList());
+                // 1. Clone Deck Info
+                Deck newDeck = Deck.builder()
+                                .name(original.getName())
+                                .description(original.getDescription())
+                                .ownerId(userId)
+                                .creatorId(original.getCreatorId())
+                                .sourceDeckId(original.getId()) // Mark source
+                                .build();
 
-        flashcardRepository.saveAll(newCards);
-    }
+                // Save first to generate ID for the new Deck (needed for explicit relationship
+                // if not relying purely on generic cascade)
+                // Actually with Cascade.ALL we can build the graph and save once, but saving
+                // deck first is safer for IDs.
+                newDeck = deckRepository.save(newDeck);
 
-    // ... method deleteDeck
+                // 2. Clone Relationships (DeckFlashcard) - Reuse EXISTING Flashcards
+                // We create NEW DeckFlashcard entries linking the New Deck to the Old
+                // Flashcards.
+                Deck finalNewDeck = newDeck;
+                List<ptit.com.enghub.entity.DeckFlashcard> newDeckFlashcards = original.getDeckFlashcards().stream()
+                                .map(originalDf -> {
+                                        // Reuse existing flashcard
+                                        Flashcard existingFlashcard = originalDf.getFlashcard();
+
+                                        ptit.com.enghub.entity.DeckFlashcard newDf = new ptit.com.enghub.entity.DeckFlashcard();
+                                        newDf.setDeck(finalNewDeck);
+                                        newDf.setFlashcard(existingFlashcard);
+                                        newDf.setId(new ptit.com.enghub.entity.DeckFlashcardId(finalNewDeck.getId(),
+                                                        existingFlashcard.getId()));
+
+                                        return newDf;
+                                }).collect(Collectors.toList());
+
+                // Update relationship
+                if (newDeck.getDeckFlashcards() == null) {
+                        newDeck.setDeckFlashcards(newDeckFlashcards);
+                } else {
+                        newDeck.getDeckFlashcards().addAll(newDeckFlashcards);
+                }
+
+                deckRepository.save(newDeck);
+        }
+
+        // ... method deleteDeck
 }

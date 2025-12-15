@@ -16,8 +16,8 @@ public interface DeckRepository extends JpaRepository<Deck, Long> {
     // 2. Lấy Deck hệ thống NHƯNG trừ những cái User đã Clone rồi
     // Logic: Lấy Deck Public mà ID của nó KHÔNG nằm trong danh sách sourceDeckId mà user đang sở hữu
     @Query("""
-        SELECT d FROM Deck d 
-        WHERE d.isPublic = true 
+        SELECT d FROM Deck d
+        WHERE d.creatorId = 1
         AND d.id NOT IN (
             SELECT my.sourceDeckId FROM Deck my WHERE my.ownerId = :userId AND my.sourceDeckId IS NOT NULL
         )

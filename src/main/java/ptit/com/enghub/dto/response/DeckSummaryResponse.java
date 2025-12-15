@@ -15,6 +15,5 @@ public class DeckSummaryResponse {
     private int progressPercent;  // % hoàn thành (0 - 100)
 
     // --- Phân biệt nguồn gốc ---
-    private boolean isPublic;     // True nếu là bộ của hệ thống
     private Long sourceDeckId;    // Nếu != null thì là bộ clone
 }

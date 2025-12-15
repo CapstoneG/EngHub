@@ -23,11 +23,6 @@ databaseChangeLog:
                   type: VARCHAR(255)
 
               - column:
-                  name: is_public
-                  type: BOOLEAN
-                  defaultValueBoolean: false
-
-              - column:
                   name: owner_id
                   type: BIGINT
 
@@ -95,11 +90,30 @@ databaseChangeLog:
                   name: next_review_at
                   type: DATETIME
 
+  - changeSet:
+      id: create-deck-flashcard-table
+      author: tu
+      changes:
+        - createTable:
+            tableName: deck_flashcard
+            columns:
               - column:
                   name: deck_id
                   type: BIGINT
                   constraints:
                     nullable: false
-                    foreignKeyName: fk_flashcard_deck
+                    foreignKeyName: fk_deck_flashcard_deck
                     referencedTableName: decks
                     referencedColumnNames: id
+              - column:
+                  name: flashcard_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_deck_flashcard_flashcard
+                    referencedTableName: flashcards
+                    referencedColumnNames: id
+        - addPrimaryKey:
+            columnNames: deck_id, flashcard_id
+            constraintName: pk_deck_flashcard
+            tableName: deck_flashcard

@@ -21,17 +21,16 @@ public class Deck {
 
     private String name;
     private String description;
-    private boolean isPublic; // True = System Deck
 
     @Column(name = "owner_id")
-    private Long ownerId;     // Người sở hữu hiện tại (User)
+    private Long ownerId; // Người sở hữu hiện tại (User)
 
     @Column(name = "source_deck_id")
     private Long sourceDeckId; // ID của bộ gốc (nếu là deck clone) - QUAN TRỌNG
 
     @Column(name = "creator_id")
-    private Long creatorId;   // Người tạo ban đầu (User)
+    private Long creatorId; // Người tạo ban đầu (User)
 
-    @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL)
-    private List<Flashcard> cards;
+    @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<DeckFlashcard> deckFlashcards;
 }

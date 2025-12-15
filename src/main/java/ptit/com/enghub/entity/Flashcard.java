@@ -20,10 +20,10 @@ public class Flashcard {
     private Long id;
 
     // --- Content
-    private String term;            // Mặt trước (Tiếng Anh)
-    private String phonetic;        // Phiên âm
-    private String definition;      // Mặt sau (Tiếng Việt)
-    private String partOfSpeech;    // (n, v, adj...)
+    private String term; // Mặt trước (Tiếng Anh)
+    private String phonetic; // Phiên âm
+    private String definition; // Mặt sau (Tiếng Việt)
+    private String partOfSpeech; // (n, v, adj...)
 
     @Column(columnDefinition = "TEXT")
     private String exampleSentence; // Câu ví dụ
@@ -38,7 +38,6 @@ public class Flashcard {
 
     private LocalDateTime nextReviewAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "deck_id")
-    private Deck deck;
+    @OneToMany(mappedBy = "flashcard", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<DeckFlashcard> deckFlashcards;
 }

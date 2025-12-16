@@ -2,12 +2,16 @@ package ptit.com.enghub.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import ptit.com.enghub.dto.request.FlashcardRequest;
 import ptit.com.enghub.dto.response.FlashcardResponse;
+import ptit.com.enghub.entity.DeckFlashcard;
 import ptit.com.enghub.entity.Flashcard;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface FlashcardMapper {
-    default java.util.List<Long> mapDecksToIds(java.util.List<ptit.com.enghub.entity.DeckFlashcard> deckFlashcards) {
+    default List<Long> mapDecksToIds(java.util.List<DeckFlashcard> deckFlashcards) {
         if (deckFlashcards == null) {
             return java.util.Collections.emptyList();
         }
@@ -19,11 +23,11 @@ public interface FlashcardMapper {
     @Mapping(target = "deckIds", source = "deckFlashcards")
     FlashcardResponse toResponse(Flashcard flashcard);
 
-    // Khi tạo mới từ request thì bỏ qua ID và các thông số thuật toán
-    // @Mapping(target = "id", ignore = true)
-    // @Mapping(target = "deck", ignore = true) // Sẽ set tay trong Service
-    // @Mapping(target = "repetitions", constant = "0")
-    // @Mapping(target = "intervalDays", constant = "0")
-    // @Mapping(target = "easeFactor", constant = "2.5")
-    // Flashcard toEntity(FlashcardRequest request);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "deckFlashcards", ignore = true)
+    @Mapping(target = "nextReviewAt", ignore = true)
+    @Mapping(target = "repetitions", constant = "0")
+    @Mapping(target = "intervalDays", constant = "0")
+    @Mapping(target = "easeFactor", constant = "2.5")
+    Flashcard toEntity(FlashcardRequest request);
 }

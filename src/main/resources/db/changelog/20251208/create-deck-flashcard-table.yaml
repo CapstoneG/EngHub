@@ -98,6 +98,13 @@ databaseChangeLog:
             tableName: deck_flashcard
             columns:
               - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
                   name: deck_id
                   type: BIGINT
                   constraints:
@@ -113,7 +120,7 @@ databaseChangeLog:
                     foreignKeyName: fk_deck_flashcard_flashcard
                     referencedTableName: flashcards
                     referencedColumnNames: id
-        - addPrimaryKey:
+        - addUniqueConstraint:
             columnNames: deck_id, flashcard_id
-            constraintName: pk_deck_flashcard
+            constraintName: uq_deck_flashcard
             tableName: deck_flashcard

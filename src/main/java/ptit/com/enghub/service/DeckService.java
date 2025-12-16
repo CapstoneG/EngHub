@@ -8,10 +8,10 @@ import ptit.com.enghub.dto.response.DeckSummaryResponse;
 import ptit.com.enghub.entity.Deck;
 import ptit.com.enghub.entity.Flashcard;
 import ptit.com.enghub.mapper.DeckMapper;
+import ptit.com.enghub.repository.DeckFlashcardRepository;
 import ptit.com.enghub.repository.DeckRepository;
 import ptit.com.enghub.repository.FlashcardRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +21,7 @@ public class DeckService {
         private final DeckRepository deckRepository;
         private final FlashcardRepository flashcardRepository;
         private final DeckMapper deckMapper;
+        private final DeckFlashcardRepository deckFlashcardRepository;
 
         public DeckSummaryResponse createDeck(Long userId, DeckCreationRequest request) {
                 Deck deck = new Deck();
@@ -65,8 +66,7 @@ public class DeckService {
                                         ptit.com.enghub.entity.DeckFlashcard newDf = new ptit.com.enghub.entity.DeckFlashcard();
                                         newDf.setDeck(finalNewDeck);
                                         newDf.setFlashcard(existingFlashcard);
-                                        newDf.setId(new ptit.com.enghub.entity.DeckFlashcardId(finalNewDeck.getId(),
-                                                        existingFlashcard.getId()));
+                                        // ID is auto-generated
 
                                         return newDf;
                                 }).collect(Collectors.toList());
@@ -81,5 +81,12 @@ public class DeckService {
                 deckRepository.save(newDeck);
         }
 
-        // ... method deleteDeck
+        @Transactional
+        public void deleteDeck(Long id) {
+                if (!deckRepository.existsById(id)) {
+                        throw new RuntimeException("Deck not found");
+                }
+                deckRepository.deleteById(id);
+                deckFlashcardRepository.deleteByDeckId(id);
+        }
 }

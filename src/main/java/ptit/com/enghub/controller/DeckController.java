@@ -42,9 +42,9 @@ public class DeckController {
     }
 
     // 4. API: Xóa bộ từ
-//    @DeleteMapping("/{deckId}")
-//    public ResponseEntity<Void> deleteDeck(@PathVariable Long deckId) {
-//        deckService.deleteDeck(deckId);
-//        return ResponseEntity.ok().build();
-//    }
+    @DeleteMapping("/{deckId}")
+    public ResponseEntity<Void> deleteDeck(@PathVariable Long deckId) {
+        deckService.deleteDeck(deckId);
+        return ResponseEntity.ok().build();
+    }
 }

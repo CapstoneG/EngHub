@@ -7,6 +7,8 @@ import ptit.com.enghub.dto.request.FlashcardRequest;
 import ptit.com.enghub.dto.response.FlashcardResponse;
 import ptit.com.enghub.service.FlashcardService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/flashcards")
 @RequiredArgsConstructor
@@ -33,5 +35,14 @@ public class FlashcardController {
     public ResponseEntity<Void> deleteFlashcard(@PathVariable Long id) {
         flashcardService.deleteFlashcard(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<FlashcardResponse>> getFlashcards(
+            @RequestParam Long deckId
+    ) {
+        return ResponseEntity.ok(
+                flashcardService.getFlashcardsByDeckId(deckId)
+        );
     }
 }

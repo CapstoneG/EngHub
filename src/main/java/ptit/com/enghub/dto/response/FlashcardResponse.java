@@ -2,6 +2,7 @@ package ptit.com.enghub.dto.response;
 
 import lombok.Data;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class FlashcardResponse {
@@ -17,6 +18,6 @@ public class FlashcardResponse {
     private String exampleSentence; // Câu ví dụ
 
     // --- Meta Data (Để UI xử lý logic hiển thị nếu cần) ---
-    private java.util.List<Long> deckIds;
+    private List<Long> deckIds;
     private LocalDateTime nextReviewAt; // Để biết khi nào ôn lại
 }

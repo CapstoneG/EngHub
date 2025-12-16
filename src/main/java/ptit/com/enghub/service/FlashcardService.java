@@ -28,9 +28,6 @@ public class FlashcardService {
     @Transactional
     public FlashcardResponse createFlashcard(FlashcardRequest request) {
         Flashcard flashcard = flashcardMapper.toEntity(request);
-        // Default values usually handled by mapper or entity builder defaults, but
-        // double check
-        // Mapper sets repetitions=0, interval=0, ease=2.5
 
         if (request.getDeckId() != null) {
             Deck deck = deckRepository.findById(request.getDeckId())
@@ -77,9 +74,11 @@ public class FlashcardService {
     }
 
     // 4. Get Flashcard
-    public FlashcardResponse getFlashcard(Long id) {
-        Flashcard flashcard = flashcardRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Flashcard not found with id: " + id));
-        return flashcardMapper.toResponse(flashcard);
+    public List<FlashcardResponse> getFlashcardsByDeckId(Long deckId) {
+        List<Flashcard> list = flashcardRepository.findByDeckId(deckId);
+
+        return list.stream()
+                .map(flashcardMapper::toResponse)
+                .toList();
     }
 }

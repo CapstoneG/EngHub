@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "flashcards")
@@ -39,5 +40,5 @@ public class Flashcard {
     private LocalDateTime nextReviewAt;
 
     @OneToMany(mappedBy = "flashcard", cascade = CascadeType.ALL, orphanRemoval = true)
-    private java.util.List<DeckFlashcard> deckFlashcards;
+    private List<DeckFlashcard> deckFlashcards;
 }

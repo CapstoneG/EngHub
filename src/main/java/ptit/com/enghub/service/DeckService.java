@@ -35,7 +35,7 @@ public class DeckService {
         }
 
         @Transactional
-        public void cloneDeck(Long userId, Long originalDeckId) {
+        public DeckSummaryResponse cloneDeck(Long userId, Long originalDeckId) {
                 Deck original = deckRepository.findById(originalDeckId)
                                 .orElseThrow(() -> new RuntimeException("Deck not found"));
 
@@ -79,6 +79,7 @@ public class DeckService {
                 }
 
                 deckRepository.save(newDeck);
+                return deckMapper.toSummaryDTO(newDeck);
         }
 
         @Transactional

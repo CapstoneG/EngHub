@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import ptit.com.enghub.dto.request.DeckCreationRequest;
 import ptit.com.enghub.dto.response.DeckDashboardResponse;
 import ptit.com.enghub.dto.response.DeckSummaryResponse;
+import ptit.com.enghub.entity.User;
 import ptit.com.enghub.service.DeckDashboardService;
 import ptit.com.enghub.service.DeckService;
+import ptit.com.enghub.service.UserService;
 
 @RestController
 @RequestMapping("/api/decks")
@@ -16,29 +18,32 @@ public class DeckController {
 
     private final DeckDashboardService dashboardService;
     private final DeckService deckService;
+    private final UserService userService;
 
     @GetMapping("/dashboard")
-    public ResponseEntity<DeckDashboardResponse> getDashboard(@RequestParam Long userId) {
-        return ResponseEntity.ok(dashboardService.getDashboard(userId));
+    public ResponseEntity<DeckDashboardResponse> getDashboard() {
+        User user = userService.getUser();
+        return ResponseEntity.ok(dashboardService.getDashboard(user.getId()));
     }
 
 //      2. API: Tạo bộ từ mới
-//      POST /api/decks?userId=1
+//      POST /api/decks
     @PostMapping
     public ResponseEntity<DeckSummaryResponse> createDeck(
-            @RequestParam Long userId,
             @RequestBody DeckCreationRequest request) {
-        return ResponseEntity.ok(deckService.createDeck(userId, request));
+        User user = userService.getUser();
+        return ResponseEntity.ok(deckService.createDeck(user.getId(), request));
     }
 
     // 3. API: Clone bộ từ có sẵn về kho của mình
     // POST /api/decks/{deckId}/clone?userId=1
     @PostMapping("/{deckId}/clone")
-    public ResponseEntity<Void> cloneDeck(
-            @PathVariable Long deckId,
-            @RequestParam Long userId) {
-        deckService.cloneDeck(userId, deckId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<DeckSummaryResponse> cloneDeck(
+            @PathVariable Long deckId
+    ) {
+        User user = userService.getUser();
+        DeckSummaryResponse cloneDeck = deckService.cloneDeck(user.getId(), deckId);
+        return ResponseEntity.ok(cloneDeck);
     }
 
     // 4. API: Xóa bộ từ

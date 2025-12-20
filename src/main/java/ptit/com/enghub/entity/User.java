@@ -24,7 +24,7 @@ import java.util.Set;
 public class User extends BaseEntity {
 
     public static final String DEFAULT_AVATAR_URL =
-            "https://res.cloudinary.com/dc5glptng/image/upload/v1763995098/logo_b8sutf.png";
+            "https://res.cloudinary.com/dc5glptng/image/upload/v1766249252/enghub/whgrudsyi9bvpowv1q7x.jpg";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

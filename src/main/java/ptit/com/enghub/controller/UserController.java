@@ -1,5 +1,6 @@
 package ptit.com.enghub.controller;
 
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ptit.com.enghub.dto.UserLearningSettingsDto;
+import ptit.com.enghub.dto.request.ChangePasswordRequest;
 import ptit.com.enghub.dto.request.UserCreationRequest;
 import ptit.com.enghub.dto.request.UserStatusRequest;
 import ptit.com.enghub.dto.request.UserUpdateRequest;
@@ -65,6 +67,19 @@ public class UserController {
             @RequestBody UserLearningSettingsDto request
     ) {
         return ResponseEntity.ok(userService.updateSettings(request));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @RequestBody @Valid ChangePasswordRequest request
+    ) {
+        userService.changePassword(request);
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .code(1000)
+                        .message("Đổi mật khẩu thành công")
+                        .build()
+        );
     }
 
 }

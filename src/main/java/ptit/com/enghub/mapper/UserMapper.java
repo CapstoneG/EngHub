@@ -18,6 +18,7 @@ public interface UserMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy =
             NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "password", ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
 
     default UserLearningSettingsDto toLearningSettingsResponse(

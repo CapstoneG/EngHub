@@ -3,8 +3,10 @@ package ptit.com.enghub.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ptit.com.enghub.dto.UserLearningSettingsDto;
+import ptit.com.enghub.dto.request.ChangePasswordRequest;
 import ptit.com.enghub.dto.request.UserUpdateRequest;
 import ptit.com.enghub.dto.response.UserResponse;
 import ptit.com.enghub.entity.User;
@@ -26,6 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final UserSettingsRepository userSettingsRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserResponse> getAllUsers() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -61,6 +64,10 @@ public class UserService {
     public UserResponse updateUser(UserUpdateRequest request) {
         User user = getCurrentUser();
         userMapper.updateUser(user, request);
+
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
@@ -118,4 +125,20 @@ public class UserService {
                 settings.getTargetDaysPerWeek()
         );
     }
+
+    public void changePassword(ChangePasswordRequest request) {
+        User user = getCurrentUser();
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new AppException(ErrorCode.INVALID_OLD_PASSWORD);
+        }
+
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new AppException(ErrorCode.PASSWORD_NOT_MATCH);
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+    }
+
 }

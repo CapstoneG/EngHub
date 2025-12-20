@@ -17,7 +17,8 @@ public enum ErrorCode {
     UNAUTHORIZED(1019, "Unauthorized access", HttpStatus.UNAUTHORIZED),
     INVALID_STATE(1021, "Trạng thái không hợp lệ", HttpStatus.BAD_REQUEST),
     VOCAB_NOT_EXISTED(1009, "Vocab not existed", HttpStatus.NOT_FOUND),
-    ROLE_NOT_FOUND(1010, "Role not found", HttpStatus.NOT_FOUND);
+    ROLE_NOT_FOUND(1010, "Role not found", HttpStatus.NOT_FOUND),
+    SETTINGS_NOT_FOUND(1011, "Setting not found", HttpStatus.NOT_FOUND);
 
     ErrorCode(int code, String message, HttpStatus httpStatusCode) {
         this.code = code;

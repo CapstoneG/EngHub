@@ -3,23 +3,19 @@ package ptit.com.enghub.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ptit.com.enghub.dto.request.UserCreationRequest;
+import ptit.com.enghub.dto.UserLearningSettingsDto;
 import ptit.com.enghub.dto.request.UserUpdateRequest;
 import ptit.com.enghub.dto.response.UserResponse;
 import ptit.com.enghub.entity.User;
-import ptit.com.enghub.enums.EnumRole;
-import ptit.com.enghub.enums.Level;
+import ptit.com.enghub.entity.UserLearningSettings;
+import ptit.com.enghub.enums.UserStatus;
 import ptit.com.enghub.exception.AppException;
 import ptit.com.enghub.exception.ErrorCode;
 import ptit.com.enghub.mapper.UserMapper;
-import ptit.com.enghub.repository.RoleRepository;
 import ptit.com.enghub.repository.UserRepository;
-import ptit.com.enghub.service.IService.VerificationTokenService;
+import ptit.com.enghub.repository.UserSettingsRepository;
 
-import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +25,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final UserSettingsRepository userSettingsRepository;
 
     public List<UserResponse> getAllUsers() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -52,22 +49,17 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    public UserResponse getUser(Long userId) {
-        return userMapper.toUserResponse(
-                userRepository.findById(userId)
-                        .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED))
-        );
-    }
+    public User getCurrentUser() {
+        String email = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
 
-    public User getUser(){
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByEmail(authentication.getName())
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
     }
 
-    public UserResponse updateUser(Long userId, UserUpdateRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    public UserResponse updateUser(UserUpdateRequest request) {
+        User user = getCurrentUser();
         userMapper.updateUser(user, request);
         return userMapper.toUserResponse(userRepository.save(user));
     }
@@ -82,5 +74,48 @@ public class UserService {
         }
         userRepository.deleteById(userId);
         return "User was deleted";
+    }
+
+    public void updateUserStatus(UserStatus status) {
+        User user = getCurrentUser();
+        user.setStatus(status);
+        userRepository.save(user);
+    }
+
+    public UserLearningSettingsDto updateSettings(UserLearningSettingsDto request) {
+        User user = getCurrentUser();
+        UserLearningSettings settings = userSettingsRepository
+                .findByUser(user)
+                .orElseThrow(() -> new AppException(ErrorCode.SETTINGS_NOT_FOUND));
+
+        if (request.getDailyStudyReminder() != null) {
+            settings.setDailyStudyReminder(request.getDailyStudyReminder());
+        }
+
+        if (request.getReminderTime() != null) {
+            settings.setReminderTime(request.getReminderTime());
+        }
+
+        if (request.getEmailNotification() != null) {
+            settings.setEmailNotification(request.getEmailNotification());
+        }
+
+        if (request.getDailyStudyMinutes() != null) {
+            settings.setDailyStudyMinutes(request.getDailyStudyMinutes());
+        }
+
+        if (request.getTargetDaysPerWeek() != null) {
+            settings.setTargetDaysPerWeek(request.getTargetDaysPerWeek());
+        }
+
+        userSettingsRepository.save(settings);
+
+        return new UserLearningSettingsDto(
+                settings.isDailyStudyReminder(),
+                settings.getReminderTime(),
+                settings.isEmailNotification(),
+                settings.getDailyStudyMinutes(),
+                settings.getTargetDaysPerWeek()
+        );
     }
 }

@@ -8,16 +8,18 @@ import org.springframework.web.client.RestTemplate;
 import ptit.com.enghub.dto.response.AuthenticationResponse;
 import ptit.com.enghub.entity.OAuth2Account;
 import ptit.com.enghub.entity.User;
+import ptit.com.enghub.entity.UserLearningSettings;
 import ptit.com.enghub.enums.EnumRole;
 import ptit.com.enghub.exception.AppException;
 import ptit.com.enghub.exception.ErrorCode;
 import ptit.com.enghub.repository.OAuth2AccountRepository;
 import ptit.com.enghub.repository.RoleRepository;
 import ptit.com.enghub.repository.UserRepository;
+import ptit.com.enghub.repository.UserSettingsRepository;
 import ptit.com.enghub.service.IService.AuthenticationService;
-import ptit.com.enghub.service.IService.VerificationTokenService;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Map;
 
 @Service
@@ -28,9 +30,9 @@ public class GoogleAuthService {
     private final UserRepository userRepository;
     private final OAuth2AccountRepository oauth2AccountRepository;
     private final AuthenticationService authenticationService;
-    private final VerificationTokenService verificationTokenService;
     private final RestTemplate restTemplate;
     private final RoleRepository roleRepository;
+    private final UserSettingsRepository settingsRepository;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
@@ -102,6 +104,7 @@ public class GoogleAuthService {
                 .firstName(firstName)
                 .lastName(lastName)
                 .verified(true)
+                .provider("GOOGLE")
                 .build();
         newUser.setCreatedAt(LocalDateTime.now());
 
@@ -110,6 +113,17 @@ public class GoogleAuthService {
         newUser.getRoles().add(roles);
 
         User savedUser = userRepository.save(newUser);
+
+        UserLearningSettings settings = UserLearningSettings.builder()
+                .user(newUser)
+                .dailyStudyReminder(true)
+                .reminderTime(LocalTime.of(21, 0))
+                .emailNotification(true)
+                .dailyStudyMinutes(15)
+                .targetDaysPerWeek(5)
+                .build();
+
+        settingsRepository.save(settings);
 
         // Lưu thông tin OAuth2
         OAuth2Account oauth2Account = OAuth2Account.builder()

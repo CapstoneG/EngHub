@@ -22,6 +22,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity {
+
+    public static final String DEFAULT_AVATAR_URL =
+            "https://res.cloudinary.com/dc5glptng/image/upload/v1763995098/logo_b8sutf.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -80,6 +84,12 @@ public class User extends BaseEntity {
     @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
 
+    @Builder.Default
+    @Column(name = "avatar_url", length = 512)
+    private String avatarUrl = DEFAULT_AVATAR_URL;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private UserLearningSettings learningSettings;
 
 }
 

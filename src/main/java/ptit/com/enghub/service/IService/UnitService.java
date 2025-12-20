@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UnitService {
     UnitResponse getUnitById(Long id);
-    List<UnitResponse> getUnitsByCourseId(Long courseId, Long userId);
+    List<UnitResponse> getUnitsByCourseId(Long courseId);
     UnitResponse createUnit(UnitRequest request);
     UnitResponse updateUnit(Long id, UnitRequest request);
     void deleteUnit(Long id);

@@ -11,7 +11,6 @@ import ptit.com.enghub.mapper.CommentMapper;
 import ptit.com.enghub.repository.CommentLikeRepository;
 import ptit.com.enghub.repository.CommentRepository;
 import ptit.com.enghub.repository.LessonRepository;
-import ptit.com.enghub.repository.UserRepository;
 import ptit.com.enghub.service.IService.CommentService;
 
 import java.util.List;
@@ -22,15 +21,13 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
     private final LessonRepository lessonRepository;
-    private final UserRepository userRepository;
     private final CommentLikeRepository likeRepository;
-
+    private final UserService userService;
     private final CommentMapper commentMapper;
 
     @Override
-    public CommentResponse createComment(Long userId, CommentRequest request) {
-
-        User user = userRepository.findById(userId).orElseThrow();
+    public CommentResponse createComment(CommentRequest request) {
+        User user = userService.getCurrentUser();
         Lesson lesson = lessonRepository.findById(request.getLessonId()).orElseThrow();
 
         Comment comment = Comment.builder()
@@ -53,14 +50,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<CommentResponse> getCommentsByLesson(Long lessonId, Long currentUserId) {
+    public List<CommentResponse> getCommentsByLesson(Long lessonId) {
+        User user = userService.getCurrentUser();
         List<Comment> comments =
                 commentRepository.findByLesson_IdAndParentIsNullOrderByCreatedAtDesc(lessonId);
 
         return comments.stream()
                 .map(commentMapper::toResponse)
                 .peek(res -> {
-                    boolean liked = likeRepository.existsByUser_IdAndComment_Id(currentUserId, res.getId());
+                    boolean liked = likeRepository.existsByUser_IdAndComment_Id(user.getId(), res.getId());
                     int countLikes = likeRepository.countByCommentId(res.getId());
                     res.setLiked(liked);
                     res.setLikes(countLikes);
@@ -69,14 +67,16 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void likeComment(Long userId, Long commentId) {
-        if (!likeRepository.existsByUser_IdAndComment_Id(userId, commentId)) {
-            likeRepository.insertLike(userId, commentId);
+    public void likeComment(Long commentId) {
+        User user = userService.getCurrentUser();
+        if (!likeRepository.existsByUser_IdAndComment_Id(user.getId(), commentId)) {
+            likeRepository.insertLike(user.getId(), commentId);
         }
     }
 
     @Override
-    public void unlikeComment(Long userId, Long commentId) {
-        likeRepository.deleteByUserIdAndCommentId(userId, commentId);
+    public void unlikeComment(Long commentId) {
+        User user = userService.getCurrentUser();
+        likeRepository.deleteByUserIdAndCommentId(user.getId(), commentId);
     }
 }

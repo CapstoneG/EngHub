@@ -20,8 +20,8 @@ public enum ErrorCode {
     ROLE_NOT_FOUND(1010, "Role not found", HttpStatus.NOT_FOUND),
     SETTINGS_NOT_FOUND(1011, "Setting not found", HttpStatus.NOT_FOUND),
     INVALID_OLD_PASSWORD(1012, "Mật khẩu cũ không đúng", HttpStatus.BAD_REQUEST),
-    PASSWORD_NOT_MATCH(1013, "Mật khẩu xác nhận không khớp", HttpStatus.BAD_REQUEST);
-
+    PASSWORD_NOT_MATCH(1013, "Mật khẩu xác nhận không khớp", HttpStatus.BAD_REQUEST),
+    TOKEN_EXPIRED(1014, "Token đã hết hạn", HttpStatus.UNAUTHORIZED);
 
     ErrorCode(int code, String message, HttpStatus httpStatusCode) {
         this.code = code;

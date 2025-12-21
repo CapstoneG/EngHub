@@ -1,0 +1,47 @@
+package ptit.com.enghub.repository;
+
+import io.lettuce.core.dynamic.annotation.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import ptit.com.enghub.entity.UserStudyDaily;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface UserStudyDailyRepository
+        extends JpaRepository<UserStudyDaily, Long> {
+
+    Optional<UserStudyDaily> findByUserIdAndStudyDate(
+            Long userId,
+            LocalDate studyDate
+    );
+
+    @Query("""
+        SELECT COALESCE(d.totalMinutes, 0)
+        FROM UserStudyDaily d
+        WHERE d.userId = :userId
+        AND d.studyDate = CURRENT_DATE
+    """)
+    Integer getTodayMinutes(@Param("userId") Long userId);
+
+    @Query("""
+        SELECT MAX(d.lastStudyAt)
+        FROM UserStudyDaily d
+        WHERE d.userId = :userId
+    """)
+    LocalDateTime findLastStudyAt(@Param("userId") Long userId);
+
+    @Query("""
+        SELECT COUNT(d)
+        FROM UserStudyDaily d
+        WHERE d.userId = :userId
+        AND d.studyDate <= CURRENT_DATE
+    """)
+    long countStudyDays(@Param("userId") Long userId);
+
+    List<UserStudyDaily> findTop7ByUserIdOrderByStudyDateDesc(Long userId);
+}

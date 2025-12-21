@@ -4,14 +4,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ptit.com.enghub.dto.request.CompleteLessonRequest;
 import ptit.com.enghub.dto.request.LessonCreationRequest;
 import ptit.com.enghub.dto.response.LessonResponse;
 import ptit.com.enghub.entity.*;
+import ptit.com.enghub.exception.AppException;
+import ptit.com.enghub.exception.ErrorCode;
 import ptit.com.enghub.mapper.LessonMapper;
-import ptit.com.enghub.mapper.UnitMapper;
 import ptit.com.enghub.repository.LessonRepository;
 import ptit.com.enghub.repository.UnitRepository;
 import ptit.com.enghub.repository.UserProgressRepository;
@@ -30,16 +32,18 @@ public class LessonServiceImpl implements LessonService {
     private final LessonMapper lessonMapper;
     private final UnitRepository unitRepository;
     private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final UserService userService;
 
     @Override
-    public LessonResponse getLesson(Long lessonId, Long userId) {
+    public LessonResponse getLesson(Long lessonId) {
+        User user = userService.getCurrentUser();
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
         LessonResponse response = lessonMapper.toResponse(lesson);
 
         boolean completed = userProgressRepository
-                .findByUserIdAndLessonId(userId, lessonId)
+                .findByUserIdAndLessonId(user.getId(), lessonId)
                 .map(UserProgress::isCompleted)
                 .orElse(false);
 
@@ -56,14 +60,15 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     @Transactional
-    public void completeLesson(Long lessonId, CompleteLessonRequest request, Long userId) {
+    public void completeLesson(Long lessonId, CompleteLessonRequest request) {
+        User user = userService.getCurrentUser();
         Lesson lesson = lessonRepository.findById(lessonId)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
 
-        UserProgress progress = userProgressRepository.findByUserIdAndLessonId(userId, lessonId)
+        UserProgress progress = userProgressRepository.findByUserIdAndLessonId(user.getId(), lessonId)
                 .orElse(new UserProgress());
 
-        progress.setUserId(userId);
+        progress.setUserId(user.getId());
         progress.setLesson(lesson);
         progress.setCompleted(true);
         progress.setScore(request.getScore());
@@ -72,11 +77,11 @@ public class LessonServiceImpl implements LessonService {
         userProgressRepository.save(progress);
 
         // Mở khóa bài học tiếp theo
-        unlockNextLesson(lesson, userId);
+        unlockNextLesson(lesson, user.getId());
     }
 
-    private boolean isLessonUnlocked(Lesson lesson, Long userId) {
-        // Bài học đầu tiên của unit luôn mở khóa
+    private boolean isLessonUnlocked(Lesson lesson) {
+        User user = userService.getCurrentUser();
         if (lesson.getOrderIndex() == 0) {
             return true;
         }
@@ -91,7 +96,7 @@ public class LessonServiceImpl implements LessonService {
             return true;
         }
 
-        return userProgressRepository.findByUserIdAndLessonId(userId, previousLesson.getId())
+        return userProgressRepository.findByUserIdAndLessonId(user.getId(), previousLesson.getId())
                 .map(UserProgress::isCompleted)
                 .orElse(false);
     }
@@ -116,6 +121,14 @@ public class LessonServiceImpl implements LessonService {
 
     @Transactional
     public Lesson createLesson(LessonCreationRequest request) {
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
 
         Unit unit = unitRepository.findById(request.getUnitId())
                 .orElseThrow(() -> new RuntimeException("Unit not found"));
@@ -223,4 +236,21 @@ public class LessonServiceImpl implements LessonService {
 
         return lessonRepository.save(lesson);
     }
+
+    @Override
+    public void deleteLesson(Long id) {
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
+        Lesson lesson = lessonRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+        lessonRepository.delete(lesson);
+    }
+
 }

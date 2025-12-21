@@ -118,6 +118,11 @@ databaseChangeLog:
               - column:
                   name: duration
                   type: int
+              - column:
+                  name: study_skill
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
 
         - createTable:
             tableName: exercise

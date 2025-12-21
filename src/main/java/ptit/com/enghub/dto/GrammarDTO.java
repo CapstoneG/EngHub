@@ -1,13 +1,13 @@
-package ptit.com.enghub.dto.request;
+package ptit.com.enghub.dto;
 
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class GrammarRequest {
+public class GrammarDTO {
     private String topic;
     private String explanation;
     private String signalWord;
-    private List<GrammarFormulaRequest> formulas;
+    private List<GrammarFormulaDTO> formulas;
 }

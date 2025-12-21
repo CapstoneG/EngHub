@@ -6,8 +6,8 @@ import ptit.com.enghub.dto.response.CommentResponse;
 import java.util.List;
 
 public interface CommentService {
-    CommentResponse createComment(Long userId, CommentRequest request);
-    List<CommentResponse> getCommentsByLesson(Long lessonId, Long currentUserId);
-    void likeComment(Long userId, Long commentId);
-    void unlikeComment(Long userId, Long commentId);
+    CommentResponse createComment(CommentRequest request);
+    List<CommentResponse> getCommentsByLesson(Long lessonId);
+    void likeComment(Long commentId);
+    void unlikeComment(Long commentId);
 }

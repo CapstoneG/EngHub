@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.UpdateTimestamp;
 import ptit.com.enghub.enums.Level;
+import ptit.com.enghub.enums.UserStatus;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -21,6 +22,10 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity {
+
+    public static final String DEFAULT_AVATAR_URL =
+            "https://res.cloudinary.com/dc5glptng/image/upload/v1766249252/enghub/whgrudsyi9bvpowv1q7x.jpg";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -73,6 +78,18 @@ public class User extends BaseEntity {
     @UpdateTimestamp
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    private UserStatus status = UserStatus.ACTIVE;
+
+    @Builder.Default
+    @Column(name = "avatar_url", length = 512)
+    private String avatarUrl = DEFAULT_AVATAR_URL;
+
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+    private UserLearningSettings learningSettings;
 
 }
 

@@ -13,7 +13,6 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -25,16 +24,18 @@ import ptit.com.enghub.dto.request.UserCreationRequest;
 import ptit.com.enghub.dto.response.AuthenticationResponse;
 import ptit.com.enghub.dto.response.IntrospectResponse;
 import ptit.com.enghub.dto.response.SessionResponse;
-import ptit.com.enghub.dto.response.UserResponse;
 import ptit.com.enghub.entity.RefreshToken;
 import ptit.com.enghub.entity.User;
+import ptit.com.enghub.entity.UserLearningSettings;
 import ptit.com.enghub.enums.EnumRole;
+import ptit.com.enghub.enums.UserStatus;
 import ptit.com.enghub.exception.AppException;
 import ptit.com.enghub.exception.ErrorCode;
 import ptit.com.enghub.mapper.UserMapper;
 import ptit.com.enghub.repository.RefreshTokenRepository;
 import ptit.com.enghub.repository.RoleRepository;
 import ptit.com.enghub.repository.UserRepository;
+import ptit.com.enghub.repository.UserSettingsRepository;
 import ptit.com.enghub.service.IService.AuthenticationService;
 import ptit.com.enghub.service.IService.VerificationTokenService;
 
@@ -42,6 +43,7 @@ import java.security.SecureRandom;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -57,6 +59,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     RoleRepository roleRepository;
     UserMapper userMapper;
     VerificationTokenService verificationTokenService;
+    UserSettingsRepository settingsRepository;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -77,6 +80,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .authenticated(false)
                     .verified(false)
                     .message("Tài khoản đã tồn tại nhưng chưa xác thực. Vui lòng xác thực email.")
+                    .build();
+        }
+
+        if ( !user.getStatus().equals(UserStatus.ACTIVE) ){
+            return AuthenticationResponse.builder()
+                    .authenticated(false)
+                    .verified(false)
+                    .message("Tài khoản không hoạt động")
                     .build();
         }
 
@@ -109,6 +120,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.getRoles().add(roles);
 
         User savedUser = userRepository.save(user);
+
+
+        UserLearningSettings settings = UserLearningSettings.builder()
+                .user(user)
+                .dailyStudyReminder(true)
+                .reminderTime(LocalTime.of(21, 0))
+                .emailNotification(true)
+                .dailyStudyMinutes(15)
+                .targetDaysPerWeek(5)
+                .build();
+
+        settingsRepository.save(settings);
 
         verificationTokenService.createAndSendVerificationToken(savedUser);
 

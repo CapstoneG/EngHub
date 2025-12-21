@@ -7,10 +7,11 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import ptit.com.enghub.dto.UserLearningSettingsDto;
+import ptit.com.enghub.dto.request.ChangePasswordRequest;
 import ptit.com.enghub.dto.request.UserCreationRequest;
+import ptit.com.enghub.dto.request.UserStatusRequest;
 import ptit.com.enghub.dto.request.UserUpdateRequest;
 import ptit.com.enghub.dto.response.ApiResponse;
 import ptit.com.enghub.dto.response.UserResponse;
@@ -29,8 +30,6 @@ import java.util.Map;
 public class UserController {
     UserService userService;
 
-
-
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers(){
         return ResponseEntity.ok(userService.getAllUsers());
@@ -41,39 +40,46 @@ public class UserController {
         return ResponseEntity.ok(userService.getYourInfo());
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<ApiResponse> getUserById(@PathVariable Long userId){
-        ApiResponse apiResponse = new ApiResponse<>();
-        apiResponse.setResult(userService.getUser(userId));
-        return ResponseEntity.ok(apiResponse);
-    }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long userId, @RequestBody UserUpdateRequest request){
-        return ResponseEntity.ok(userService.updateUser(userId, request));
-    }
-
-    @PostMapping("/update-level")
-    public ResponseEntity<UserResponse> updateLevelUser(@RequestBody Map<String, String> body){
-        User user = userService.getUser();
-
-        String levelStr = body.get("level");
-        Level newLevel = Level.valueOf(levelStr.trim().toUpperCase());
-
-        UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
-        userUpdateRequest.setLevel(newLevel);
-        userUpdateRequest.setPassword(user.getPassword());
-        userUpdateRequest.setFirstName(user.getFirstName());
-        userUpdateRequest.setLastName(user.getLastName());
-        userUpdateRequest.setPhoneNo(user.getProvider());
-        log.info(userUpdateRequest.toString());
-        return ResponseEntity.ok(userService.updateUser(user.getId(), userUpdateRequest));
+    @PostMapping("/update-user")
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UserUpdateRequest request){
+        return ResponseEntity.ok(userService.updateUser(request));
     }
 
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId){
-        userService.deleteUser(userId);
+//    @DeleteMapping("/delete-user")
+//    public ResponseEntity<String> deleteUser(){
+//        User user = userService.getUser();
+//        userService.deleteUser(user.getId());
+//        return ResponseEntity.noContent().build();
+//    }
+
+    @PatchMapping("/status")
+    public ResponseEntity<Void> updateMyStatus(
+            @RequestBody UserStatusRequest request
+    ) {
+        userService.updateUserStatus(request.getStatus());
         return ResponseEntity.noContent().build();
     }
+
+    @PostMapping("/learning-settings")
+    public ResponseEntity<UserLearningSettingsDto> updateLearningSettings(
+            @RequestBody UserLearningSettingsDto request
+    ) {
+        return ResponseEntity.ok(userService.updateSettings(request));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<ApiResponse<Void>> changePassword(
+            @RequestBody @Valid ChangePasswordRequest request
+    ) {
+        userService.changePassword(request);
+        return ResponseEntity.ok(
+                ApiResponse.<Void>builder()
+                        .code(1000)
+                        .message("Đổi mật khẩu thành công")
+                        .build()
+        );
+    }
+
 }

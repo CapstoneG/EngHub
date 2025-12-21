@@ -2,6 +2,7 @@ package ptit.com.enghub.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import ptit.com.enghub.enums.StudySkill;
 
 import java.util.List;
 
@@ -42,5 +43,9 @@ public class Lesson {
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Vocabulary> vocabularies;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "study_skill", length = 30, nullable = false)
+    private StudySkill studySkill;
 
 }

@@ -1,9 +1,9 @@
-package ptit.com.enghub.dto.request;
+package ptit.com.enghub.dto;
 
 import lombok.Data;
 
 @Data
-public class VideoRequest {
+public class VideoDTO {
     private String url;
     private String description;
     private Integer duration;

@@ -1,10 +1,10 @@
-package ptit.com.enghub.dto.request;
+package ptit.com.enghub.dto;
 
 
 import lombok.Data;
 
 @Data
-public class DialogueRequest {
+public class DialogueDTO {
     private String speaker;
     private String text;
 }

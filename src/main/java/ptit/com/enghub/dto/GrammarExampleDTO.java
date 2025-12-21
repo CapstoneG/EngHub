@@ -1,9 +1,9 @@
-package ptit.com.enghub.dto.request;
+package ptit.com.enghub.dto;
 
 import lombok.Data;
 
 @Data
-public class GrammarExampleRequest {
+public class GrammarExampleDTO {
     private String sentence;
     private String translation;
     private String highlight;

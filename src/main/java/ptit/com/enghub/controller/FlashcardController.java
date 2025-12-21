@@ -21,8 +21,6 @@ public class FlashcardController {
         return ResponseEntity.ok(flashcardService.createFlashcard(request));
     }
 
-    // 2. Sửa nội dung thẻ (VD: sửa nghĩa tiếng Việt)
-    // PUT /api/flashcards/{id}
     @PutMapping("/{id}")
     public ResponseEntity<FlashcardResponse> updateFlashcard(
             @PathVariable Long id,
@@ -30,7 +28,6 @@ public class FlashcardController {
         return ResponseEntity.ok(flashcardService.updateFlashcard(id, request));
     }
 
-    // 3. Xóa thẻ
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFlashcard(@PathVariable Long id) {
         flashcardService.deleteFlashcard(id);

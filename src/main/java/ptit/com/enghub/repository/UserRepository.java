@@ -14,9 +14,4 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
     Optional<User> findByEmail(String email);
-
-//    @Query("SELECT u FROM User u WHERE u.lastLogin <= :threshold")
-    @Query("SELECT u FROM User u")
-    List<User> findUsersLoggedWithin(@Param("threshold") LocalDateTime threshold);
-
 }

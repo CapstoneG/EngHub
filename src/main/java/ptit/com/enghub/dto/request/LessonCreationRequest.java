@@ -1,6 +1,7 @@
 package ptit.com.enghub.dto.request;
 
 import lombok.Data;
+import ptit.com.enghub.dto.*;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public class LessonCreationRequest {
     private int duration;
     private Long unitId;
 
-    private VideoRequest video;
-    private GrammarRequest grammar;
-    private List<VocabularyRequest> vocabularies;
-    private List<DialogueRequest> dialogues;
-    private List<ExerciseRequest> exercises;
+    private VideoDTO video;
+    private GrammarDTO grammar;
+    private List<VocabularyDTO> vocabularies;
+    private List<DialogueDTO> dialogues;
+    private List<ExerciseDTO> exercises;
 }

@@ -26,8 +26,6 @@ public class DeckController {
         return ResponseEntity.ok(dashboardService.getDashboard(user.getId()));
     }
 
-//      2. API: Tạo bộ từ mới
-//      POST /api/decks
     @PostMapping
     public ResponseEntity<DeckSummaryResponse> createDeck(
             @RequestBody DeckCreationRequest request) {
@@ -35,8 +33,6 @@ public class DeckController {
         return ResponseEntity.ok(deckService.createDeck(user.getId(), request));
     }
 
-    // 3. API: Clone bộ từ có sẵn về kho của mình
-    // POST /api/decks/{deckId}/clone?userId=1
     @PostMapping("/{deckId}/clone")
     public ResponseEntity<DeckSummaryResponse> cloneDeck(
             @PathVariable Long deckId
@@ -46,7 +42,6 @@ public class DeckController {
         return ResponseEntity.ok(cloneDeck);
     }
 
-    // 4. API: Xóa bộ từ
     @DeleteMapping("/{deckId}")
     public ResponseEntity<Void> deleteDeck(@PathVariable Long deckId) {
         deckService.deleteDeck(deckId);

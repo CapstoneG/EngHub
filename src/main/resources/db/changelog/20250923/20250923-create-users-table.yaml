@@ -69,6 +69,10 @@ databaseChangeLog:
                   name: level
                   type: VARCHAR(255)
               - column:
+                  name: avatar_url
+                  type: VARCHAR(512)
+                  defaultValue: "https://res.cloudinary.com/dc5glptng/image/upload/v1763995098/logo_b8sutf.png"
+              - column:
                   name: provider
                   type: VARCHAR(50)
               - column:
@@ -90,6 +94,10 @@ databaseChangeLog:
               - column:
                   name: updated_by
                   type: VARCHAR(100)
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+                  defaultValue: "ACTIVE"
 
   - changeSet:
       id: 3-create-user-roles
@@ -315,6 +323,54 @@ databaseChangeLog:
               - column:
                   name: created_by
                   value: system
+  - changeSet:
+      id: user-learning-settings
+      author: trong
+      changes:
+        - createTable:
+            tableName: user_learning_settings
+            columns:
+              - column:
+                  name: id
+                  type: BIGSERIAL
+                  constraints:
+                    primaryKey: true
+
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: daily_study_reminder
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+
+              - column:
+                  name: reminder_time
+                  type: TIME
+
+              - column:
+                  name: email_notification
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+
+              - column:
+                  name: daily_study_minutes
+                  type: INTEGER
+
+              - column:
+                  name: target_days_per_week
+                  type: INTEGER
+
+        - addForeignKeyConstraint:
+            baseTableName: user_learning_settings
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_user_learning_settings_user
 
   - changeSet:
       id: 8-insert-admin-user
@@ -351,6 +407,45 @@ databaseChangeLog:
               - column:
                   name: level
                   value: "PROFICIENCY"
+              - column:
+                  name: status
+                  value: "ACTIVE"
+              - column:
+                  name: provider
+                  value: "LOCAL"
+  - changeSet:
+      id: insert-admin-learning-settings
+      author: trong
+      context: data
+      changes:
+        - insert:
+            tableName: user_learning_settings
+            columns:
+              - column:
+                  name: user_id
+                  valueNumeric: 1
+
+              - column:
+                  name: daily_study_reminder
+                  valueBoolean: true
+
+              - column:
+                  name: reminder_time
+                  value: "21:00:00"
+
+              - column:
+                  name: email_notification
+                  valueBoolean: true
+
+              - column:
+                  name: daily_study_minutes
+                  valueNumeric: 15
+
+              - column:
+                  name: target_days_per_week
+                  valueNumeric: 5
+
+
 
   - changeSet:
       id: 9-assign-admin-role

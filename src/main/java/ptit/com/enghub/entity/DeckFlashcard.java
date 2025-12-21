@@ -26,5 +26,4 @@ public class DeckFlashcard {
     @JoinColumn(name = "flashcard_id")
     private Flashcard flashcard;
 
-    // Additional columns can be added here in the future
 }

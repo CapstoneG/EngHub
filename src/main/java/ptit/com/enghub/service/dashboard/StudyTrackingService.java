@@ -3,7 +3,7 @@ package ptit.com.enghub.service.dashboard;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ptit.com.enghub.dto.request.EndStudyRequest;
+import ptit.com.enghub.dto.EndStudyDto;
 import ptit.com.enghub.dto.request.StartStudyRequest;
 import ptit.com.enghub.entity.User;
 import ptit.com.enghub.entity.UserStudyDaily;
@@ -12,7 +12,6 @@ import ptit.com.enghub.exception.AppException;
 import ptit.com.enghub.exception.ErrorCode;
 import ptit.com.enghub.repository.UserStudyDailyRepository;
 import ptit.com.enghub.repository.UserStudySessionRepository;
-import ptit.com.enghub.service.AuthenticationServiceImpl;
 import ptit.com.enghub.service.UserService;
 
 import java.time.Duration;
@@ -26,10 +25,9 @@ public class StudyTrackingService {
     private final UserService userService;
     private final UserStudySessionRepository sessionRepo;
     private final UserStudyDailyRepository dailyRepo;
-    private final AuthenticationServiceImpl authenticationService;
 
     @Transactional
-    public void startStudy(StartStudyRequest request) {
+    public EndStudyDto startStudy(StartStudyRequest request) {
         User user = userService.getCurrentUser();
 
         UserStudySession session = UserStudySession.builder()
@@ -42,14 +40,16 @@ public class StudyTrackingService {
                 .build();
 
         sessionRepo.save(session);
+        EndStudyDto response = new EndStudyDto();
+        response.setSessionId(session.getId());
+        return response;
     }
 
     @Transactional
-    public void endStudy(Long sessionId, String token) {
-
-        User user = authenticationService.getUserFromToken(token);
+    public void endStudy(EndStudyDto request) {
+        User user = userService.getCurrentUser();
         UserStudySession session;
-
+        Long sessionId = request.getSessionId();
         if (sessionId != null) {
             session = sessionRepo.findById(sessionId)
                     .orElseThrow(() -> new RuntimeException("Session not found"));

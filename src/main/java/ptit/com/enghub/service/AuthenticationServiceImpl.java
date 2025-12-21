@@ -273,35 +273,4 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return stringJoiner.toString();
     }
-
-    public User getUserFromToken(String token) {
-        if (token == null || token.isEmpty()) {
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
-        }
-        try {
-            SignedJWT signedJWT = SignedJWT.parse(token);
-
-            JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
-            if (!signedJWT.verify(verifier)) {
-                throw new AppException(ErrorCode.UNAUTHENTICATED);
-            }
-
-            // Check expiration
-            Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-            if (expirationTime == null || expirationTime.before(new Date())) {
-                throw new AppException(ErrorCode.TOKEN_EXPIRED);
-            }
-
-            String email = signedJWT.getJWTClaimsSet().getSubject();
-            if (email == null || email.isEmpty()) {
-                throw new AppException(ErrorCode.UNAUTHENTICATED);
-            }
-
-            return userRepository.findByEmail(email)
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
-        } catch (ParseException | JOSEException e) {
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
-        }
-    }
 }

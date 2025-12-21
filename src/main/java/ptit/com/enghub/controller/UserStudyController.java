@@ -3,7 +3,7 @@ package ptit.com.enghub.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ptit.com.enghub.dto.request.EndStudyRequest;
+import ptit.com.enghub.dto.EndStudyDto;
 import ptit.com.enghub.dto.request.StartStudyRequest;
 import ptit.com.enghub.dto.response.ApiResponse;
 import ptit.com.enghub.service.dashboard.StudyTrackingService;
@@ -16,24 +16,18 @@ public class UserStudyController {
     private final StudyTrackingService studyTrackingService;
 
     @PostMapping("/start")
-    public ResponseEntity<ApiResponse<Void>> startStudy(
+    public ResponseEntity<EndStudyDto> startStudy(
             @RequestBody StartStudyRequest request
     ) {
-        studyTrackingService.startStudy(request);
-        return ResponseEntity.ok(
-                ApiResponse.<Void>builder()
-                        .code(0)
-                        .message("start session")
-                        .build()
-        );
+        EndStudyDto sessionResponse = studyTrackingService.startStudy(request);
+        return ResponseEntity.ok(sessionResponse);
     }
 
     @PostMapping("/end")
     public ResponseEntity<ApiResponse<Void>> endStudy(
-            @RequestParam("sessionId") Long sessionId,
-            @RequestParam(value = "token", required = false) String token
+            @RequestBody EndStudyDto request
     ) {
-        studyTrackingService.endStudy(sessionId, "Bearer " + token);
+        studyTrackingService.endStudy(request);
 
         return ResponseEntity.ok(
                 ApiResponse.<Void>builder()
@@ -43,4 +37,3 @@ public class UserStudyController {
         );
     }
 }
-

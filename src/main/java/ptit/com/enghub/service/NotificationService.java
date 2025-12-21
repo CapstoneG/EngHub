@@ -35,7 +35,7 @@ public class NotificationService {
         n.setRead(false);
 
         repository.save(n);
-        publisher.publishToUser(req.getUserId(), n);
+        publisher.publishToUser("notifications", req.getUserId(), n);
         return n;
     }
 

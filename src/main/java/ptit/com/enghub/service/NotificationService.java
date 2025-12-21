@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ptit.com.enghub.dto.ReminderMessage;
 import ptit.com.enghub.dto.request.NotificationRequest;
 import ptit.com.enghub.entity.Notification;
+import ptit.com.enghub.entity.User;
 import ptit.com.enghub.enums.NotificationType;
 import ptit.com.enghub.messaging.NotificationProducer;
 import ptit.com.enghub.repository.NotificationRepository;
@@ -20,6 +21,7 @@ public class NotificationService {
 
     private final NotificationRepository repository;
     private final RealtimePublisher publisher;
+    private final UserService userService;
 
     public Notification create(NotificationRequest req) {
 
@@ -33,12 +35,13 @@ public class NotificationService {
         n.setRead(false);
 
         repository.save(n);
-        publisher.publishToUser(req.getUserId(), n);
+        publisher.publishToUser("notifications", req.getUserId(), n);
         return n;
     }
 
-    public Page<Notification> listForUser(String userId, Pageable pageable) {
-        return repository.findByUserIdOrderByCreatedAtDesc(userId, pageable);
+    public Page<Notification> listForUser(Pageable pageable) {
+        User user = userService.getCurrentUser();
+        return repository.findByUserIdOrderByCreatedAtDesc(user.getId().toString(), pageable);
     }
 
     public void markAsRead(UUID id) {
@@ -49,8 +52,9 @@ public class NotificationService {
         });
     }
 
-    public long countUnread(String userId) {
-        return repository.countByUserIdAndIsReadFalse(userId);
+    public long countUnread() {
+        User user = userService.getCurrentUser();
+        return repository.countByUserIdAndIsReadFalse(user.getId().toString());
     }
 }
 

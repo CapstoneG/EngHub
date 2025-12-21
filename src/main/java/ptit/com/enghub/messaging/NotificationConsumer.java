@@ -34,6 +34,6 @@ public class NotificationConsumer {
         n.setRead(false);
 
         notificationRepository.save(n);
-        realtimePublisher.publishToUser(msg.getUserId(), n);
+        realtimePublisher.publishToUser("notifications", msg.getUserId(), n);
     }
 }

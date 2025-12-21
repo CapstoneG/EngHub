@@ -8,9 +8,9 @@ import ptit.com.enghub.entity.Lesson;
 import java.util.List;
 
 public interface LessonService {
-    LessonResponse getLesson(Long lessonId, Long userId);
+    LessonResponse getLesson(Long lessonId);
     List<LessonResponse> getLessonsByUnitId(Long unitId);
-    void completeLesson(Long lessonId, CompleteLessonRequest request, Long userId);
+    void completeLesson(Long lessonId, CompleteLessonRequest request);
     Lesson createLesson(LessonCreationRequest request);
     void deleteLesson(Long id);
 

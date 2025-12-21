@@ -18,13 +18,11 @@ import java.util.UUID;
 public class NotificationController {
 
     private final NotificationService service;
-    private final UserService userService;
 
     @GetMapping
     public Page<Notification> getNotifications(@RequestParam(defaultValue = "0") int page,
                                                @RequestParam(defaultValue = "10") int size) {
-        User user = userService.getUser();
-        return service.listForUser(user.getId().toString(), PageRequest.of(page, size));
+        return service.listForUser(PageRequest.of(page, size));
     }
 
     @PostMapping
@@ -39,7 +37,6 @@ public class NotificationController {
 
     @GetMapping("/unread-count")
     public long unreadCount() {
-        User user = userService.getUser();
-        return service.countUnread(user.getId().toString());
+        return service.countUnread();
     }
 }

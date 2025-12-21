@@ -21,13 +21,11 @@ import java.util.List;
 public class LessonController {
     private final LessonService lessonService;
     private final ExerciseService exerciseService;
-    private final UserService userService;
 
     @GetMapping("/lessons/{id}")
     public ApiResponse<LessonResponse> getLesson(@PathVariable Long id) {
-        User user = userService.getUser();
         return ApiResponse.<LessonResponse>builder()
-                .result(lessonService.getLesson(id, user.getId()))
+                .result(lessonService.getLesson(id))
                 .build();
     }
 
@@ -40,8 +38,7 @@ public class LessonController {
 
     @PostMapping("/lessons/{id}/complete")
     public ApiResponse<Void> completeLesson(@PathVariable Long id, @RequestBody CompleteLessonRequest request) {
-        User user = userService.getUser();
-        lessonService.completeLesson(id, request, user.getId());
+        lessonService.completeLesson(id, request);
         return ApiResponse.<Void>builder()
                 .message("Lesson completed successfully")
                 .build();

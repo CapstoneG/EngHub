@@ -17,30 +17,26 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
-    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<CommentResponse> createComment(
             @RequestBody CommentRequest request
     ) {
-        User user = userService.getUser();
-        return ResponseEntity.ok(commentService.createComment(user.getId(), request));
+        return ResponseEntity.ok(commentService.createComment(request));
     }
 
     @GetMapping("/lesson/{lessonId}")
     public ResponseEntity<List<CommentResponse>> getComments(
             @PathVariable Long lessonId
     ) {
-        User user = userService.getUser();
-        return ResponseEntity.ok(commentService.getCommentsByLesson(lessonId, user.getId()));
+        return ResponseEntity.ok(commentService.getCommentsByLesson(lessonId));
     }
 
     @PostMapping("/{commentId}/like")
     public ResponseEntity<Void> likeComment(
             @PathVariable Long commentId
     ) {
-        User user = userService.getUser();
-        commentService.likeComment(user.getId(), commentId);
+        commentService.likeComment(commentId);
         return ResponseEntity.ok().build();
     }
 
@@ -48,8 +44,7 @@ public class CommentController {
     public ResponseEntity<Void> unlikeComment(
             @PathVariable Long commentId
     ) {
-        User user = userService.getUser();
-        commentService.unlikeComment(user.getId(), commentId);
+        commentService.unlikeComment(commentId);
         return ResponseEntity.ok().build();
     }
 }

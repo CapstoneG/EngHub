@@ -11,8 +11,7 @@ public class RealtimePublisher {
         this.messagingTemplate = messagingTemplate;
     }
 
-    // FE subscribes to /topic/notifications.{userId} (or /topic/notifications/{userId})
-    public void publishToUser(String userId, Object payload) {
-        messagingTemplate.convertAndSend("/topic/notifications/" + userId, payload);
+    public void publishToUser(String channel, String userId, Object payload) {
+        messagingTemplate.convertAndSend("/topic/" + channel + "/" + userId, payload);
     }
 }

@@ -18,6 +18,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "VOCAB"
         - insert:
             tableName: lesson
             columns:
@@ -33,6 +36,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "VOCAB"
         - insert:
             tableName: lesson
             columns:
@@ -48,6 +54,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "VOCAB"
         - insert:
             tableName: lesson
             columns:
@@ -63,6 +72,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "VOCAB"
 
 #                  ===
         - insert:
@@ -80,6 +92,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "GRAMMAR"
         - insert:
             tableName: lesson
             columns:
@@ -95,6 +110,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "GRAMMAR"
         - insert:
             tableName: lesson
             columns:
@@ -110,6 +128,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "GRAMMAR"
         - insert:
             tableName: lesson
             columns:
@@ -125,6 +146,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "GRAMMAR"
         - insert:
             tableName: lesson
             columns:
@@ -140,6 +164,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "GRAMMAR"
 #                  ===
         - insert:
             tableName: lesson
@@ -156,6 +183,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "SPEAKING"
         - insert:
             tableName: lesson
             columns:
@@ -171,6 +201,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "SPEAKING"
         - insert:
             tableName: lesson
             columns:
@@ -186,6 +219,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "SPEAKING"
         - insert:
             tableName: lesson
             columns:
@@ -201,6 +237,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "SPEAKING"
         - insert:
             tableName: lesson
             columns:
@@ -216,6 +255,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "SPEAKING"
 #        ===
         - insert:
             tableName: lesson
@@ -232,6 +274,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "LISTENING"
         - insert:
             tableName: lesson
             columns:
@@ -247,6 +292,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "LISTENING"
         - insert:
             tableName: lesson
             columns:
@@ -262,6 +310,9 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "SPEAKING"
         - insert:
             tableName: lesson
             columns:
@@ -277,3 +328,6 @@ databaseChangeLog:
               - column:
                   name: duration
                   value: 10
+              - column:
+                  name: study_skill
+                  value: "LISTENING"

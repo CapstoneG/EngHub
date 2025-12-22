@@ -29,16 +29,6 @@ public class Flashcard {
     @Column(columnDefinition = "TEXT")
     private String exampleSentence; // Câu ví dụ
 
-    // --- Algorithm SRS ---
-    @Builder.Default
-    private Double easeFactor = 2.5;
-    @Builder.Default
-    private Integer intervalDays = 0;
-    @Builder.Default
-    private Integer repetitions = 0;
-
-    private LocalDateTime nextReviewAt;
-
     @OneToMany(mappedBy = "flashcard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeckFlashcard> deckFlashcards;
 }

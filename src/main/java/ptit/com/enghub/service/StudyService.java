@@ -7,8 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ptit.com.enghub.dto.response.FlashcardResponse;
 import ptit.com.enghub.entity.Flashcard;
+import ptit.com.enghub.entity.User;
+import ptit.com.enghub.entity.UserFlashcardProgress;
 import ptit.com.enghub.mapper.FlashcardMapper;
 import ptit.com.enghub.repository.FlashcardRepository;
+import ptit.com.enghub.repository.UserFlashcardProgressRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,78 +23,112 @@ import java.util.stream.Collectors;
 public class StudyService {
 
     private final FlashcardRepository flashcardRepository;
-    private final FlashcardMapper flashcardMapper; // MapStruct để convert Entity -> Response
+    private final FlashcardMapper flashcardMapper;
+    private final UserService userService;
+    private final UserFlashcardProgressRepository progressRepository;
 
-    private static final int SESSION_LIMIT = 20; // Mỗi lần học tối đa 20 thẻ
+    private static final int SESSION_LIMIT = 20;
 
-    /**
-     * Lấy danh sách thẻ cho phiên học
-     */
     public List<FlashcardResponse> getStudySession(Long deckId) {
+
+        User user = userService.getCurrentUser();
         LocalDateTime now = LocalDateTime.now();
 
-        // Bước 1: Ưu tiên lấy thẻ Cũ cần ôn (Due Cards)
-        List<Flashcard> sessionCards = new ArrayList<>(
-                flashcardRepository.findDueCards(deckId, now, Pageable.ofSize(SESSION_LIMIT))
-        );
+        List<UserFlashcardProgress> dueProgresses =
+                progressRepository.findDueCards(
+                        user.getId(),
+                        deckId,
+                        now,
+                        Pageable.ofSize(SESSION_LIMIT)
+                );
 
-        // Bước 2: Nếu thẻ cũ ít hơn giới hạn, lấp đầy bằng thẻ Mới (New Cards)
+        List<Flashcard> sessionCards = dueProgresses.stream()
+                .map(UserFlashcardProgress::getFlashcard)
+                .collect(Collectors.toCollection(ArrayList::new));
+
         int slotsRemaining = SESSION_LIMIT - sessionCards.size();
         if (slotsRemaining > 0) {
-            List<Flashcard> newCards = flashcardRepository.findNewCards(deckId, Pageable.ofSize(slotsRemaining));
+            List<UserFlashcardProgress> newProgresses =
+                    progressRepository.findNewCards(
+                            user.getId(),
+                            deckId,
+                            Pageable.ofSize(slotsRemaining)
+                    );
+
+            List<Flashcard> newCards = newProgresses.stream()
+                    .map(UserFlashcardProgress::getFlashcard)
+                    .toList();
             sessionCards.addAll(newCards);
         }
 
-        // Bước 3: Convert sang DTO để trả về Client
         return sessionCards.stream()
                 .map(flashcardMapper::toResponse)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Xử lý kết quả User đánh giá (Thuật toán SM-2)
-     * @param quality: 1 (Quên/Again), 3 (Khá/Good), 5 (Dễ/Easy)
-     */
     @Transactional
-    public FlashcardResponse submitCardResult(Long cardId, int quality) {
-        Flashcard card = flashcardRepository.findById(cardId)
-                .orElseThrow(() -> new RuntimeException("Card not found with id: " + cardId));
+    public UserFlashcardProgress submitCardResult(Long cardId, int quality) {
 
-        // --- Bắt đầu thuật toán SM-2 ---
+        User user = userService.getCurrentUser();
+
+        Flashcard card = flashcardRepository.findById(cardId)
+                .orElseThrow(() -> new RuntimeException("Card not found"));
+
+        UserFlashcardProgress progress =
+                progressRepository
+                        .findByUserIdAndFlashcardId(user.getId(), cardId)
+                        .orElseGet(() -> createNewProgress(user.getId(), card));
+
+        applySM2(progress, quality);
+
+        progress.setLastReviewedAt(LocalDateTime.now());
+        progressRepository.save(progress);
+
+        return progress;
+    }
+
+    private UserFlashcardProgress createNewProgress(Long userId, Flashcard card) {
+        return UserFlashcardProgress.builder()
+                .userId(userId)
+                .flashcard(card)
+                .easeFactor(2.5)
+                .repetitions(0)
+                .intervalDays(0)
+                .nextReviewAt(LocalDateTime.now())
+                .build();
+    }
+
+    private void applySM2(UserFlashcardProgress p, int quality) {
 
         if (quality < 3) {
-            // Case: User QUÊN (Again)
-            card.setRepetitions(0); // Reset số lần nhớ
-            card.setIntervalDays(1); // Hỏi lại vào ngày mai (hoặc 10p nữa tùy config, ở đây set 1 ngày)
+            p.setRepetitions(0);
+            p.setIntervalDays(1);
         } else {
-            // Case: User NHỚ (Good/Easy)
-            int reps = card.getRepetitions() + 1;
-            card.setRepetitions(reps);
+            int reps = p.getRepetitions() + 1;
+            p.setRepetitions(reps);
 
-            // Tính Interval (Khoảng cách ngày ôn tiếp theo)
-            int nextInterval;
+            int interval;
             if (reps == 1) {
-                nextInterval = 1;
+                interval = 1;
             } else if (reps == 2) {
-                nextInterval = 6;
+                interval = 6;
             } else {
-                // Công thức: I(n) = I(n-1) * EF
-                nextInterval = (int) Math.ceil(card.getIntervalDays() * card.getEaseFactor());
+                interval = (int) Math.ceil(
+                        p.getIntervalDays() * p.getEaseFactor()
+                );
             }
-            card.setIntervalDays(nextInterval);
+            p.setIntervalDays(interval);
 
-            // Cập nhật Ease Factor (Độ dễ nhớ)
-            // Công thức chuẩn: EF' = EF + (0.1 - (5-q) * (0.08 + (5-q)*0.02))
-            double newEf = card.getEaseFactor() + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02));
-            if (newEf < 1.3) newEf = 1.3; // Chặn dưới không thấp hơn 1.3
-            card.setEaseFactor(newEf);
+            double ef = p.getEaseFactor()
+                    + (0.1 - (5 - quality)
+                    * (0.08 + (5 - quality) * 0.02));
+
+            p.setEaseFactor(Math.max(ef, 1.3));
         }
 
-        // Set ngày ôn tập mới
-        card.setNextReviewAt(LocalDateTime.now().plusDays(card.getIntervalDays()));
-
-        // Lưu và trả về
-        Flashcard savedCard = flashcardRepository.save(card);
-        return flashcardMapper.toResponse(savedCard);
+        p.setNextReviewAt(
+                LocalDateTime.now().plusDays(p.getIntervalDays())
+        );
     }
 }
+

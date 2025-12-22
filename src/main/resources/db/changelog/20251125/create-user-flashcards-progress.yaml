@@ -1,0 +1,87 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: trong
+      changes:
+        - createTable:
+            tableName: user_flashcard_progress
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: flashcard_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: ease_factor
+                  type: DOUBLE
+                  defaultValueNumeric: 2.5
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: repetitions
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: interval_days
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: next_review_at
+                  type: TIMESTAMP
+
+              - column:
+                  name: last_reviewed_at
+                  type: TIMESTAMP
+
+        - addUniqueConstraint:
+            tableName: user_flashcard_progress
+            columnNames: user_id, flashcard_id
+            constraintName: uq_user_flashcard
+
+        - createIndex:
+            tableName: user_flashcard_progress
+            indexName: idx_user_flashcard
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: flashcard_id
+
+        - createIndex:
+            tableName: user_flashcard_progress
+            indexName: idx_user_next_review
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: next_review_at
+
+        - addForeignKeyConstraint:
+            baseTableName: user_flashcard_progress
+            baseColumnNames: flashcard_id
+            referencedTableName: flashcards
+            referencedColumnNames: id
+            constraintName: fk_user_flashcard_progress_flashcard
+            onDelete: CASCADE

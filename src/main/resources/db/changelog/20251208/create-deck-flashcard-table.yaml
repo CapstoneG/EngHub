@@ -70,25 +70,6 @@ databaseChangeLog:
                   name: example_sentence
                   type: TEXT
 
-              # --- SRS fields ---
-              - column:
-                  name: ease_factor
-                  type: DOUBLE
-                  defaultValueNumeric: 2.5
-
-              - column:
-                  name: interval_days
-                  type: INT
-                  defaultValueNumeric: 0
-
-              - column:
-                  name: repetitions
-                  type: INT
-                  defaultValueNumeric: 0
-
-              - column:
-                  name: next_review_at
-                  type: DATETIME
 
   - changeSet:
       id: create-deck-flashcard-table

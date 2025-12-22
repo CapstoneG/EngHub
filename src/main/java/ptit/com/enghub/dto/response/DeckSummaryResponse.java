@@ -1,8 +1,10 @@
 package ptit.com.enghub.dto.response;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class DeckSummaryResponse {
     private Long id;
     private String name;

@@ -77,44 +77,18 @@ public class DataSeeder implements CommandLineRunner {
                         .definition(fDto.getDefinition())
                         .partOfSpeech(fDto.getPartOfSpeech())
                         .exampleSentence(fDto.getExampleSentence())
-                        .easeFactor(2.5)
-                        .intervalDays(0)
-                        .repetitions(0)
-                        .nextReviewAt(LocalDateTime.now())
                         .build();
 
                 // Create connection
                 DeckFlashcard df = new DeckFlashcard();
                 df.setDeck(deck);
                 df.setFlashcard(flashcard);
-                // ID is composite, we can construct it if needed but JPA might handle it if we
-                // set relations?
-                // Best practice with helper method, but here we do manual.
-                // We need to set ID manually for EmbeddedId usually if not generated.
-                // BUT, Flashcard ID is generated. We must save Flashcard first?
-                // Or: save Flashcard (cascade from DeckFlashcard?) -> DeckFlashcard does NOT
-                // have cascade.
-                // So we must add to Flashcard.deckFlashcards list and save Flashcard?
-
-                // Let's rely on Cascade from Flashcard (which has Cascade.ALL for
-                // deckFlashcards)
-                // df.setId(null); // ID is auto-generated
-
-                // Safest approach: Explicit save Flashcard
-                // Reset DF
-
-                // Link
                 List<DeckFlashcard> dfs = new ArrayList<>();
                 dfs.add(df);
                 flashcard.setDeckFlashcards(dfs);
 
                 flashcards.add(flashcard);
             }
-            // Saving flashcards will cascade to DeckFlashcard.
-            // BUT DeckFlashcard needs Deck ID (which we have) and Flashcard ID (which is
-            // generated).
-            // JPA should handle the FK if the relationship is set correctly.
-            // Let's try saving.
             for (Flashcard f : flashcards) {
                 // Ensure DF has the back-reference if needed
                 f.getDeckFlashcards().get(0).setFlashcard(f);

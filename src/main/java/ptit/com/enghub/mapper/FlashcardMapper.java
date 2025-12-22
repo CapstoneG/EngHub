@@ -25,9 +25,5 @@ public interface FlashcardMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "deckFlashcards", ignore = true)
-    @Mapping(target = "nextReviewAt", ignore = true)
-    @Mapping(target = "repetitions", constant = "0")
-    @Mapping(target = "intervalDays", constant = "0")
-    @Mapping(target = "easeFactor", constant = "2.5")
     Flashcard toEntity(FlashcardRequest request);
 }

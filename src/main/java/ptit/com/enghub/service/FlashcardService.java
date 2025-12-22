@@ -5,12 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ptit.com.enghub.dto.request.FlashcardRequest;
 import ptit.com.enghub.dto.response.FlashcardResponse;
-import ptit.com.enghub.entity.Deck;
-import ptit.com.enghub.entity.DeckFlashcard;
-import ptit.com.enghub.entity.Flashcard;
+import ptit.com.enghub.entity.*;
 import ptit.com.enghub.mapper.FlashcardMapper;
 import ptit.com.enghub.repository.DeckRepository;
 import ptit.com.enghub.repository.FlashcardRepository;
+import ptit.com.enghub.repository.UserFlashcardProgressRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,10 +22,13 @@ public class FlashcardService {
     private final FlashcardRepository flashcardRepository;
     private final DeckRepository deckRepository;
     private final FlashcardMapper flashcardMapper;
+    private final UserService userService;
+    private final UserFlashcardProgressRepository progressRepository;
 
     // 1. Create Flashcard
     @Transactional
     public FlashcardResponse createFlashcard(FlashcardRequest request) {
+        User user = userService.getCurrentUser();
         Flashcard flashcard = flashcardMapper.toEntity(request);
 
         if (request.getDeckId() != null) {
@@ -44,6 +46,18 @@ public class FlashcardService {
         }
 
         Flashcard savedFlashcard = flashcardRepository.save(flashcard);
+
+        UserFlashcardProgress progress = UserFlashcardProgress.builder()
+                .userId(user.getId())
+                .flashcard(savedFlashcard)
+                .easeFactor(2.5)
+                .repetitions(0)
+                .intervalDays(0)
+                .nextReviewAt(null)
+                .build();
+
+        progressRepository.save(progress);
+
         return flashcardMapper.toResponse(savedFlashcard);
     }
 

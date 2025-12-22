@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ptit.com.enghub.dto.response.DeckDashboardResponse;
 import ptit.com.enghub.dto.response.DeckSummaryResponse;
 import ptit.com.enghub.entity.Deck;
+import ptit.com.enghub.entity.User;
 import ptit.com.enghub.mapper.DeckMapper;
 import ptit.com.enghub.repository.DeckRepository;
 
@@ -15,21 +16,26 @@ import java.util.List;
 public class DeckDashboardService {
     private final DeckRepository deckRepository;
     private final DeckMapper deckMapper;
+    private final UserService userService;
+    private final DeckService deckService;
 
-    public DeckDashboardResponse getDashboard(Long userId) {
-        // 1. Lấy "Kho của tôi" (My Decks)
-        // Bao gồm: Deck tự tạo + Deck clone về
-        List<Deck> myDecks = deckRepository.findByOwnerId(userId);
-        List<DeckSummaryResponse> myDeckDTOs = deckMapper.toSummaryDTOs(myDecks);
+    public DeckDashboardResponse getDashboard() {
+        User user = userService.getCurrentUser();
 
-        // 2. Lấy "Cửa hàng" (System Decks)
-        // Chỉ lấy những bộ public mà user CHƯA clone về
-        List<Deck> systemDecks = deckRepository.findAvailableSystemDecksForUser(userId);
-        List<DeckSummaryResponse> systemDeckDTOs = deckMapper.toSummaryDTOs(systemDecks);
+        List<Deck> myDecks = deckRepository.findByOwnerId(user.getId());
+        List<DeckSummaryResponse> myDeckDTOs = myDecks.stream()
+                .map(deck -> deckService.getDeckSummary(deck.getId()))
+                .toList();
+
+
+        List<Deck> systemDecks = deckRepository.findAvailableSystemDecksForUser(user.getId());
+        List<DeckSummaryResponse> systemDeckDTOs = systemDecks.stream()
+                .map(deck -> deckService.getDeckSummary(deck.getId()))
+                .toList();
 
         return DeckDashboardResponse.builder()
-                .myDecks(myDeckDTOs) // Gộp chung hiển thị ở mục "Đang học/Của tôi"
-                .systemDecks(systemDeckDTOs) // Mục "Khám phá thêm"
+                .myDecks(myDeckDTOs)
+                .systemDecks(systemDeckDTOs)
                 .build();
     }
 }

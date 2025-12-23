@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ptit.com.enghub.dto.EndStudyDto;
 import ptit.com.enghub.dto.request.StartStudyRequest;
+import ptit.com.enghub.dto.response.StudyChartResponse;
 import ptit.com.enghub.entity.User;
 import ptit.com.enghub.entity.UserStudyDaily;
 import ptit.com.enghub.entity.UserStudySession;
@@ -14,9 +15,16 @@ import ptit.com.enghub.repository.UserStudyDailyRepository;
 import ptit.com.enghub.repository.UserStudySessionRepository;
 import ptit.com.enghub.service.UserService;
 
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -98,4 +106,47 @@ public class StudyTrackingService {
 
         dailyRepo.save(daily);
     }
+
+    public List<StudyChartResponse> getLast4WeeksWeekdayChart() {
+        User user = userService.getCurrentUser();
+
+        LocalDate today = LocalDate.now();
+        LocalDate currentWeekMonday = today.with(DayOfWeek.MONDAY);
+
+        LocalDate startMonday = currentWeekMonday.minusWeeks(3);
+
+        List<Object[]> rawData =
+                dailyRepo.findDailyStudyMinutes(user.getId(), startMonday);
+
+        Map<LocalDate, Integer> minutesMap = new HashMap<>();
+
+        for (Object[] row : rawData) {
+            LocalDate date = (LocalDate) row[0];
+            Number minutes = (Number) row[1];
+
+            minutesMap.put(
+                    date,
+                    minutes != null ? minutes.intValue() : 0
+            );
+        }
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
+        List<StudyChartResponse> chartData = new ArrayList<>();
+
+        for (int week = 0; week < 4; week++) {
+            LocalDate weekMonday = startMonday.plusWeeks(week);
+            for (int day = 0; day < 7; day++) {
+                LocalDate date = weekMonday.plusDays(day);
+
+                chartData.add(new StudyChartResponse(
+                        date.format(formatter),
+                        minutesMap.getOrDefault(date, 0)
+                ));
+            }
+        }
+
+        return chartData;
+    }
+
+
 }

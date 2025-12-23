@@ -43,5 +43,17 @@ public interface UserStudyDailyRepository
     """)
     long countStudyDays(@Param("userId") Long userId);
 
-    List<UserStudyDaily> findTop7ByUserIdOrderByStudyDateDesc(Long userId);
+    @Query("""
+        SELECT d.studyDate, d.totalMinutes
+        FROM UserStudyDaily d
+        WHERE d.userId = :userId
+          AND d.studyDate >= :fromDate
+        ORDER BY d.studyDate
+    """)
+    List<Object[]> findDailyStudyMinutes(
+            @Param("userId") Long userId,
+            @Param("fromDate") LocalDate fromDate
+    );
+
+
 }

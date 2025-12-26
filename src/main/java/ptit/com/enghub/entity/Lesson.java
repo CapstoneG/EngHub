@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import ptit.com.enghub.enums.StudySkill;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -30,10 +31,10 @@ public class Lesson {
     private Unit unit;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Exercise> exercises;
+    private List<Exercise> exercises = new ArrayList<>();;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Dialogue> dialogue;
+    private List<Dialogue> dialogues = new ArrayList<>();;
 
     @OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Grammar grammar;
@@ -42,7 +43,7 @@ public class Lesson {
     private Video video;
 
     @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Vocabulary> vocabularies;
+    private List<Vocabulary> vocabularies = new ArrayList<>();;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "study_skill", length = 30, nullable = false)

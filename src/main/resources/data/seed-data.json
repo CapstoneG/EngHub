@@ -1,0 +1,154 @@
+[
+  {
+    "name": "IELTS Essential Vocabulary",
+    "description": "Top 10 most common words for IELTS Speaking and Writing.",
+    "flashcards": [
+      {
+        "term": "Abundant",
+        "phonetic": "/əˈbʌn.dənt/",
+        "definition": "Dồi dào, phong phú, nhiều hơn mức cần thiết.",
+        "partOfSpeech": "adj",
+        "exampleSentence": "There is abundant evidence that cars have a harmful effect on the environment."
+      },
+      {
+        "term": "Banal",
+        "phonetic": "/bəˈnɑːl/",
+        "definition": "Nhàm chán, tầm thường, thiếu tính độc đáo.",
+        "partOfSpeech": "adj",
+        "exampleSentence": "He just sat there making banal remarks all evening."
+      },
+      {
+        "term": "Cacophony",
+        "phonetic": "/kəˈkɒf.ə.ni/",
+        "definition": "Âm thanh hỗn độn, chói tai, không hòa hợp.",
+        "partOfSpeech": "n",
+        "exampleSentence": "As we entered the farmyard we were met with a cacophony of animal sounds."
+      },
+      {
+        "term": "Dauntless",
+        "phonetic": "/ˈdɔːnt.ləs/",
+        "definition": "Không sợ hãi, gan dạ và quyết tâm.",
+        "partOfSpeech": "adj",
+        "exampleSentence": "The dauntless firefighters ran into the burning building to save the children."
+      },
+      {
+        "term": "Eclectic",
+        "phonetic": "/ɪˈklek.tɪk/",
+        "definition": "Đa dạng, chọn lọc từ nhiều nguồn hoặc phong cách khác nhau.",
+        "partOfSpeech": "adj",
+        "exampleSentence": "His musical tastes are eclectic, ranging from hard rock to classical."
+      },
+      {
+        "term": "Facilitate",
+        "phonetic": "/fəˈsɪl.ɪ.teɪt/",
+        "definition": "Làm cho việc gì đó trở nên dễ dàng hoặc thuận tiện hơn.",
+        "partOfSpeech": "v",
+        "exampleSentence": "The new ramp will facilitate the entry of wheelchairs."
+      },
+      {
+        "term": "Garrulous",
+        "phonetic": "/ˈɡær.əl.əs/",
+        "definition": "Nói nhiều, lắm lời, đặc biệt về những chuyện không quan trọng.",
+        "partOfSpeech": "adj",
+        "exampleSentence": "I had a garrulous neighbour who wouldn't stop talking about her cats."
+      },
+      {
+        "term": "Hallow",
+        "phonetic": "/ˈhæl.əʊ/",
+        "definition": "Tôn vinh hoặc coi là linh thiêng.",
+        "partOfSpeech": "v",
+        "exampleSentence": "The church stands on hallowed ground."
+      },
+      {
+        "term": "Iconoclast",
+        "phonetic": "/aɪˈkɒn.ə.klæst/",
+        "definition": "Người thách thức hoặc phá bỏ những niềm tin, tập tục được tôn sùng.",
+        "partOfSpeech": "n",
+        "exampleSentence": "Rogers, an iconoclast in architecture, is sometimes described as creative and sometimes as merely eccentric."
+      },
+      {
+        "term": "Jaded",
+        "phonetic": "/ˈdʒeɪ.dɪd/",
+        "definition": "Mệt mỏi, chán nản hoặc mất hứng thú do trải qua quá nhiều.",
+        "partOfSpeech": "adj",
+        "exampleSentence": "Use something exciting to liven up your jaded appetite."
+      }
+    ]
+  },
+  {
+    "name": "Everyday Phrasal Verbs",
+    "description": "Useful phrasal verbs for daily conversation.",
+    "flashcards": [
+      {
+        "term": "Call off",
+        "phonetic": "/kɔːl ɒf/",
+        "definition": "Hủy bỏ một kế hoạch hoặc sự kiện.",
+        "partOfSpeech": "v",
+        "exampleSentence": "They had to call off the meeting because the boss was sick."
+      },
+      {
+        "term": "Calm down",
+        "phonetic": "/kɑːm daʊn/",
+        "definition": "Bình tĩnh lại, bớt tức giận hoặc căng thẳng.",
+        "partOfSpeech": "v",
+        "exampleSentence": "You need to calm down before you drive the car."
+      },
+      {
+        "term": "Catch up",
+        "phonetic": "/kætʃ ʌp/",
+        "definition": "Bắt kịp hoặc theo kịp ai đó.",
+        "partOfSpeech": "v",
+        "exampleSentence": "You'll have to run fast to catch up with him."
+      },
+      {
+        "term": "Check in",
+        "phonetic": "/tʃek ɪn/",
+        "definition": "Làm thủ tục đăng ký (khách sạn, sân bay).",
+        "partOfSpeech": "v",
+        "exampleSentence": "We checked in at the hotel as soon as we arrived."
+      },
+      {
+        "term": "Do over",
+        "phonetic": "/duː ˈəʊ.vər/",
+        "definition": "Làm lại từ đầu.",
+        "partOfSpeech": "v",
+        "exampleSentence": "My teacher made me do my homework over because it was messy."
+      },
+      {
+        "term": "Eat out",
+        "phonetic": "/iːt aʊt/",
+        "definition": "Ăn ở nhà hàng thay vì ăn ở nhà.",
+        "partOfSpeech": "v",
+        "exampleSentence": "We didn't feel like cooking so we decided to eat out."
+      },
+      {
+        "term": "Figure out",
+        "phonetic": "/ˈfɪɡ.ər aʊt/",
+        "definition": "Tìm ra, hiểu ra hoặc giải quyết được vấn đề.",
+        "partOfSpeech": "v",
+        "exampleSentence": "I need to figure out how to fix this computer."
+      },
+      {
+        "term": "Give up",
+        "phonetic": "/ɡɪv ʌp/",
+        "definition": "Bỏ cuộc, ngừng cố gắng.",
+        "partOfSpeech": "v",
+        "exampleSentence": "She didn't give up even though the race was hard."
+      },
+      {
+        "term": "Hang out",
+        "phonetic": "/hæŋ aʊt/",
+        "definition": "Đi chơi, dành thời gian thư giãn cùng bạn bè.",
+        "partOfSpeech": "v",
+        "exampleSentence": "We like to hang out at the park on weekends."
+      },
+      {
+        "term": "Hold on",
+        "phonetic": "/həʊld ɒn/",
+        "definition": "Chờ một chút.",
+        "partOfSpeech": "v",
+        "exampleSentence": "Hold on a minute while I find my keys."
+      }
+    ]
+  }
+]

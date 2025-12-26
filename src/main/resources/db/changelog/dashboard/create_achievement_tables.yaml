@@ -1,0 +1,244 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-achievements
+      author: trong
+      changes:
+        - createTable:
+            tableName: achievements
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: code
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+
+              - column:
+                  name: type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: condition_type
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: condition_value
+                  type: INT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: reward_xp
+                  type: INT
+                  defaultValueNumeric: 0
+
+
+              - column:
+                  name: icon_url
+                  type: VARCHAR(500)
+  - changeSet:
+      id: 2
+      author: trong
+      changes:
+        - createTable:
+            tableName: achievement_progress
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: achievement_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: current_value
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: target_value
+                  type: INT
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: last_updated_at
+                  type: TIMESTAMP
+
+        - addUniqueConstraint:
+            tableName: achievement_progress
+            columnNames: user_id, achievement_id
+            constraintName: uk_achievement_progress_user_achievement
+
+        - addForeignKeyConstraint:
+            baseTableName: achievement_progress
+            baseColumnNames: achievement_id
+            referencedTableName: achievements
+            referencedColumnNames: id
+            constraintName: fk_progress_achievement
+            onDelete: CASCADE
+
+
+  - changeSet:
+      id: 3
+      author: trong
+      changes:
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STREAK_7_DAYS }
+              - column: { name: name, value: Học 7 ngày liên tiếp }
+              - column: { name: type, value: STREAK }
+              - column: { name: condition_type, value: STREAK_DAYS }
+              - column: { name: condition_value, valueNumeric: 7 }
+              - column: { name: reward_xp, valueNumeric: 50 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/medal-streak_cfeway.png" }
+
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STREAK_14_DAYS }
+              - column: { name: name, value: Học 14 ngày liên tiếp }
+              - column: { name: type, value: STREAK }
+              - column: { name: condition_type, value: STREAK_DAYS }
+              - column: { name: condition_value, valueNumeric: 14 }
+              - column: { name: reward_xp, valueNumeric: 100 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/medal-streak_cfeway.png" }
+
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STREAK_30_DAYS }
+              - column: { name: name, value: Học 30 ngày liên tiếp }
+              - column: { name: type, value: STREAK }
+              - column: { name: condition_type, value: STREAK_DAYS }
+              - column: { name: condition_value, valueNumeric: 30 }
+              - column: { name: reward_xp, valueNumeric: 250 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/medal-streak_cfeway.png" }
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STREAK_50_DAYS }
+              - column: { name: name, value: Học 50 ngày liên tiếp }
+              - column: { name: type, value: STREAK }
+              - column: { name: condition_type, value: STREAK_DAYS }
+              - column: { name: condition_value, valueNumeric: 50 }
+              - column: { name: reward_xp, valueNumeric: 400 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/medal-streak_cfeway.png" }
+
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STUDY_50_CARDS }
+              - column: { name: name, value: Học 50 flashcard }
+              - column: { name: type, value: FLASHCARD }
+              - column: { name: condition_type, value: TOTAL_CARDS }
+              - column: { name: condition_value, valueNumeric: 50 }
+              - column: { name: reward_xp, valueNumeric: 100 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/trophy_hshsgt.png" }
+
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STUDY_150_CARDS }
+              - column: { name: name, value: Học 150 flashcard }
+              - column: { name: type, value: FLASHCARD }
+              - column: { name: condition_type, value: TOTAL_CARDS }
+              - column: { name: condition_value, valueNumeric: 150 }
+              - column: { name: reward_xp, valueNumeric: 200 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/trophy_hshsgt.png" }
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STUDY_400_CARDS }
+              - column: { name: name, value: Học 400 flashcard }
+              - column: { name: type, value: FLASHCARD }
+              - column: { name: condition_type, value: TOTAL_CARDS }
+              - column: { name: condition_value, valueNumeric: 400 }
+              - column: { name: reward_xp, valueNumeric: 350 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/trophy_hshsgt.png" }
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STUDY_1000_CARDS }
+              - column: { name: name, value: Học 1000 flashcard }
+              - column: { name: type, value: FLASHCARD }
+              - column: { name: condition_type, value: TOTAL_CARDS }
+              - column: { name: condition_value, valueNumeric: 1000 }
+              - column: { name: reward_xp, valueNumeric: 600 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/trophy_hshsgt.png" }
+
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STUDY_30_MIN }
+              - column: { name: name, value: Học 30 phút }
+              - column: { name: type, value: TIME }
+              - column: { name: condition_type, value: TOTAL_STUDY_TIME }
+              - column: { name: condition_value, valueNumeric: 1800 }
+              - column: { name: reward_xp, valueNumeric: 200 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/medal-time_otgu6t.png" }
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STUDY_1_HOURS }
+              - column: { name: name, value: Học 1 giờ }
+              - column: { name: type, value: TIME }
+              - column: { name: condition_type, value: TOTAL_STUDY_TIME }
+              - column: { name: condition_value, valueNumeric: 3600 }
+              - column: { name: reward_xp, valueNumeric: 400 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/medal-time_otgu6t.png" }
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STUDY_2_HOURS }
+              - column: { name: name, value: Học 2 giờ }
+              - column: { name: type, value: TIME }
+              - column: { name: condition_type, value: TOTAL_STUDY_TIME }
+              - column: { name: condition_value, valueNumeric: 7200 }
+              - column: { name: reward_xp, valueNumeric: 400 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/medal-time_otgu6t.png" }
+        - insert:
+            tableName: achievements
+            columns:
+              - column: { name: code, value: STUDY_5_HOURS }
+              - column: { name: name, value: Học 5 giờ }
+              - column: { name: type, value: TIME }
+              - column: { name: condition_type, value: TOTAL_STUDY_TIME }
+              - column: { name: condition_value, valueNumeric: 18000 }
+              - column: { name: reward_xp, valueNumeric: 600 }
+              - column: { name: icon_url, value: "https://res.cloudinary.com/dc5glptng/image/upload/v1766514554/medal-time_otgu6t.png" }

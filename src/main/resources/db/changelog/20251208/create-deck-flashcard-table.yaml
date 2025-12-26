@@ -1,0 +1,107 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-decks-table
+      author: tu
+      changes:
+        - createTable:
+            tableName: decks
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+
+              - column:
+                  name: description
+                  type: VARCHAR(255)
+
+              - column:
+                  name: owner_id
+                  type: BIGINT
+
+              - column:
+                  name: source_deck_id
+                  type: BIGINT
+
+              - column:
+                  name: creator_id
+                  type: BIGINT
+
+  - changeSet:
+      id: create-flashcards-table
+      author: tu
+      changes:
+        - createTable:
+            tableName: flashcards
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              # --- Content ---
+              - column:
+                  name: term
+                  type: VARCHAR(255)
+
+              - column:
+                  name: phonetic
+                  type: VARCHAR(255)
+
+              - column:
+                  name: definition
+                  type: VARCHAR(255)
+
+              - column:
+                  name: part_of_speech
+                  type: VARCHAR(50)
+
+              - column:
+                  name: example_sentence
+                  type: TEXT
+
+
+  - changeSet:
+      id: create-deck-flashcard-table
+      author: tu
+      changes:
+        - createTable:
+            tableName: deck_flashcard
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: deck_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_deck_flashcard_deck
+                    referencedTableName: decks
+                    referencedColumnNames: id
+              - column:
+                  name: flashcard_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_deck_flashcard_flashcard
+                    referencedTableName: flashcards
+                    referencedColumnNames: id
+        - addUniqueConstraint:
+            columnNames: deck_id, flashcard_id
+            constraintName: uq_deck_flashcard
+            tableName: deck_flashcard

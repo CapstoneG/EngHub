@@ -17,3 +17,11 @@ databaseChangeLog:
       file: db/changelog/20251125/create-notification-table.yaml
   - include:
       file: db/changelog/dashboard/create-user-study-table.yaml
+  - include:
+      file: db/changelog/20251208/create-deck-flashcard-table.yaml
+  - include:
+      file: db/changelog/20251125/create-user-flashcards-progress.yaml
+  - include:
+      file: db/changelog/dashboard/create_achievement_tables.yaml
+  - include:
+      file: db/changelog/dashboard/create-cron-reset.yaml

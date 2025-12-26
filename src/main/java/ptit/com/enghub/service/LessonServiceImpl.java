@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ptit.com.enghub.dto.LessonSeedData;
 import ptit.com.enghub.dto.request.CompleteLessonRequest;
 import ptit.com.enghub.dto.request.LessonCreationRequest;
 import ptit.com.enghub.dto.response.LessonResponse;
@@ -171,7 +172,7 @@ public class LessonServiceImpl implements LessonService {
                         di.setLesson(lesson);
                         return di;
                     }).toList();
-            lesson.setDialogue(dList);
+            lesson.setDialogues(dList);
         }
 
         if (request.getGrammar() != null) {
@@ -251,6 +252,114 @@ public class LessonServiceImpl implements LessonService {
         Lesson lesson = lessonRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Lesson not found"));
         lessonRepository.delete(lesson);
+    }
+
+    @Override
+    @Transactional
+    public void seedLesson(Long lessonId, LessonSeedData data){
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+
+        if (data.getVideo() != null) {
+            Video video = new Video();
+            video.setUrl(data.getVideo().getUrl());
+            video.setDescription(data.getVideo().getDescription());
+            video.setDuration(data.getVideo().getDuration());
+            video.setLesson(lesson);
+            lesson.setVideo(video);
+        }
+
+        if (data.getVocabularies() != null) {
+            lesson.getVocabularies().clear();
+
+            for (var v : data.getVocabularies()) {
+                Vocabulary vo = new Vocabulary();
+                vo.setWord(v.getWord());
+                vo.setMeaning(v.getMeaning());
+                vo.setExample(v.getExample());
+                vo.setImageUrl(v.getImageUrl());
+                vo.setLesson(lesson);
+
+                lesson.getVocabularies().add(vo);
+            }
+        }
+
+
+        if (data.getDialogues() != null) {
+            lesson.getDialogues().clear();
+
+            for (var d : data.getDialogues()) {
+                Dialogue di = new Dialogue();
+                di.setSpeaker(d.getSpeaker());
+                di.setText(d.getText());
+                di.setLesson(lesson);
+
+                lesson.getDialogues().add(di);
+            }
+        }
+
+
+        if (data.getGrammar() != null) {
+
+            Grammar grammar = lesson.getGrammar();
+            if (grammar == null) {
+                grammar = new Grammar();
+                grammar.setLesson(lesson);
+                lesson.setGrammar(grammar);
+            }
+
+            grammar.setTopic(data.getGrammar().getTopic());
+            grammar.setExplanation(data.getGrammar().getExplanation());
+            grammar.setSignalWord(data.getGrammar().getSignalWord());
+
+            grammar.getFormulas().clear();
+
+            for (var f : data.getGrammar().getFormulas()) {
+                GrammarFormula gf = new GrammarFormula();
+                gf.setGrammar(grammar);
+                gf.setType(f.getType());
+                gf.setFormula(f.getFormula());
+                gf.setDescription(f.getDescription());
+                gf.setVerbType(f.getVerbType());
+
+                gf.getExamples().clear();
+
+                for (var e : f.getExamples()) {
+                    GrammarExample ex = new GrammarExample();
+                    ex.setFormula(gf);
+                    ex.setSentence(e.getSentence());
+                    ex.setTranslation(e.getTranslation());
+                    ex.setHighlight(e.getHighlight());
+
+                    gf.getExamples().add(ex);
+                }
+
+                grammar.getFormulas().add(gf);
+            }
+        }
+
+
+        if (data.getExercises() != null) {
+            lesson.getExercises().clear();
+
+            for (var e : data.getExercises()) {
+                Exercise ex = new Exercise();
+                ex.setQuestion(e.getQuestion());
+                ex.setType(e.getType());
+                ex.setLesson(lesson);
+
+                try {
+                    if (e.getMetadata() != null && !e.getMetadata().isNull()) {
+                        ex.setMetadata(objectMapper.writeValueAsString(e.getMetadata()));
+                    }
+                } catch (Exception ignore) {}
+
+                lesson.getExercises().add(ex);
+            }
+        }
+
+
+        lessonRepository.save(lesson);
     }
 
 }

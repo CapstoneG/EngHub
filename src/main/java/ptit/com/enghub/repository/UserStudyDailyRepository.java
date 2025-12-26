@@ -1,7 +1,9 @@
 package ptit.com.enghub.repository;
 
 import io.lettuce.core.dynamic.annotation.Param;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ptit.com.enghub.entity.UserStudyDaily;
@@ -43,5 +45,17 @@ public interface UserStudyDailyRepository
     """)
     long countStudyDays(@Param("userId") Long userId);
 
-    List<UserStudyDaily> findTop7ByUserIdOrderByStudyDateDesc(Long userId);
+    @Query("""
+        SELECT d.studyDate, d.totalMinutes
+        FROM UserStudyDaily d
+        WHERE d.userId = :userId
+          AND d.studyDate >= :fromDate
+        ORDER BY d.studyDate
+    """)
+    List<Object[]> findDailyStudyMinutes(
+            @Param("userId") Long userId,
+            @Param("fromDate") LocalDate fromDate
+    );
+
+
 }

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ptit.com.enghub.dto.request.StudySubmissionRequest;
 import ptit.com.enghub.dto.response.FlashcardResponse;
 import ptit.com.enghub.entity.Flashcard;
 import ptit.com.enghub.entity.User;
@@ -12,10 +13,12 @@ import ptit.com.enghub.entity.UserFlashcardProgress;
 import ptit.com.enghub.mapper.FlashcardMapper;
 import ptit.com.enghub.repository.FlashcardRepository;
 import ptit.com.enghub.repository.UserFlashcardProgressRepository;
+import ptit.com.enghub.service.dashboard.AchievementChecker;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +29,7 @@ public class StudyService {
     private final FlashcardMapper flashcardMapper;
     private final UserService userService;
     private final UserFlashcardProgressRepository progressRepository;
+    private final AchievementChecker checker;
 
     private static final int SESSION_LIMIT = 20;
 
@@ -66,25 +70,81 @@ public class StudyService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
-    public UserFlashcardProgress submitCardResult(Long cardId, int quality) {
+//    @Transactional
+//    public UserFlashcardProgress submitCardResult(Long cardId, int quality) {
+//
+//        User user = userService.getCurrentUser();
+//
+//        Flashcard card = flashcardRepository.findById(cardId)
+//                .orElseThrow(() -> new RuntimeException("Card not found"));
+//
+//        UserFlashcardProgress progress =
+//                progressRepository
+//                        .findByUserIdAndFlashcardId(user.getId(), cardId)
+//                        .orElseGet(() -> createNewProgress(user.getId(), card));
+//
+//        applySM2(progress, quality);
+//
+//        progress.setLastReviewedAt(LocalDateTime.now());
+//        progressRepository.save(progress);
+//
+//        return progress;
+//    }
 
+    @Transactional
+    public List<UserFlashcardProgress> submitCardsResult(
+            List<StudySubmissionRequest.CardResult> results
+    ) {
         User user = userService.getCurrentUser();
 
-        Flashcard card = flashcardRepository.findById(cardId)
-                .orElseThrow(() -> new RuntimeException("Card not found"));
+        List<Long> cardIds = results.stream()
+                .map(StudySubmissionRequest.CardResult::getCardId)
+                .toList();
 
-        UserFlashcardProgress progress =
+        Map<Long, Flashcard> cardMap = flashcardRepository
+                .findAllByIdIn(cardIds)
+                .stream()
+                .collect(Collectors.toMap(Flashcard::getId, c -> c));
+
+        Map<Long, UserFlashcardProgress> progressMap =
                 progressRepository
-                        .findByUserIdAndFlashcardId(user.getId(), cardId)
-                        .orElseGet(() -> createNewProgress(user.getId(), card));
+                        .findByUserIdAndFlashcardIdIn(user.getId(), cardIds)
+                        .stream()
+                        .collect(Collectors.toMap(
+                                p -> p.getFlashcard().getId(),
+                                p -> p
+                        ));
 
-        applySM2(progress, quality);
+        List<UserFlashcardProgress> toSave = new ArrayList<>();
 
-        progress.setLastReviewedAt(LocalDateTime.now());
-        progressRepository.save(progress);
+        int countFlashcardStudied = 0;
 
-        return progress;
+        for (StudySubmissionRequest.CardResult r : results) {
+
+            Flashcard card = cardMap.get(r.getCardId());
+            if (card == null) {
+                throw new RuntimeException("Card not found: " + r.getCardId());
+            }
+
+            UserFlashcardProgress progress =
+                    progressMap.getOrDefault(
+                            r.getCardId(),
+                            createNewProgress(user.getId(), card)
+                    );
+
+            applySM2(progress, r.getQuality());
+            progress.setLastReviewedAt(LocalDateTime.now());
+
+            if ( progress.getRepetitions() != 0 ){
+                countFlashcardStudied++;
+            }
+
+            toSave.add(progress);
+        }
+
+        checker.onFlashcardStudied(user.getId(), countFlashcardStudied);
+
+        return progressRepository.saveAll(toSave);
     }
 
     private UserFlashcardProgress createNewProgress(Long userId, Flashcard card) {

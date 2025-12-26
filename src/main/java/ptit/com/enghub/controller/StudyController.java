@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ptit.com.enghub.dto.request.StudySubmissionRequest;
+import ptit.com.enghub.dto.response.ApiResponse;
 import ptit.com.enghub.dto.response.FlashcardResponse;
 import ptit.com.enghub.entity.UserFlashcardProgress;
 import ptit.com.enghub.service.StudyService;
@@ -28,11 +29,12 @@ public class StudyController {
     }
 
     @PostMapping("/submit")
-    public ResponseEntity<UserFlashcardProgress> submitResult(@RequestBody StudySubmissionRequest request) {
-        UserFlashcardProgress updatedCard = studyService.submitCardResult(
-                request.getCardId(),
-                request.getQuality()
+    public ApiResponse<Void> submitResult(@RequestBody StudySubmissionRequest request) {
+        List<UserFlashcardProgress> updatedCard = studyService.submitCardsResult(
+                request.getResults()
         );
-        return ResponseEntity.ok(updatedCard);
+        return ApiResponse.<Void>builder()
+                .message("Submit ok")
+                .build();
     }
 }

@@ -1,8 +1,10 @@
 package ptit.com.enghub.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ptit.com.enghub.dto.ExerciseDTO;
+import ptit.com.enghub.dto.LessonSeedData;
 import ptit.com.enghub.dto.request.CompleteLessonRequest;
 import ptit.com.enghub.dto.request.LessonCreationRequest;
 import ptit.com.enghub.dto.response.ApiResponse;
@@ -78,5 +80,14 @@ public class LessonController {
 //                .message("Lesson updated successfully")
 //                .build();
 //    }
+
+    @PostMapping("/{lessonId}/seed")
+    public ResponseEntity<Void> seedLesson(
+            @PathVariable Long lessonId,
+            @RequestBody LessonSeedData request
+    ) {
+        lessonService.seedLesson(lessonId, request);
+        return ResponseEntity.ok().build();
+    }
 
 }

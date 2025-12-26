@@ -33,10 +33,14 @@ public class StudyTrackingService {
     private final UserService userService;
     private final UserStudySessionRepository sessionRepo;
     private final UserStudyDailyRepository dailyRepo;
+    private final AchievementChecker checker;
 
     @Transactional
     public EndStudyDto startStudy(StartStudyRequest request) {
         User user = userService.getCurrentUser();
+        if ( !hasSessionToday(user.getId()) ){
+            checker.onDailyStudy(user.getId());
+        }
 
         UserStudySession session = UserStudySession.builder()
                 .userId(user.getId())
@@ -104,6 +108,8 @@ public class StudyTrackingService {
         daily.setSessionCount(daily.getSessionCount() + 1);
         daily.setLastStudyAt(now);
 
+        checker.onTotalTimeStudy(user.getId(), session.getDurationMinutes());
+
         dailyRepo.save(daily);
     }
 
@@ -149,4 +155,16 @@ public class StudyTrackingService {
     }
 
 
+    public boolean hasSessionToday(Long userId) {
+        LocalDate today = LocalDate.now();
+
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(23, 59, 59);
+
+        return sessionRepo.existsByUserIdAndStartedAtBetween(
+                userId,
+                startOfDay,
+                endOfDay
+        );
+    }
 }

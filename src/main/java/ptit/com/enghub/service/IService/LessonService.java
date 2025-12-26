@@ -1,5 +1,6 @@
 package ptit.com.enghub.service.IService;
 
+import ptit.com.enghub.dto.LessonSeedData;
 import ptit.com.enghub.dto.request.CompleteLessonRequest;
 import ptit.com.enghub.dto.request.LessonCreationRequest;
 import ptit.com.enghub.dto.response.LessonResponse;
@@ -13,5 +14,6 @@ public interface LessonService {
     void completeLesson(Long lessonId, CompleteLessonRequest request);
     Lesson createLesson(LessonCreationRequest request);
     void deleteLesson(Long id);
+    void seedLesson(Long lessonId, LessonSeedData data);
 
 }

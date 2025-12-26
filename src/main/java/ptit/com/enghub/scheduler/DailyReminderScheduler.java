@@ -65,8 +65,6 @@ public class DailyReminderScheduler {
                         "daily-reminder",
                         null
                 );
-
-                log.info("Sent daily reminder to {}", pref.getUser().getEmail());
             } catch (Exception e) {
                 log.error("Failed to send reminder to {}", pref.getUser().getEmail(), e);
             }

@@ -1,0 +1,39 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: trong
+      changes:
+        - sql:
+            splitStatements: false
+            stripComments: false
+            sql: |
+              CREATE OR REPLACE PROCEDURE reset_streak_if_missed(
+                  IN p_user_id BIGINT,
+                  IN p_check_date DATE DEFAULT CURRENT_DATE - 1
+              )
+              LANGUAGE plpgsql
+              AS $$
+              BEGIN
+                  IF NOT EXISTS (
+                      SELECT 1
+                      FROM public.user_study_daily d
+                      WHERE d.user_id = p_user_id
+                        AND d.study_date = p_check_date
+                        AND d.total_minutes > 0
+                  ) THEN
+                      UPDATE public.achievement_progress ap
+                      SET current_value = 0,
+                          last_updated_at = NOW()
+                      WHERE ap.user_id = p_user_id
+                        AND ap.achievement_id IN (
+                            SELECT a.id
+                            FROM public.achievements a
+                            WHERE a.type = 'STREAK'
+                        )
+                        AND ap.current_value < ap.target_value;
+                  END IF;
+              END;
+              $$;
+      rollback:
+        - sql: |
+            DROP PROCEDURE IF EXISTS reset_streak_if_missed(BIGINT, DATE);

@@ -3,8 +3,10 @@ package ptit.com.enghub.service.dashboard;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ptit.com.enghub.entity.Achievement;
+import ptit.com.enghub.entity.User;
 import ptit.com.enghub.enums.ConditionType;
 import ptit.com.enghub.repository.AchievementRepository;
+import ptit.com.enghub.service.UserService;
 
 import java.util.List;
 
@@ -31,8 +33,7 @@ public class AchievementChecker {
         }
     }
 
-    public void onDailyStudy(Long userId, int streakDays) {
-
+    public void onDailyStudy(Long userId) {
         List<Achievement> achievements = achievementRepo.findAll();
 
         for (Achievement achievement : achievements) {
@@ -42,6 +43,21 @@ public class AchievementChecker {
                         userId,
                         achievement,
                         1
+                );
+            }
+        }
+    }
+
+    public void onTotalTimeStudy(Long userId, int time) {
+        List<Achievement> achievements = achievementRepo.findAll();
+
+        for (Achievement achievement : achievements) {
+            if (achievement.getConditionType() == ConditionType.TOTAL_STUDY_TIME) {
+
+                progressService.updateProgress(
+                        userId,
+                        achievement,
+                        time
                 );
             }
         }

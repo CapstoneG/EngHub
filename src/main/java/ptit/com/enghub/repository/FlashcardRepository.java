@@ -20,4 +20,5 @@ public interface FlashcardRepository extends JpaRepository<Flashcard, Long> {
         WHERE df.deck.id = :deckId
     """)
     List<Flashcard> findByDeckId(@Param("deckId") Long deckId);
+    List<Flashcard> findAllByIdIn(List<Long> ids);
 }

@@ -5,5 +5,6 @@ public enum StudySkill {
     GRAMMAR,
     READING,
     LISTENING,
-    SPEAKING
+    SPEAKING,
+    WRITING
 }

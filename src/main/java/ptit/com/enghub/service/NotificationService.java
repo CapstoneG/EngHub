@@ -1,15 +1,14 @@
 package ptit.com.enghub.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import ptit.com.enghub.dto.ReminderMessage;
 import ptit.com.enghub.dto.request.NotificationRequest;
 import ptit.com.enghub.entity.Notification;
 import ptit.com.enghub.entity.User;
-import ptit.com.enghub.enums.NotificationType;
-import ptit.com.enghub.messaging.NotificationProducer;
 import ptit.com.enghub.repository.NotificationRepository;
 
 import java.time.Instant;
@@ -17,11 +16,12 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class NotificationService {
 
     private final NotificationRepository repository;
-    private final RealtimePublisher publisher;
     private final UserService userService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     public Notification create(NotificationRequest req) {
 
@@ -35,7 +35,9 @@ public class NotificationService {
         n.setRead(false);
 
         repository.save(n);
-        publisher.publishToUser("notifications", req.getUserId(), n);
+        messagingTemplate.convertAndSend(
+                "/topic/notifications/" + req.getUserId(), n
+        );
         return n;
     }
 
@@ -50,6 +52,14 @@ public class NotificationService {
             n.setReadAt(Instant.now());
             repository.save(n);
         });
+    }
+
+    public void markAsReadAll() {
+        User user = userService.getCurrentUser();
+        repository.markAllAsRead(
+                user.getId().toString(),
+                Instant.now()
+        );
     }
 
     public long countUnread() {

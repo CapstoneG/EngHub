@@ -7,18 +7,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ptit.com.enghub.dto.request.AuthenticationRequest;
-import ptit.com.enghub.dto.request.IntrospectRequest;
-import ptit.com.enghub.dto.request.RefreshTokenRequest;
-import ptit.com.enghub.dto.request.UserCreationRequest;
+import ptit.com.enghub.dto.request.*;
 import ptit.com.enghub.dto.response.*;
+import ptit.com.enghub.entity.Notification;
 import ptit.com.enghub.service.GoogleAuthService;
 import ptit.com.enghub.service.IService.AuthenticationService;
 import ptit.com.enghub.service.IService.VerificationTokenService;
+import ptit.com.enghub.service.NotificationService;
 
 import java.text.ParseException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -28,6 +29,7 @@ public class AuthenticationController {
     AuthenticationService authenticationService;
     GoogleAuthService googleAuthService;
     VerificationTokenService verificationTokenService;
+    NotificationService notificationService;
 
     @PostMapping("/register")
     public ApiResponse<AuthenticationResponse> register(@RequestBody @Valid UserCreationRequest request){

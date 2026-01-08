@@ -7,4 +7,6 @@ public class UnitRequest {
     private String title;
     private int orderIndex;
     private Long courseId;
+    private String description;
+    private String icon;
 }

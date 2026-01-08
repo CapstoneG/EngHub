@@ -47,6 +47,26 @@ public class CloudinaryService {
         }
     }
 
+    public UploadResponse uploadAudio(MultipartFile file) {
+        try {
+            Map<?, ?> uploadResult = cloudinary.uploader().upload(
+                    file.getBytes(),
+                    ObjectUtils.asMap(
+                            "resource_type", "video",
+                            "folder", "audios"
+                    )
+            );
+
+            return UploadResponse.builder()
+                    .url(uploadResult.get("secure_url").toString())
+                    .publicId(uploadResult.get("public_id").toString())
+                    .build();
+
+        } catch (Exception e) {
+            log.error("Cloudinary upload audio error", e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 
     public void deleteImage(String publicId) {
         try {

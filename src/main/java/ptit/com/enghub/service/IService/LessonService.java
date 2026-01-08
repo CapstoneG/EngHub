@@ -15,5 +15,5 @@ public interface LessonService {
     Lesson createLesson(LessonCreationRequest request);
     void deleteLesson(Long id);
     void seedLesson(Long lessonId, LessonSeedData data);
-
+    LessonResponse updateLesson(Long id, LessonCreationRequest request);
 }

@@ -1,12 +1,12 @@
 package ptit.com.enghub.messaging;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 import ptit.com.enghub.config.RabbitMQConfig;
 import ptit.com.enghub.dto.ReminderMessage;
 import ptit.com.enghub.entity.Notification;
 import ptit.com.enghub.repository.NotificationRepository;
-import ptit.com.enghub.service.RealtimePublisher;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -15,11 +15,12 @@ import java.util.UUID;
 public class NotificationConsumer {
 
     private final NotificationRepository notificationRepository;
-    private final RealtimePublisher realtimePublisher;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public NotificationConsumer(NotificationRepository notificationRepository, RealtimePublisher realtimePublisher) {
+    public NotificationConsumer(NotificationRepository notificationRepository,
+                                SimpMessagingTemplate messagingTemplate) {
         this.notificationRepository = notificationRepository;
-        this.realtimePublisher = realtimePublisher;
+        this.messagingTemplate = messagingTemplate;
     }
 
     @RabbitListener(queues = RabbitMQConfig.NOTIFICATION_QUEUE)
@@ -34,6 +35,8 @@ public class NotificationConsumer {
         n.setRead(false);
 
         notificationRepository.save(n);
-        realtimePublisher.publishToUser("notifications", msg.getUserId(), n);
+        messagingTemplate.convertAndSend(
+                "/topic/notifications/" + msg.getUserId(), n
+        );
     }
 }

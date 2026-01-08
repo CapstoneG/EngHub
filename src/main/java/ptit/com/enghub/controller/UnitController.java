@@ -25,6 +25,7 @@ public class UnitController {
                 .build();
     }
 
+
     @GetMapping("/courses/{courseId}/units")
     public ApiResponse<List<UnitResponse>> getUnitsByCourseId(@PathVariable Long courseId) {
         return ApiResponse.<List<UnitResponse>>builder()
@@ -33,14 +34,14 @@ public class UnitController {
                 .build();
     }
 
-    @PostMapping
+    @PostMapping("/units")
     public ApiResponse<UnitResponse> create(@RequestBody UnitRequest request) {
         return ApiResponse.<UnitResponse>builder()
                 .result(unitService.createUnit(request))
                 .message("Unit created successfully")
                 .build();
     }
-    @PutMapping("/{id}")
+    @PutMapping("/units/{id}")
     public ApiResponse<UnitResponse> update(@PathVariable Long id, @RequestBody UnitRequest request) {
         return ApiResponse.<UnitResponse>builder()
                 .result(unitService.updateUnit(id, request))
@@ -48,7 +49,7 @@ public class UnitController {
                 .build();
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/units/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id) {
         unitService.deleteUnit(id);
         return ApiResponse.<Void>builder()

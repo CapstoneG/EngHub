@@ -70,16 +70,16 @@ public class LessonController {
     }
 
 
-//    @PutMapping("/lessons/{id}")
-//    public ApiResponse<LessonResponse> updateLesson(
-//            @PathVariable Long id,
-//            @RequestBody LessonUpdateRequest request
-//    ) {
-//        return ApiResponse.<LessonResponse>builder()
-//                .result(lessonService.updateLesson(id, request))
-//                .message("Lesson updated successfully")
-//                .build();
-//    }
+    @PutMapping("/lessons/{id}")
+    public ApiResponse<LessonResponse> updateLesson(
+            @PathVariable Long id,
+            @RequestBody LessonCreationRequest request
+    ) {
+        return ApiResponse.<LessonResponse>builder()
+                .result(lessonService.updateLesson(id, request))
+                .message("Lesson updated successfully")
+                .build();
+    }
 
     @PostMapping("/{lessonId}/seed")
     public ResponseEntity<Void> seedLesson(

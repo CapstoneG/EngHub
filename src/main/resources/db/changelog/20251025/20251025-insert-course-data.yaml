@@ -49,19 +49,3 @@ databaseChangeLog:
               - column:
                   name: language_id
                   value: 1
-
-        - insert:
-            tableName: course
-            columns:
-              - column:
-                  name: title
-                  value: "Business English"
-              - column:
-                  name: description
-                  value: "Khóa học tiếng Anh thương mại tập trung vào kỹ năng giao tiếp trong môi trường doanh nghiệp."
-              - column:
-                  name: level
-                  value: "Professional"
-              - column:
-                  name: language_id
-                  value: 1

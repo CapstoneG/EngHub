@@ -6,328 +6,179 @@ databaseChangeLog:
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Thành viên gia đình"
-              - column:
-                  name: order_index
-                  value: 0
-              - column:
-                  name: unit_id
-                  value: 1
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "VOCAB"
-        - insert:
-            tableName: lesson
-            columns:
-              - column:
-                  name: title
-                  value: "Đồ vật xung quanh"
-              - column:
-                  name: order_index
-                  value: 1
-              - column:
-                  name: unit_id
-                  value: 1
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "VOCAB"
-        - insert:
-            tableName: lesson
-            columns:
-              - column:
-                  name: title
-                  value: "Từ vựng về nghề nghiệp"
-              - column:
-                  name: order_index
-                  value: 2
-              - column:
-                  name: unit_id
-                  value: 1
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "VOCAB"
-        - insert:
-            tableName: lesson
-            columns:
-              - column:
-                  name: title
-                  value: "Kiểm tra từ vựng tổng hợp"
-              - column:
-                  name: order_index
-                  value: 3
-              - column:
-                  name: unit_id
-                  value: 1
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "VOCAB"
+              - column: { name: title, value: "Gia đình và bản thân" }
+              - column: { name: order_index, value: 0 }
+              - column: { name: unit_id, value: 1 }
+              - column: { name: duration, value: 10 }
+              - column: { name: study_skill, value: "VOCAB" }
 
-#                  ===
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Động từ To Be (am, is, are)"
-              - column:
-                  name: order_index
-                  value: 0
-              - column:
-                  name: unit_id
-                  value: 2
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "GRAMMAR"
+              - column: { name: title, value: "Đồ vật xung quanh" }
+              - column: { name: order_index, value: 1 }
+              - column: { name: unit_id, value: 1 }
+              - column: { name: duration, value: 10 }
+              - column: { name: study_skill, value: "VOCAB" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Thì hiện tại đơn (Simple Present)"
-              - column:
-                  name: order_index
-                  value: 1
-              - column:
-                  name: unit_id
-                  value: 2
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "GRAMMAR"
+              - column: { name: title, value: "Nghề nghiệp phổ biến" }
+              - column: { name: order_index, value: 2 }
+              - column: { name: unit_id, value: 1 }
+              - column: { name: duration, value: 10 }
+              - column: { name: study_skill, value: "VOCAB" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Danh từ & Đại từ"
-              - column:
-                  name: order_index
-                  value: 2
-              - column:
-                  name: unit_id
-                  value: 2
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "GRAMMAR"
+              - column: { name: title, value: "Kiểm tra từ vựng cơ bản" }
+              - column: { name: order_index, value: 3 }
+              - column: { name: unit_id, value: 1 }
+              - column: { name: duration, value: 10 }
+              - column: { name: study_skill, value: "VOCAB" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Luyện tập thì hiện tại đơn"
-              - column:
-                  name: order_index
-                  value: 3
-              - column:
-                  name: unit_id
-                  value: 2
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "GRAMMAR"
+              - column: { name: title, value: "Động từ To Be (am / is / are)" }
+              - column: { name: order_index, value: 0 }
+              - column: { name: unit_id, value: 2 }
+              - column: { name: duration, value: 10 }
+              - column: { name: study_skill, value: "GRAMMAR" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Bài kiểm tra ngữ pháp"
-              - column:
-                  name: order_index
-                  value: 4
-              - column:
-                  name: unit_id
-                  value: 2
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "GRAMMAR"
-#                  ===
+              - column: { name: title, value: "Thì hiện tại đơn" }
+              - column: { name: order_index, value: 1 }
+              - column: { name: unit_id, value: 2 }
+              - column: { name: duration, value: 10 }
+              - column: { name: study_skill, value: "GRAMMAR" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Chào hỏi và tạm biệt"
-              - column:
-                  name: order_index
-                  value: 0
-              - column:
-                  name: unit_id
-                  value: 3
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "SPEAKING"
+              - column: { name: title, value: "Danh từ và đại từ" }
+              - column: { name: order_index, value: 2 }
+              - column: { name: unit_id, value: 2 }
+              - column: { name: duration, value: 10 }
+              - column: { name: study_skill, value: "GRAMMAR" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Giới thiệu bản thân"
-              - column:
-                  name: order_index
-                  value: 1
-              - column:
-                  name: unit_id
-                  value: 3
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "SPEAKING"
+              - column: { name: title, value: "Kiểm tra ngữ pháp cơ bản" }
+              - column: { name: order_index, value: 3 }
+              - column: { name: unit_id, value: 2 }
+              - column: { name: duration, value: 10 }
+              - column: { name: study_skill, value: "GRAMMAR" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Hỏi và nói về thời tiết"
-              - column:
-                  name: order_index
-                  value: 2
-              - column:
-                  name: unit_id
-                  value: 3
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "SPEAKING"
+              - column: { name: title, value: "Từ vựng học tập và công việc" }
+              - column: { name: order_index, value: 0 }
+              - column: { name: unit_id, value: 3 }
+              - column: { name: duration, value: 12 }
+              - column: { name: study_skill, value: "VOCAB" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Đặt món ăn & đồ uống"
-              - column:
-                  name: order_index
-                  value: 3
-              - column:
-                  name: unit_id
-                  value: 3
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "SPEAKING"
+              - column: { name: title, value: "Cụm từ thông dụng (Phrasal Verbs)" }
+              - column: { name: order_index, value: 1 }
+              - column: { name: unit_id, value: 3 }
+              - column: { name: duration, value: 12 }
+              - column: { name: study_skill, value: "VOCAB" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Kiểm tra giao tiếp"
-              - column:
-                  name: order_index
-                  value: 4
-              - column:
-                  name: unit_id
-                  value: 3
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "SPEAKING"
-#        ===
+              - column: { name: title, value: "Kiểm tra từ vựng trung cấp" }
+              - column: { name: order_index, value: 2 }
+              - column: { name: unit_id, value: 3 }
+              - column: { name: duration, value: 12 }
+              - column: { name: study_skill, value: "VOCAB" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Nghe hội thoại: đi siêu thị"
-              - column:
-                  name: order_index
-                  value: 0
-              - column:
-                  name: unit_id
-                  value: 4
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "LISTENING"
+              - column: { name: title, value: "Thì quá khứ đơn và hiện tại hoàn thành" }
+              - column: { name: order_index, value: 0 }
+              - column: { name: unit_id, value: 4 }
+              - column: { name: duration, value: 12 }
+              - column: { name: study_skill, value: "GRAMMAR" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Nghe hội thoại: hỏi đường"
-              - column:
-                  name: order_index
-                  value: 1
-              - column:
-                  name: unit_id
-                  value: 4
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "LISTENING"
+              - column: { name: title, value: "Câu điều kiện loại 1 và 2" }
+              - column: { name: order_index, value: 1 }
+              - column: { name: unit_id, value: 4 }
+              - column: { name: duration, value: 12 }
+              - column: { name: study_skill, value: "GRAMMAR" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Phản xạ nói theo mẫu"
-              - column:
-                  name: order_index
-                  value: 2
-              - column:
-                  name: unit_id
-                  value: 4
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "SPEAKING"
+              - column: { name: title, value: "Kiểm tra ngữ pháp trung cấp" }
+              - column: { name: order_index, value: 2 }
+              - column: { name: unit_id, value: 4 }
+              - column: { name: duration, value: 12 }
+              - column: { name: study_skill, value: "GRAMMAR" }
+
         - insert:
             tableName: lesson
             columns:
-              - column:
-                  name: title
-                  value: "Luyện nghe chọn đáp án đúng"
-              - column:
-                  name: order_index
-                  value: 3
-              - column:
-                  name: unit_id
-                  value: 4
-              - column:
-                  name: duration
-                  value: 10
-              - column:
-                  name: study_skill
-                  value: "LISTENING"
+              - column: { name: title, value: "Từ vựng học thuật nâng cao" }
+              - column: { name: order_index, value: 0 }
+              - column: { name: unit_id, value: 5 }
+              - column: { name: duration, value: 15 }
+              - column: { name: study_skill, value: "VOCAB" }
+
+        - insert:
+            tableName: lesson
+            columns:
+              - column: { name: title, value: "Từ đồng nghĩa và sắc thái nghĩa" }
+              - column: { name: order_index, value: 1 }
+              - column: { name: unit_id, value: 5 }
+              - column: { name: duration, value: 15 }
+              - column: { name: study_skill, value: "VOCAB" }
+
+        - insert:
+            tableName: lesson
+            columns:
+              - column: { name: title, value: "Kiểm tra từ vựng nâng cao" }
+              - column: { name: order_index, value: 2 }
+              - column: { name: unit_id, value: 5 }
+              - column: { name: duration, value: 15 }
+              - column: { name: study_skill, value: "VOCAB" }
+
+        - insert:
+            tableName: lesson
+            columns:
+              - column: { name: title, value: "Câu bị động và mệnh đề quan hệ" }
+              - column: { name: order_index, value: 0 }
+              - column: { name: unit_id, value: 6 }
+              - column: { name: duration, value: 15 }
+              - column: { name: study_skill, value: "GRAMMAR" }
+
+        - insert:
+            tableName: lesson
+            columns:
+              - column: { name: title, value: "Câu gián tiếp và đảo ngữ" }
+              - column: { name: order_index, value: 1 }
+              - column: { name: unit_id, value: 6 }
+              - column: { name: duration, value: 15 }
+              - column: { name: study_skill, value: "GRAMMAR" }
+
+        - insert:
+            tableName: lesson
+            columns:
+              - column: { name: title, value: "Kiểm tra ngữ pháp nâng cao" }
+              - column: { name: order_index, value: 2 }
+              - column: { name: unit_id, value: 6 }
+              - column: { name: duration, value: 15 }
+              - column: { name: study_skill, value: "GRAMMAR" }

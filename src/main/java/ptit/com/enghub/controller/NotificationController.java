@@ -35,6 +35,11 @@ public class NotificationController {
         service.markAsRead(id);
     }
 
+    @PostMapping("/read-all")
+    public void markReadAll() {
+        service.markAsReadAll();
+    }
+
     @GetMapping("/unread-count")
     public long unreadCount() {
         return service.countUnread();

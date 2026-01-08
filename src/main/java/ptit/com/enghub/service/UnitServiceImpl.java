@@ -67,7 +67,10 @@ public class UnitServiceImpl implements UnitService {
         Course course = courseRepository.findById(request.getCourseId())
                 .orElseThrow(() -> new RuntimeException("Course not found"));
         unit.setCourse(course);
-
+        unit.setIcon(request.getIcon());
+        unit.setDescription(request.getDescription());
+        unit.setOrderIndex(request.getOrderIndex());
+        unit.setTitle(request.getTitle());
         return unitMapper.toResponse(unitRepository.save(unit));
     }
 
@@ -84,6 +87,10 @@ public class UnitServiceImpl implements UnitService {
                     .orElseThrow(() -> new RuntimeException("Course not found"));
             unit.setCourse(course);
         }
+        unit.setIcon(request.getIcon());
+        unit.setDescription(request.getDescription());
+        unit.setOrderIndex(request.getOrderIndex());
+        unit.setTitle(request.getTitle());
 
         return unitMapper.toResponse(unitRepository.save(unit));
     }

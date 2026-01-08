@@ -1,6 +1,7 @@
 package ptit.com.enghub.service.IService;
 
 import com.nimbusds.jose.JOSEException;
+import org.springframework.security.core.Authentication;
 import ptit.com.enghub.dto.request.AuthenticationRequest;
 import ptit.com.enghub.dto.request.IntrospectRequest;
 import ptit.com.enghub.dto.request.RefreshTokenRequest;
@@ -25,4 +26,5 @@ public interface AuthenticationService {
     public void revokeSession(Long sessionId);
     public void revokeAllSessions(String email);
     public IntrospectResponse introspect(IntrospectRequest request) throws JOSEException, ParseException;
+    public Authentication parseToken(String token) throws JOSEException, ParseException;
 }

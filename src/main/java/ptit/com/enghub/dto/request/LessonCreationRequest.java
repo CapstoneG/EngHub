@@ -2,6 +2,7 @@ package ptit.com.enghub.dto.request;
 
 import lombok.Data;
 import ptit.com.enghub.dto.*;
+import ptit.com.enghub.enums.StudySkill;
 
 import java.util.List;
 
@@ -17,4 +18,5 @@ public class LessonCreationRequest {
     private List<VocabularyDTO> vocabularies;
     private List<DialogueDTO> dialogues;
     private List<ExerciseDTO> exercises;
+    private StudySkill studySkill;
 }

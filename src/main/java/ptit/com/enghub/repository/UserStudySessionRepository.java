@@ -30,5 +30,25 @@ public interface UserStudySessionRepository
             LocalDateTime startOfDay,
             LocalDateTime endOfDay
     );
+
+    @Query(value = """
+    SELECT 
+        EXTRACT(DOW FROM started_at) AS day_of_week,
+        activity_type,
+        COUNT(id)
+    FROM user_study_session
+    WHERE started_at >= :fromDate
+    GROUP BY day_of_week, activity_type
+""", nativeQuery = true)
+    List<Object[]> countActivityByDay(@Param("fromDate") LocalDateTime fromDate);
+
+    @Query("""
+        SELECT s.skill, COUNT(DISTINCT s.userId)
+        FROM UserStudySession s
+        WHERE s.skill IS NOT NULL
+        GROUP BY s.skill
+        ORDER BY COUNT(DISTINCT s.userId) DESC
+    """)
+    List<Object[]> countDistinctUsersBySkill();
 }
 

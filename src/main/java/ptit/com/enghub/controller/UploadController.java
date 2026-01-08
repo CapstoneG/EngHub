@@ -36,6 +36,16 @@ public class UploadController {
                 .build();
     }
 
+    @PostMapping("/audio")
+    public ApiResponse<UploadResponse> uploadAudio(
+            @RequestParam("file") MultipartFile file
+    ) {
+        return ApiResponse.<UploadResponse>builder()
+                .result(cloudinaryService.uploadAudio(file))
+                .message("Upload audio successfully")
+                .build();
+    }
+
 
     @DeleteMapping("/image")
     public ApiResponse<Void> deleteImage(
@@ -59,6 +69,15 @@ public class UploadController {
                 .build();
     }
 
+    @DeleteMapping("/audio")
+    public ApiResponse<Void> deleteAudio(
+            @RequestParam String publicId
+    ) {
+        cloudinaryService.deleteVideo(publicId);
 
+        return ApiResponse.<Void>builder()
+                .message("Delete audio successfully")
+                .build();
+    }
 
 }

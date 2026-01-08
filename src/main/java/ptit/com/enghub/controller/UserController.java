@@ -9,14 +9,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ptit.com.enghub.dto.UserLearningSettingsDto;
-import ptit.com.enghub.dto.request.ChangePasswordRequest;
-import ptit.com.enghub.dto.request.UserCreationRequest;
-import ptit.com.enghub.dto.request.UserStatusRequest;
-import ptit.com.enghub.dto.request.UserUpdateRequest;
+import ptit.com.enghub.dto.request.*;
 import ptit.com.enghub.dto.response.ApiResponse;
 import ptit.com.enghub.dto.response.UserResponse;
 import ptit.com.enghub.entity.User;
 import ptit.com.enghub.enums.Level;
+import ptit.com.enghub.enums.NotificationType;
+import ptit.com.enghub.service.NotificationService;
 import ptit.com.enghub.service.UserService;
 
 import java.util.List;
@@ -29,6 +28,7 @@ import java.util.Map;
 @Slf4j
 public class UserController {
     UserService userService;
+    NotificationService noti;
 
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers(){
@@ -46,6 +46,23 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUser(request));
     }
 
+    @PostMapping("/update-level-placement")
+    public ResponseEntity<UserResponse> updateLevel(@RequestBody UserUpdateRequest request){
+
+        User user = userService.getCurrentUser();
+
+        NotificationRequest n = new NotificationRequest();
+        n.setUserId(user.getId().toString());
+        n.setType(NotificationType.SYSTEM_MESSAGE);
+        n.setTitle("Chào mừng bạn đến với EngHub!");
+        n.setContent(
+                "Hãy bắt đầu hành trình học tiếng Anh với các kỹ năng Listening, Speaking, Reading và Writing.\n\n" +
+                        "Chúc bạn học tập hiệu quả và đạt được mục tiêu của mình!"
+        );
+        noti.create(n);
+        return ResponseEntity.ok(userService.updateUser(request));
+    }
+
 
 //    @DeleteMapping("/delete-user")
 //    public ResponseEntity<String> deleteUser(){
@@ -59,6 +76,15 @@ public class UserController {
             @RequestBody UserStatusRequest request
     ) {
         userService.updateUserStatus(request.getStatus());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/status/{id}")
+    public ResponseEntity<Void> updateMyStatus(
+            @RequestBody UserStatusRequest request,
+            @PathVariable Long id
+    ) {
+        userService.updateUserStatus(request.getStatus(), id);
         return ResponseEntity.noContent().build();
     }
 

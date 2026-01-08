@@ -12,6 +12,10 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -273,4 +277,33 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         return stringJoiner.toString();
     }
+
+    public Authentication parseToken(String token)
+            throws JOSEException, ParseException {
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+        if (!signedJWT.verify(verifier)) {
+            throw new RuntimeException("Invalid JWT signature");
+        }
+        Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        if (expirationTime == null || expirationTime.before(new Date())) {
+            throw new RuntimeException("JWT token expired");
+        }
+
+        String email = signedJWT.getJWTClaimsSet().getSubject();
+
+        String scope = signedJWT.getJWTClaimsSet().getStringClaim("scope");
+
+        List<GrantedAuthority> authorities = scope == null
+                ? Collections.emptyList()
+                : List.of(new SimpleGrantedAuthority("ROLE_" + scope));
+
+        return new UsernamePasswordAuthenticationToken(
+                email,
+                null,
+                authorities
+        );
+    }
+
 }

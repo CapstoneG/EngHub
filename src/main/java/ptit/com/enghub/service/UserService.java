@@ -89,6 +89,22 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void updateUserStatus(UserStatus status, long id) {
+
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        user.setStatus(status);
+        userRepository.save(user);
+    }
+
     public UserLearningSettingsDto updateSettings(UserLearningSettingsDto request) {
         User user = getCurrentUser();
         UserLearningSettings settings = userSettingsRepository

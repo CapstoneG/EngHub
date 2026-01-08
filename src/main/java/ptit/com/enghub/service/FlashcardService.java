@@ -3,7 +3,9 @@ package ptit.com.enghub.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import ptit.com.enghub.dto.request.BulkFlashcardRequest;
 import ptit.com.enghub.dto.request.FlashcardRequest;
+import ptit.com.enghub.dto.response.BulkFlashcardResponse;
 import ptit.com.enghub.dto.response.FlashcardResponse;
 import ptit.com.enghub.entity.*;
 import ptit.com.enghub.mapper.FlashcardMapper;
@@ -24,6 +26,7 @@ public class FlashcardService {
     private final FlashcardMapper flashcardMapper;
     private final UserService userService;
     private final UserFlashcardProgressRepository progressRepository;
+    private final AIService aiService;
 
     // 1. Create Flashcard
     @Transactional
@@ -92,6 +95,43 @@ public class FlashcardService {
         List<Flashcard> list = flashcardRepository.findByDeckId(deckId);
 
         return list.stream()
+                .map(flashcardMapper::toResponse)
+                .toList();
+    }
+
+    @Transactional
+    public List<FlashcardResponse> createFlashcardsFromListWords(BulkFlashcardRequest request) {
+
+        Deck deck = deckRepository.findById(request.getDeckId())
+                .orElseThrow(() -> new RuntimeException(
+                        "Deck not found with id: " + request.getDeckId()));
+
+        List<BulkFlashcardResponse> externalFlashcards =
+                aiService.fetchFlashcards(request.getWords());
+
+        List<Flashcard> flashcards = new ArrayList<>();
+
+        for (BulkFlashcardResponse dto : externalFlashcards) {
+            Flashcard flashcard = new Flashcard();
+            flashcard.setTerm(dto.getTerm());
+            flashcard.setPhonetic(dto.getPhonetic());
+            flashcard.setDefinition(dto.getDefinition());
+            flashcard.setPartOfSpeech(dto.getPartOfSpeech());
+            flashcard.setExampleSentence(dto.getExampleSentence());
+
+            DeckFlashcard deckFlashcard = new DeckFlashcard();
+            deckFlashcard.setDeck(deck);
+            deckFlashcard.setFlashcard(flashcard);
+
+            flashcard.setDeckFlashcards(new ArrayList<>());
+            flashcard.getDeckFlashcards().add(deckFlashcard);
+
+            flashcards.add(flashcard);
+        }
+
+        List<Flashcard> saved = flashcardRepository.saveAll(flashcards);
+
+        return saved.stream()
                 .map(flashcardMapper::toResponse)
                 .toList();
     }
